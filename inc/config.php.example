@@ -1,0 +1,85 @@
+<?php
+
+//
+// Basic Settings
+//
+
+define( 'APPNAME',    'Basic Template' );
+define( 'APPSLOGAN',  'Small PHP Template to create webpages.' );
+define( 'KEYWORDS',   ''); // serachword for search enginges 
+define( 'DESCRIPTION', ''); // PAges Description for search engines
+define( 'APPDOMAIN',  'you.domain.de' );
+define( 'PAGES',      __DIR__ . "/pages/" ); // path to the pages folder
+
+define( 'ENV',        'prod' ); 						// Enviroment (dev,prod)
+define( 'SECRET',     'tOpSeCr3tT0k3n!'); // Secret token
+
+// Set default Timezone 
+// var_dump( DateTimeZone::listIdentifiers() ); // list them all
+date_default_timezone_set( 'Europe/Berlin' );
+
+//
+// Mail / Contact Data
+//
+
+define( 'MAILHOST', "smtp.gmail.com" );
+define( 'MAILUSER', "yourmail@gmail.com" ); // musst a valid email adress!
+define( 'MAILPASS', "*****" );
+define( 'MAILPORT', 465 );
+define( 'MAILPROTO', "ssl" );
+
+define( 'MAILPHONE', '' ); // Phone number used in html template
+define( 'MAILFAX', '' ); // Fax number used in html template
+define( 'MAILRECIPIENT', 'recipient@web.com' ); // Mail Recipient address (Will also used in html mail template)
+
+define( 'MAILTWITTER', 'http://twitter.com/' ); // twitter url used in html mail template
+define( 'MAILFACEBOOK', 'http://facebook.com/' ); // facebook url used in html mail template
+define( 'MAILHTMLHEADER', '' );
+define( 'MAILHTMLIMAGE', '' );
+
+// $subjectfields = array( // Betrefffeld Texte, bei "NULL" ist das subjectfeld deaktiviert
+//   'Allgemeine Frage',
+//   'Verbesserungsvorschlag',
+//   'Fehler melden',
+//   'Werbeanfrage'
+// );
+$subjectfields = NULL;
+define( 'MAILSUBJECT', $subjectfields );
+
+//
+// Database Stuff
+//
+
+// Used Database type
+define( 'DB', 'SQLite' ); // Use Database SQLite
+//define( 'DB', 'MySQL' ); // Used Database MySQL
+
+// MySQL connection parameters
+define( 'MYSQL_USER', 'dbuser' );
+define( 'MYSQL_PASS', '*****' );
+define( 'MYSQL_NAME', 'tpl' );
+define( 'MYSQL_HOST', 'localhost' );
+define( 'MYSQL_PORT', 3306 );
+
+// SQLite connection parameters
+define( 'SQLITE_TYPE', 'FILE' );	// FILE | MEMORY (In planning)
+define( 'SQLITE_FILE', __DIR__ . '/db/database.db' ); // seen from inc/
+
+//
+// Some usefull constants
+//
+
+// set server and client token
+$unpack = unpack( 'H*', SECRET );
+$secret = array_shift( $unpack );
+define('SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret );
+define('CLIENTTOKEN', urlencode( base64_encode( SERVERTOKEN ) ) );
+
+// helper constants
+define('PROTOCOL',    stripos( isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'http' ,'https') === true ? 'https://' : 'http://' );
+define('HOST',        isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : 'localhost' );	
+define('PATH',        dirname($_SERVER['PHP_SELF']) );
+define('URL',         PROTOCOL . HOST . PATH ); 
+define('CLIENTLANG',  substr( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'de' , 0, 2 ) );
+
+?>
