@@ -10,6 +10,8 @@ if( strpos( $currentURL, 'SCRIPT' ) !== false ) {
 // Sanity check, install should only be checked from index.php
 defined('PATH') or exit('Install tests must be loaded from within index.php!');
 
+$minversion = '7.1.0';
+
 // Setup checks
 $checks = array(
 	// basicly neccessary
@@ -34,6 +36,10 @@ $checks = array(
 	'mbrstring' => true,
 	'ctype' => true
 );
+
+if( substr( phpversion('tidy'), 0, 1 ) >= 8 ) {
+  $checks['mbrstring'] = false;
+}
 
 function urlExists( $url = null ) {  
     if($url == null) return false;  
@@ -106,10 +112,9 @@ function urlExists( $url = null ) {
 	<?php if( $checks['version'] ) : ?>
 		<tr>
 			<th>PHP Version</th>
-      <?php $minversion = '7.1.0' ?>
       <?php $operator = '>='; ?>
 			<?php if (version_compare(PHP_VERSION, $minversion, $operator )): ?>
-				<td class="pass">installed: <?= PHP_VERSION ?>, reqired: <?= $minversion ?></td>
+				<td class="pass">installed: <?= PHP_VERSION ?>, min. reqired: <?= $minversion ?></td>
 			<?php else: $failed = TRUE ?>
 				<td class="fail"><?= APPNAME ?> requires PHP <?= $minversion ?> or newer, this version is <?php echo PHP_VERSION ?>.</td>
 			<?php endif ?>

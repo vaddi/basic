@@ -21,8 +21,7 @@ A running PHP Webserver (A space where you can place PHP Files).
 
 Updating a old Version which is installed via git command is also straight forrward (you have to chack all changes on existing files):
 
-	git fetch
-	git merge
+	git pull
 
 
 See [git-merge]() for more about how to merge your Setup and the base Setup.

@@ -6,13 +6,10 @@ class Site extends Base {
   
   // default pages folder
   private $_pages = '';
-  private $_dbfile = '/db/Database.php';
   
   public function __construct() {
     self::loadFile( __DIR__ .  '/../config.php' );
     self::loadFile( __DIR__ .  '/Template.php' );
-    self::loadFile( __DIR__ .  '/db/Database.php' );
-    $this->_db = new Database( DB );
     // validate pages folder
     $this->_pages = PAGES;
     if( ! is_dir( $this->_pages ) ) {

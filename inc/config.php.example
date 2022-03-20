@@ -27,11 +27,23 @@ define( 'MAILUSER', "yourmail@gmail.com" ); // musst a valid email adress!
 define( 'MAILPASS', "*****" );
 define( 'MAILPORT', 465 );
 define( 'MAILPROTO', "ssl" );
+define( 'MAILRECIPIENT', 'recipient@gmail.com' ); // single entry, or comma separeted list of recipients for the contact mails
+
+// Contactpage Data
+define( 'CONTACTNAME', 'Name Surename' ); // You Full name
+define( 'CONTACTSTREET', 'Street. Number' );
+define( 'CONTACTPOSTCODE', 'PLZ' );
+define( 'CONTACTCITY', 'City' );
+define( 'CONTACTCOUNTRY', 'State' );
+define( 'CONTACTSTATE', 'Deutschland' );
+define( 'CONTACTPHONE', '0123123123' );
+define( 'CONTACTFAX', '' );
+define( 'CONTACTMAIL', 'recipient@gmail.com' );
+define( 'CONTACTTWITTER', 'http://twitter.com/' );
+define( 'CONTACTFACEBOOK', 'http://facebook.com/' );
 
 define( 'MAILPHONE', '' ); // Phone number used in html template
 define( 'MAILFAX', '' ); // Fax number used in html template
-define( 'MAILRECIPIENT', 'recipient@web.com' ); // Mail Recipient address (Will also used in html mail template)
-
 define( 'MAILTWITTER', 'http://twitter.com/' ); // twitter url used in html mail template
 define( 'MAILFACEBOOK', 'http://facebook.com/' ); // facebook url used in html mail template
 define( 'MAILHTMLHEADER', '' );
@@ -63,6 +75,7 @@ define( 'MYSQL_PORT', 3306 );
 
 // SQLite connection parameters
 define( 'SQLITE_TYPE', 'FILE' );	// FILE | MEMORY (In planning)
+define( 'SQLITE_FILENAME', 'database.sqlite' ); // the used Filename
 define( 'SQLITE_FILE', __DIR__ . '/db/database.db' ); // seen from inc/
 
 //
@@ -81,5 +94,6 @@ define('HOST',        isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME']
 define('PATH',        dirname($_SERVER['PHP_SELF']) );
 define('URL',         PROTOCOL . HOST . PATH ); 
 define('CLIENTLANG',  substr( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'de' , 0, 2 ) );
+define( 'PAGE', isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'home' );
 
 ?>

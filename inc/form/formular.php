@@ -1,16 +1,7 @@
 <?php
 
-// Einstellungen bitte in der Config machen
-// allow/disallow subject
-// allow/disallow captcha
-// 
+// Einstellungen bitte in der Config vornehmen
 include('config.php');
-
-//error_reporting( E_ALL ^ E_NOTICE ); // hide all basic notices from PHP
-
-// if( empty( $subjectfields ) ) {
-//   $subjectfields = false;
-// }
 
 if( isset( $_COOKIE["commitcookie"] ) && $_COOKIE["commitcookie"] != NULL ) {
 

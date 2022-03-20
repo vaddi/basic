@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/* enable smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
 /* links */
 a:link, 
 a:visited {
@@ -33,6 +38,10 @@ body {
 /* header */
 header small {
   color: #7d7a7a;
+}
+
+header .right-header {
+  text-align: right;
 }
 
 /* footer */
@@ -96,6 +105,12 @@ nav li a.active {
   font-weight: bold;
 }
 
+#content .code {
+  background: #f6f8fa;
+  padding: 16px;
+
+}
+
 /*
 Media Queries
 */
@@ -108,4 +123,5 @@ Media Queries
 
 @media (max-width: 640px) {
   .page-content { margin: 0; }
+  nav ul li { float: none; margin: 40px 10px; width: 100%;}
 }

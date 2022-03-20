@@ -1,5 +1,6 @@
 <?php $file = 'README.md'; ?>
-<h1>Dokumentation <small>parsed from <?= $file?></small></h1>
+<h1>Dokumentation</h1>
+<p>parsed from <strong><?= $file?></strong> File.</p>
 
 <?php
 
@@ -25,64 +26,68 @@ class Slimdown {
     '/<\/blockquote><blockquote>/' => "\n"                    // fix extra blockquote
   );
 
-  private static function para ($regs) {
+  private static function para( $regs ) {
     $line = $regs[1];
-    $trimmed = trim ($line);
-    if (preg_match ('/^<\/?(ul|ol|li|h|p|bl)/', $trimmed)) {
+    $trimmed = trim( $line );
+    if( preg_match( '/^\s/', $line ) ) {
+      return sprintf( "\n<p class='code'>%s</p>\n", $line );
+    }
+    if( preg_match( '/^<\/?(ul|ol|li|h|p|bl)/', $trimmed ) ) {
       return "\n" . $line . "\n";
     }
-    return sprintf ("\n<p>%s</p>\n", $trimmed);
+    return sprintf( "\n<p>%s</p>\n", $trimmed );
   }
 
-  private static function ul_list ($regs) {
+  private static function ul_list( $regs ) {
     $item = $regs[1];
-    return sprintf ("\n<ul>\n\t<li>%s</li>\n</ul>", trim ($item));
+    return sprintf( "\n<ul>\n\t<li>%s</li>\n</ul>", trim( $item ) );
   }
 
-  private static function ol_list ($regs) {
+  private static function ol_list( $regs ) {
     $item = $regs[1];
-    return sprintf ("\n<ol>\n\t<li>%s</li>\n</ol>", trim ($item));
+    return sprintf( "\n<ol>\n\t<li>%s</li>\n</ol>", trim( $item ) );
   }
 
-  private static function blockquote ($regs) {
+  private static function blockquote( $regs ) {
     $item = $regs[2];
-    return sprintf ("\n<blockquote>%s</blockquote>", trim ($item));
+    return sprintf( "\n<blockquote>%s</blockquote>", trim( $item ) );
   }
 
-  private static function header ($regs) {
-    list ($tmp, $chars, $header) = $regs;
-    $level = strlen ($chars);
+  private static function header( $regs ) {
+    list( $tmp, $chars, $header ) = $regs;
+    $level = strlen( $chars );
     self::$_headers[] = trim( str_replace( '#', '', $header ) );
     if( $level == '2' ) {
-      return sprintf ('<h%d><a id="%s">%s</a></h%d><hr />', $level, trim( str_replace( '#', '', $header ) ), str_replace( '#', '', $header ), $level);
+      return sprintf( '<h%d><a id="%s">%s</a></h%d><hr />', $level, trim( str_replace( '#', '', $header ) ), str_replace( '#', '', $header ), $level );
     } else {
-      return sprintf ('<h%d><a id="%s">%s</a></h%d>', $level, trim( str_replace( '#', '', $header ) ), str_replace( '#', '', $header ), $level);
+      return sprintf( '<h%d><a id="%s">%s</a></h%d>', $level, trim( str_replace( '#', '', $header ) ), str_replace( '#', '', $header ), $level );
     }
   }
 
   /**
    * Add a rule.
    */
-  public static function add_rule ($regex, $replacement) {
-    self::$rules[$regex] = $replacement;
+  public static function add_rule( $regex, $replacement ) {
+    self::$rules[ $regex ] = $replacement;
   }
 
   static public function getHeaders() {
     return self::$_headers;
   }
+
   /**
    * Render some Markdown into HTML.
    */
-  public static function render ($text) {
+  public static function render( $text ) {
     $text = "\n" . $text . "\n";
-    foreach (self::$rules as $regex => $replacement) {
-      if (is_callable ( $replacement)) {
-        $text = preg_replace_callback ($regex, $replacement, $text);
+    foreach( self::$rules as $regex => $replacement ) {
+      if( is_callable( $replacement ) ) {
+        $text = preg_replace_callback( $regex, $replacement, $text );
       } else {
-        $text = preg_replace ($regex, $replacement, $text);
+        $text = preg_replace( $regex, $replacement, $text );
       }
     }
-    return trim ($text);
+    return trim( $text );
   }
 }
 

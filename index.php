@@ -1,6 +1,7 @@
 <?php 
 
 require_once( 'inc/class/Site.php' );
+
 try {
   $site = new Site();
   $site->render();
