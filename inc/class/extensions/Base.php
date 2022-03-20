@@ -65,8 +65,10 @@ class Base {
 	 * Get total application files in upload
 	 */
 	protected static function totalFiles() {
-		$path = realpath( './' ) . '/' . PAGES;
-		return ( exec( "find $path -not -type d | wc -l |tr -d ' '" ) );
+//		$path = realpath( './' ) . '/' . PAGES;
+    $path = PAGES;
+		$result = ( exec( "find $path -not -type d | wc -l |tr -d ' '" ) );
+    return $result -1;
 	}
 	
 	
@@ -203,9 +205,44 @@ class Base {
 	}
   
 	/**
-	 * Helper to build prometheus scrape endpoint
+	 * Helper for login
 	 */
-  
+	public static function login( $user = null, $passwd = null ) { 
+    if( $user === null || $passwd === null ) return false;
+		$result = false;
+    if( $user === USER ) {
+      if( $passwd === USERPASS ) {
+        $result = true;
+      }
+    }
+    return $result;
+	}
+
+	/**
+	 * Helper to build prometheus scrape endpoint for Application
+	 */
+	public static function appExporter() { 
+		$result = null;
+    
+    $result .= "# HELP " . SHORTNAME . "_info " . APPNAME . " Info Metric with constant value 1\n";
+    $result .= "# TYPE " . SHORTNAME . "_info gauge\n";
+    $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . HOST . "\"} 1\n";
+    
+    $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
+    $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
+    $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . self::totalFiles() . "\n";
+    
+    $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
+    $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
+    $result .= SHORTNAME . "_commits " . self::gitCommits() . "\n";
+    
+    // usefull metrics?
+    // current loged in users
+    
+    header("Content-type: text/plain; charset=utf-8");
+    http_response_code( 200 );
+    return $result;
+	}
 
 }
 

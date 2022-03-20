@@ -1,6 +1,6 @@
 # Simple PHP Basic Template #
 
-A Simple plain PHP Templating Engine. 
+A Simple plain PHP Templating Engine. You can see a running Application on [demo-page]().
 
 
 ## Installation ##
@@ -61,7 +61,28 @@ You only have to place the file into the `css` or `js` Folder and the Template C
 The Base Template contains some JavaScript Files for clock, pageload and to highlight the current navigation link. 
 
 
+## Application Exporter ##
+
+The Application has a Prometheus ready scrape target url on where it can find some Metrics.
+
+	http://domain.tld/basic/?page=metrics
+
+All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder Page name (default might be `basic`).
+
+
+- basic_info = like current Version and Application Domain
+- basic_pages = Amount of Files/Pages in the configured PAGES destination Folder and the Localpath.
+- basic_commits = Amount of git Commits
+
+
+## Known Bugs ##
+
+Bugs can also be Reported under: [git-issues]()
+
+
+
 ## Links ##
 
 - [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merge-and-git-rebase/)
-
+- [git-issues](https://github.com/vaddi/basic/issues)
+- [demo-page](https://www.mvattersen.de/basic)

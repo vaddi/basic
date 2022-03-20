@@ -13,6 +13,10 @@ define( 'PAGES',      __DIR__ . "/pages/" ); // path to the pages folder
 
 define( 'ENV',        'prod' ); 						// Enviroment (dev,prod)
 define( 'SECRET',     'tOpSeCr3tT0k3n!'); // Secret token
+define( 'VERSION',    '2.0' );
+
+define( 'USER', 'admin' );
+define( 'USERPASS', 'admin' );
 
 // Set default Timezone 
 // var_dump( DateTimeZone::listIdentifiers() ); // list them all

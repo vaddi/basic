@@ -15,4 +15,5 @@
 
   <p>The base construct is very loose, which has advantages (you can easiely add own changes) and disadvantage (some Changes might be hard to implement).</p>
   
+  <p>Prometheus ready scrape endpoint. You can find your metrincs data under the following Link: <a href="<?= URL ?>/?page=metrics" target="_blank"><?= URL ?>/?page=metrics</a></p>
 </div>

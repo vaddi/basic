@@ -89,7 +89,7 @@ nav li a.active {
 
 .page-content {
   width: auto;
-  margin: 0 7.4em;
+  margin: 0 7.4em 50px;
 }
 
 #content {
@@ -105,10 +105,13 @@ nav li a.active {
   font-weight: bold;
 }
 
+#content code {
+  background: #f6f8fa;
+  padding: 3px 7px;
+}
 #content .code {
   background: #f6f8fa;
   padding: 16px;
-
 }
 
 /*

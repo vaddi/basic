@@ -7,15 +7,6 @@ $erg = array();
 // Helper functions
 
 function germanDay( $day = null, $format = null ) {
-	// get Weekday from number 
-	// 0 = Sunday
-	// 1 = Monday
-	// 2 = Tuesday
-	// 3 = Wednesday
-	// 4 = Thursday
-	// 5 = Friday
-	// 6 = Saturday
-	
 	if( $day === null ) $day = date( "w" );
 	if( $day < 0 || $day > 6 ) return;
 	if( $format === null ) $format = 's'; // s = Short, l = Long, m = Middle
@@ -77,11 +68,12 @@ function germanMonth( $month = null, $format = null ) {
 }
 
 function expireDate() {
-	return germanDay() . ", " . date( 'd' ) . " " . germanMonth() . " " . date( 'Y' ) . " " . ( ( date( 'H' ) +1 ) < 10 ? '0' . ( date( 'H' ) +1 ) : ( date( 'H' ) +1 ) ) . ":00:00 GMT";
+	return  germanDay() . ", " . date( 'd' ) . " " . germanMonth() . " " . date( 'Y' ) . " " . ( ( date( 'H' ) +1 ) < 10 ? '0' . ( date( 'H' ) +1 ) : ( date( 'H' ) +1 ) ) . ":00:00 GMT";
 }
 
 // Parsing request data to erg array
-if( $request !== null ) {
+if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
+
 	if( is_array( $request ) ) {
 		foreach ( $request as $id => $tupil ) {
 			if( is_array( $tupil ) ) {
@@ -95,40 +87,90 @@ if( $request !== null ) {
 	} 
 	
   // do something with $erg
-  if( ! empty( $erg ) ) {
+  if( ! empty( $erg['submit'] ) ) {
     $user = isset( $erg['user'] ) ? $erg['user'] : null;
     $password = isset( $erg['password'] ) ? $erg['password'] : null;
-    $result = array();
 
     // validate user
+    $result = array();
     if( $user === null ) {
       $result = array(
         'code'  =>  401,
         'message' => 'Empty Username given.'
       );
     } else if( $user ) {
-      $result = array(
-        'code' => 0,
-        'message' => 'Logged in successfully'
-      );
       // create session etc
+      if( $password === null ) {
+        $result = array(
+          'code'  =>  401,
+          'message' => 'Empty Password given.'
+        );
+      } else if( $password ) {
+        // do the Login
+        $login = Base::login( $user, $password );
+        if( $login ) {
+          // set cookiedata
+          $shavar = sha1( $user . $password, CLIENTTOKEN );
+          setcookie( 'cid', CLIENTTOKEN, time()+3600 );  /* expire in 1 hour */
+          // redirect on sucssefull login
+          if( isset( $erg['redirect'] )) header( 'Location: ' . $erg['redirect'] );
+          $result = array(
+            'code' => 0,
+            'message' => 'Logged in successfully',
+          );
+        } else {
+          $result = array(
+            'code' => 403,
+            'message' => 'Failed to Login',
+          );
+        }
+      }
     }
 
-    // // set json header
-    // // THIS NEED TO BE VALIDATED IF SET Access-Control-Allow-Origin to * (token, pubkey, etc)
-    // //header( 'Access-Control-Allow-Origin: *' ); // neccessary if called from cross domain
-    // header( 'Cache-Control: no-cache, must-revalidate' );
-    // header( 'Expires: ' . expireDate() );
-    // header( 'Content-type: application/json; charset=UTF-8' );
-    // print_r( json_encode( $erg ) );
-
   }
-  echo "<pre>";
-  var_dump( json_encode( $erg ) );
-  print_r( $result );
-  echo "</pre>";
-}
+
+  // error output
+  if( isset( $result['code'] ) && $result['code'] != 0 ) {
+    echo '<div style="margin-top:20px;">' . $result['code'] . ' ';
+    echo '<span>' . $result['message'] . '</span>';
+    echo '</div>';
+  }
   
+  // echo "<pre>";
+  // //var_dump( json_encode( $erg ) );
+  // print_r( $result );
+  // echo "</pre>";
+  
+}
+
+// simple logged in check, user has valid session
+if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN ) {
+//if( isset( $_COOKIE['cid'] ) && base64_decode( sha1( USER . USERPASS, str_replace( "%3D",'', $_COOKIE['cid'] ) ) ) === SERVERTOKEN ) {
+  // do the logout
+  if( isset( $request['logout'] ) && $request['logout'] == 'true'  ) {
+    setcookie( 'cid', '', 1 );
+    if( isset( $_SERVER['HTTP_REFERER'] )) header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+  }
+  echo '<div style="margin-top:20px;">You\'re logged in, welcome.</div>';
+}
+
+// echo "<pre>";
+// print_r( SERVERTOKEN );
+// echo "\n";
+// print_r( CLIENTTOKEN );
+// echo "\n";
+// echo "\n";
+// print_r( urldecode( base64_decode( substr( CLIENTTOKEN, 0, -6 ) ) ) ); // === SERVERTOKEN
+// echo "\n";
+// print_r( substr( urldecode( base64_decode( CLIENTTOKEN ) ), 0, -3 )  ); // === SERVERTOKEN
+// echo "\n";
+// print_r( base64_decode( str_replace( "%3D",'', CLIENTTOKEN ) ) );
+// echo "\n";
+// echo "\n";
+// //print_r(  base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN  ); // logged in
+// print_r( base64_decode( sha1( USER . USERPASS, str_replace( "%3D",'', $_COOKIE['cid'] ) ) ) === SERVERTOKEN ); // logged in
+// echo "</pre>";
+
 ?>
 
 <div style="margin-top:40px;width:100%;text-align:center;">
@@ -138,14 +180,16 @@ if( $request !== null ) {
 			<legend>Login</legend>
 			<label for="forename">
 				Username/E-Mail:<br />
-				<input id="user" type="text" name="user" placeholder="You username" />
+				<input id="user" type="text" name="user" placeholder="You username" autofocus />
 			</label><br />
 			
 			<label for="password">
-				Lastname:<br />
+				Password:<br />
 				<input id="password" type="password" name="password" placeholder="12345678" />
 			</label><br />
     </fieldset>
+    <input type="hidden" name="submit" value="submit" />
+    <input type="hidden" name="redirect" value="<?= isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '?page=login'; ?>" />
     <button type="submit" style="margin:15px 0 0;">Absenden</button>
   </form>
 

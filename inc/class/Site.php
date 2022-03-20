@@ -40,20 +40,38 @@ class Site extends Base {
   public function getContent() {
     // get requested page
     $page = isset( $_REQUEST['page']) ? $_REQUEST['page'] : 'index';
+    $content = null;
     // validate we have this page
     $file = $this->_pages . $page . ".php" ;
+    // if file is protetet (pages has $hidden = true;)
+    // $preload = $template->loadFileData( $file );
+    // if( $preload ) {
+    //   # show 401 or 403
+    // }
+    // show a forbiddenpage 403 or 401
+    if( $page == '401' ) {
+      $file = __DIR__ . "/../pages/401.php";
+    }
+    if( $page == '403' ) {
+      $file = __DIR__ . "/../pages/403.php";
+    }
     if( ! is_file( $file ) ) {
       // otherwise we use a 404 page (from templates)
       $file = __DIR__ . "/../pages/404.php";
     }
-    $template = new Template();
+    $template = new Template( TPL );
     // database object
     return $template->loadFileData( $file );
   }
 
   public function render() {
-    $template = new Template();
-    $output = $template->build( $this->getContent() );
+    $template = new Template( TPL );
+    if( isset( $_REQUEST['page']) && $_REQUEST['page'] == 'metrics' ) {
+      // appExporter for endpoint metrics (no html stuff, just plain text)
+      $output = Base::appExporter();
+    } else {
+      $output = $template->build( $this->getContent() );
+    }
     print_r( $output );
   }
   

@@ -10,13 +10,15 @@ class Slimdown {
 
   public static $rules = array (
     '/(#+)(.*)/' => 'self::header',                           // headers
-    '/\[([^\[]+)\]\(([^\)]+)\)/' => '<a href=\'\2\'>\1</a>',  // links
+    '/\[([^\[]+)\]\(([^\)]+)\)/' => '\1 -> <a name=\'\1\' href=\'\2\' target=\'_blank\'>\2</a>',  // links (we set them also as anchor)
+    '/\[([^\[]+)\]\(\)/' => 'self::shortlink',                    // short links
     '/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',            // bold
     '/(\*|_)(.*?)\1/' => '<em>\2</em>',                       // emphasis
     '/\~\~(.*?)\~\~/' => '<del>\1</del>',                     // del
     '/\:\"(.*?)\"\:/' => '<q>\1</q>',                         // quote
     '/`(.*?)`/' => '<code>\1</code>',                         // inline code
     '/\n\*(.*)/' => 'self::ul_list',                          // ul lists
+    '/\n\-(.*)/' => 'self::ul_list',                          // ul lists
     '/\n[0-9]+\.(.*)/' => 'self::ol_list',                    // ol lists
     '/\n(&gt;|\>)(.*)/' => 'self::blockquote ',               // blockquotes
     '/\n-{5,}/' => "\n<hr />",                                // horizontal rule
@@ -30,27 +32,32 @@ class Slimdown {
     $line = $regs[1];
     $trimmed = trim( $line );
     if( preg_match( '/^\s/', $line ) ) {
-      return sprintf( "\n<p class='code'>%s</p>\n", $line );
+      return sprintf( "<p class='code'>%s</p>\n", $line );
     }
     if( preg_match( '/^<\/?(ul|ol|li|h|p|bl)/', $trimmed ) ) {
-      return "\n" . $line . "\n";
+      return $line . "\n";
     }
-    return sprintf( "\n<p>%s</p>\n", $trimmed );
+    return sprintf( "<p>%s</p>\n", $trimmed );
+  }
+
+  private static function shortlink( $regs ) {
+    $item = $regs[1];
+    return sprintf( '<a href=\'#%s\'>%s</a>', trim( $item ), trim( $item ) );
   }
 
   private static function ul_list( $regs ) {
     $item = $regs[1];
-    return sprintf( "\n<ul>\n\t<li>%s</li>\n</ul>", trim( $item ) );
+    return sprintf( "<ul><li>%s</li>\n</ul>\n", trim( $item ) );
   }
 
   private static function ol_list( $regs ) {
     $item = $regs[1];
-    return sprintf( "\n<ol>\n\t<li>%s</li>\n</ol>", trim( $item ) );
+    return sprintf( "<ol><li>%s</li>\n</ol>\n", trim( $item ) );
   }
 
   private static function blockquote( $regs ) {
     $item = $regs[2];
-    return sprintf( "\n<blockquote>%s</blockquote>", trim( $item ) );
+    return sprintf( "<blockquote>%s</blockquote>", trim( $item ) );
   }
 
   private static function header( $regs ) {
@@ -95,12 +102,12 @@ $marcdown = file_get_contents( __DIR__ . '/../../' . $file );
 $marcdown = Slimdown::render( $marcdown );
 $headers = Slimdown::getHeaders();
 
-$output  = "<h1>Table of contents: </h1>";
-$output .= "<ul style='list-style-type: decimal-leading-zero;'>";
+$output  = "<h1>Table of contents: </h1>\n";
+$output .= "<ul style='list-style-type: decimal-leading-zero;'>\n";
 foreach( $headers as $key => $value ) {
-  $output .= "<li><a href='#" . $value . "'>" . $value . "</a></li>";
+  $output .= "<li><a href='#" . $value . "'>" . $value . "</a></li>\n";
 }
-$output .= "</ul>";
+$output .= "</ul>\n";
 $output .= "<br />\n";
 $output .= $marcdown;
 
