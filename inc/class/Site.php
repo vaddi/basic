@@ -8,6 +8,11 @@ class Site extends Base {
   private $_pages = '';
   
   public function __construct() {
+    if( ! is_file( __DIR__ .  '/../config.php' ) ) {
+      echo "Config file not found, pleases create one by:<br />";
+      echo "cp inc/config.php.example inc/config.php";
+      exit;
+    }
     self::loadFile( __DIR__ .  '/../config.php' );
     self::loadFile( __DIR__ .  '/Template.php' );
     // validate pages folder
