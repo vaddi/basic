@@ -33,13 +33,9 @@ $checks = array(
 	'reflection' => true,
 	'filters' => true,
 	'iconv' => true,
-	'mbrstring' => true,
+	'mbrstring' => false, // seems broken in php8
 	'ctype' => true
 );
-
-if( substr( phpversion('tidy'), 0, 1 ) >= 8 ) {
-  $checks['mbrstring'] = false;
-}
 
 function urlExists( $url = null ) {  
     if($url == null) return false;  
