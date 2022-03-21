@@ -66,7 +66,7 @@ All files will be added to page head by `tpl/head.php`
 
 The Application has a Prometheus ready scrape target url on where it can find some Metrics.
 
-	http://domain.tld/basic/?page=metrics
+	http(s)://domain.tld/basic/?page=metrics
 
 All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder Page name (default might be `basic`).
 
@@ -76,6 +76,7 @@ All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder
 - basic_commits = Amount of git Commits
 - basic_appsize = Total Size of the Application
 
+You can use my Dasboard as Example: [dashboard]()
 
 ## Known Bugs ##
 
@@ -88,3 +89,4 @@ Bugs can also be Reported under: [git-issues]()
 - [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merge-and-git-rebase/)
 - [git-issues](https://github.com/vaddi/basic/issues)
 - [demo-page](https://www.mvattersen.de/basic)
+- [dashboard](https://github.com/vaddi/basic/tree/main/inc/asset/dashboard.json)

@@ -49,12 +49,12 @@ class Site extends Base {
     //   # show 401 or 403
     // }
     // show a forbiddenpage 403 or 401
-    if( $page == '401' ) {
-      $file = __DIR__ . "/../pages/401.php";
-    }
-    if( $page == '403' ) {
-      $file = __DIR__ . "/../pages/403.php";
-    }
+    // if( $page == '401' ) {
+    //   $file = __DIR__ . "/../pages/401.php";
+    // }
+    // if( $page == '403' ) {
+    //   $file = __DIR__ . "/../pages/403.php";
+    // }
     if( ! is_file( $file ) ) {
       // otherwise we use a 404 page (from templates)
       $file = __DIR__ . "/../pages/404.php";

@@ -106,10 +106,12 @@ nav li a.active {
 }
 
 #content code {
+  font-family: ui-monospace,monospace;
   background: #f6f8fa;
   padding: 3px 7px;
 }
 #content .code {
+  font-family: ui-monospace,monospace;
   background: #f6f8fa;
   padding: 16px;
 }

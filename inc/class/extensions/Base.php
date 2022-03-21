@@ -86,7 +86,7 @@ class Base {
 	}
 
 	protected static function checkForUpdate() {
-		// FIX me
+		// ToDo: Find Updates
 //		if( is_file( '/usr/bin/git' ) ) {
 //			$folder = str_replace( '/admin', '', realpath( './' ) ); 
 //			return (int) shell_exec( "[ $(/usr/bin/git -C $folder rev-parse HEAD) = $(/usr/bin/git -C $folder ls-remote $(/usr/bin/git -C $folder rev-parse --abbrev-ref @{u} | \sed 's/\// /g') | cut -f1) ] && echo -n 0 || echo -n 1" );
@@ -174,7 +174,7 @@ class Base {
 	}
 
   public static function getOpenDoings() {
-    $result = exec( 'grep -ri "todo" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -2;
+    $result = exec( 'grep -r "ToDo:" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -2;
     return $result;
   }
   
@@ -219,6 +219,19 @@ class Base {
     }
     return $result;
 	}
+  
+	/**
+	 * Helper for request counter
+	 */
+	public static function requestCounter() { 
+    // save each user request in sqlite db
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $timestamp = date( 'Y-m-d H:i:s', time());
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    $platform = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'];
+    $url = URL;
+    $referer = $_SERVER['HTTP_REFERER'];
+	}
 
 	/**
 	 * Helper to build prometheus scrape endpoint for Application
@@ -252,7 +265,7 @@ class Base {
     $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
     $result .= SHORTNAME . "_mtime " . microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] . "\n";
 
-    // usefull metrics?
+    // ToDo: find some usefull metrics.
     // current loged in users (user sessions)
     // current process runtime (ps -p $(pidof "nginx: worker process") -o etimes= | tr -d " ")
     // current errors (from log?)

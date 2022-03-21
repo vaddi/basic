@@ -18,7 +18,7 @@ if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['
 //print_r( scandir( session_save_path() ) );
 //var_dump( str_replace( '.', '', microtime( true ) - $_SERVER["REQUEST_TIME_FLOAT"] ) );
 echo "<pre>";
-var_dump( $_COOKIE );
+var_dump( $_SERVER );
 echo "</pre>";
 
 ?>
