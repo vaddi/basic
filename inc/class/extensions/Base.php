@@ -48,16 +48,18 @@ class Base {
 	 * @return	Appsize (/ whithout git folder)
 	 */
 	protected static function appSize() {
+    $result = null;
 		$path = exec( 'pwd' );
 		$size = explode( "\t", exec( '/usr/bin/du -s ' . $path ) );
-		$real = isset( $size[0] ) ? number_format( $size[0] / 1024, 2 ) : null;
+		$result[] = isset( $size[0] ) ? number_format( $size[0] / 1024, 2 ) : null;
 		if( self::git() ) {
 			$size = explode( "\t", exec( '/usr/bin/du -s ' . $path . '/.git' ) );
 			$git = isset( $size[0] ) ? number_format( $size[0] / 1024, 2 ) . ' MB' : null;
-      $result = 'total ' . $real . 'MB, only .git ' . ( (float) $real - (float) $git ) . 'MB';
-			return $result;
+      //$result = 'total ' . $real . 'MB, only .git ' . ( (float) $real - (float) $git ) . 'MB';
+      $result[] = (float) $git;
+      $result[] = (float) $result[0] - (float) $git;
 		}
-		return $real;
+		return $result;
 	}
 	
 	
@@ -235,6 +237,12 @@ class Base {
     $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
     $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
     $result .= SHORTNAME . "_commits " . self::gitCommits() . "\n";
+    
+    $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in MiB\n";
+    $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
+    $result .= SHORTNAME . "_appsize{type=\"total\"} " . self::appSize()[0] . "\n";
+    $result .= SHORTNAME . "_appsize{type=\"git\"} " . self::appSize()[1] . "\n";
+    $result .= SHORTNAME . "_appsize{type=\"plain\"} " . self::appSize()[2] . "\n";
     
     // usefull metrics?
     // current loged in users

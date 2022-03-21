@@ -5,15 +5,17 @@
 //
 
 define( 'APPNAME',    'Basic Template' );
+define( 'SHORTNAME',   basename(getcwd()) ); // no whitespaces, we use the base foldername
 define( 'APPSLOGAN',  'Small PHP Template to create webpages.' );
 define( 'KEYWORDS',   ''); // serachword for search enginges 
 define( 'DESCRIPTION', ''); // PAges Description for search engines
 define( 'APPDOMAIN',  'you.domain.de' );
 define( 'PAGES',      __DIR__ . "/pages/" ); // path to the pages folder
+define( 'TPL',      __DIR__ . "/tpl/" ); // path to the templates folder
 
 define( 'ENV',        'prod' ); 						// Enviroment (dev,prod)
 define( 'SECRET',     'tOpSeCr3tT0k3n!'); // Secret token
-define( 'VERSION',    '2.0' );
+define( 'VERSION',    '2.1' );
 
 define( 'USER', 'admin' );
 define( 'USERPASS', 'admin' );

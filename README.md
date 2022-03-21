@@ -73,6 +73,7 @@ All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder
 - basic_info = like current Version and Application Domain
 - basic_pages = Amount of Files/Pages in the configured PAGES destination Folder and the Localpath.
 - basic_commits = Amount of git Commits
+- basic_appsize = Total Size of the Application
 
 
 ## Known Bugs ##
