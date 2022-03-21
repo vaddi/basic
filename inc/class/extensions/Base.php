@@ -87,11 +87,12 @@ class Base {
 
 	protected static function checkForUpdate() {
 		// ToDo: Find Updates
-//		if( is_file( '/usr/bin/git' ) ) {
-//			$folder = str_replace( '/admin', '', realpath( './' ) ); 
-//			return (int) shell_exec( "[ $(/usr/bin/git -C $folder rev-parse HEAD) = $(/usr/bin/git -C $folder ls-remote $(/usr/bin/git -C $folder rev-parse --abbrev-ref @{u} | \sed 's/\// /g') | cut -f1) ] && echo -n 0 || echo -n 1" );
-//		}
-		return false;
+		if( is_file( '/usr/bin/git' ) ) {
+			//$folder = str_replace( '/admin', '', realpath( './' ) );
+      $folder = realpath( './' );
+			return (int) shell_exec( "[ $(/usr/bin/git -C $folder rev-parse HEAD) = $(/usr/bin/git -C $folder ls-remote $(/usr/bin/git -C $folder rev-parse --abbrev-ref @{u} | \sed 's/\// /g') | cut -f1) ] && echo -n 0 || echo -n 1" );
+		}
+		return 0;
 	} 
 
 	/** 
@@ -260,6 +261,10 @@ class Base {
     $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
     $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
     $result .= SHORTNAME . "_todos " . self::getOpenDoings() +1 . "\n";
+
+    $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
+    $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
+    $result .= SHORTNAME . "_updates " . self::checkForUpdate() . "\n";
 
     $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
     $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
