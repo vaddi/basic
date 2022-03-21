@@ -1,48 +1,12 @@
 <?php
 
+// Autoload other extension Classes
+spl_autoload_register( function( $class_name ) {
+  require_once( __DIR__ . '/' . $class_name . '.php');
+});
+
 class Base {
 
-	//
-	// Git stuff
-	//
-	
-	/**
-	 * Compare the commit Hashes from the current commit and the last from git logs
-	 */
-	protected static function gitLast() {
-		if( self::git() ) {
-			if( is_file( '/usr/bin/git' ) ) {
-				$fromlog = exec( 'git log -1 | grep commit | tail -c 41' );
-				$current = exec( 'git rev-parse HEAD' );
-				$result = '<span style="color:';
-				if( $fromlog == $current ) $result .= 'inherit';
-					else $result .= 'red';
-				$result .= '"';
-				$result .= '>' . $fromlog . '</span>';
-				return $result;
-			}
-		}
-		return false;
-	}
-	
-	
-	/**
-	 * Get the current remote url 
-	 */
-	protected static function gitRemote() {
-		if( self::git() ) {
-			if( is_file( '/usr/bin/git' ) ) {
-				$remotes = exec( '/usr/bin/git remote -v' );
-				$line = explode( "\t", $remotes );
-				$result = isset( $line[1] ) ? $line[1] : null;
-				$result = preg_replace('/\(.*?\)|\s*/', '', $result);
-				return $result;
-			}
-		}
-		return false;
-	}
-	
-	
 	/**
 	 * Get total application size
 	 * @return	Appsize (/ whithout git folder)
@@ -52,7 +16,7 @@ class Base {
 		$path = exec( 'pwd' );
 		$size = explode( "\t", exec( '/usr/bin/du -s ' . $path ) );
 		$result[] = isset( $size[0] ) ? $size[0] : null;
-		if( self::git() ) {
+		if( Git::git() ) {
 			$size = explode( "\t", exec( '/usr/bin/du -s ' . $path . '/.git' ) );
 			$git = isset( $size[0] ) ? $size[0] : null;
       //$result = 'total ' . $real . 'MB, only .git ' . ( (float) $real - (float) $git ) . 'MB';
@@ -61,8 +25,7 @@ class Base {
 		}
 		return $result;
 	}
-	
-	
+
 	/**
 	 * Get total application files in upload
 	 */
@@ -72,45 +35,7 @@ class Base {
 		$result = ( exec( "find $path -not -type d | wc -l |tr -d ' '" ) );
     return $result -1;
 	}
-	
-	
-	/**
-	 * Get the total amount of pushed commits
-	 */
-	protected static function gitCommits() {
-		if( self::git() ) {
-			if( is_file( '/usr/bin/git' ) ) 
-				return exec( '/usr/bin/git rev-list --reverse HEAD | awk "{ print NR }" | tail -n 1' );
-		}
-		return false;
-	}
 
-	protected static function checkForUpdate() {
-		// ToDo: Find Updates
-		if( is_file( '/usr/bin/git' ) ) {
-			//$folder = str_replace( '/admin', '', realpath( './' ) );
-      $folder = realpath( './' );
-			return (int) shell_exec( "[ $(/usr/bin/git -C $folder rev-parse HEAD) = $(/usr/bin/git -C $folder ls-remote $(/usr/bin/git -C $folder rev-parse --abbrev-ref @{u} | \sed 's/\// /g') | cut -f1) ] && echo -n 0 || echo -n 1" );
-		}
-		return 0;
-	} 
-
-	/** 
-	 * Helper function to get version number from "git tag" (dont forget to commit them!)
-	 */
-	protected static function gitTag() {
-		if( self::git() ) {
-			if( is_file( '/usr/bin/git' ) ) 
-				return exec( '/usr/bin/git describe --abbrev=0 --tags' );
-		}
-		return false;
-	}
-	
-	private static function git() {
-		if( is_dir( realpath( './' ) . '/.git' ) ) return true;
-		return false;
-	}
-	
 	/**
 	 * Helper function to get the used enviroment
 	 */
@@ -232,6 +157,7 @@ class Base {
     $platform = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'];
     $url = URL;
     $referer = $_SERVER['HTTP_REFERER'];
+    
 	}
 
 	/**
@@ -250,7 +176,7 @@ class Base {
 
     $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
     $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
-    $result .= SHORTNAME . "_commits " . self::gitCommits() . "\n";
+    $result .= SHORTNAME . "_commits " . Git::gitCommits() . "\n";
 
     $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
     $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
@@ -260,15 +186,15 @@ class Base {
 
     $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
     $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
-    $result .= SHORTNAME . "_todos " . self::getOpenDoings() +1 . "\n";
+    $result .= SHORTNAME . "_todos " . ( self::getOpenDoings() +1 ) . "\n";
 
     $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
     $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
-    $result .= SHORTNAME . "_updates " . self::checkForUpdate() . "\n";
+    $result .= SHORTNAME . "_updates " . Git::checkForUpdate() . "\n";
 
     $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
     $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
-    $result .= SHORTNAME . "_mtime " . microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] . "\n";
+    $result .= SHORTNAME . "_mtime " . ( microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] ) . "\n";
 
     // ToDo: find some usefull metrics.
     // current loged in users (user sessions)

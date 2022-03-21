@@ -15,7 +15,6 @@ define( 'TPL',      __DIR__ . "/tpl/" ); // path to the templates folder
 
 define( 'ENV',        'prod' ); 						// Enviroment (dev,prod)
 define( 'SECRET',     'tOpSeCr3tT0k3n!'); // Secret token
-define( 'VERSION',    '2.1' );
 
 define( 'USER', 'admin' );
 define( 'USERPASS', 'admin' );
@@ -94,6 +93,7 @@ $unpack = unpack( 'H*', SECRET );
 $secret = array_shift( $unpack );
 define('SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret );
 define('CLIENTTOKEN', urlencode( base64_encode( SERVERTOKEN ) ) );
+define( 'VERSION',    file_get_contents( 'inc/version.txt' ) );
 
 // helper constants
 define('PROTOCOL',    stripos( isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'http' ,'https') === true ? 'https://' : 'http://' );
