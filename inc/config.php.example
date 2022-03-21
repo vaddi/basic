@@ -23,6 +23,7 @@ define( 'USERPASS', 'admin' );
 // Set default Timezone 
 // var_dump( DateTimeZone::listIdentifiers() ); // list them all
 date_default_timezone_set( 'Europe/Berlin' );
+define( 'CLIFETIME', 3600 ); // Cookie lifetime
 
 //
 // Mail / Contact Data

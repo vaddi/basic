@@ -225,30 +225,38 @@ class Base {
 	 */
 	public static function appExporter() { 
 		$result = null;
-    
+
     $result .= "# HELP " . SHORTNAME . "_info " . APPNAME . " Info Metric with constant value 1\n";
     $result .= "# TYPE " . SHORTNAME . "_info gauge\n";
-    $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . APPDOMAIN . "\"} 1\n";
-    
+    $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . APPDOMAIN . "\",enviroment=\"" . ENV . "\"} 1\n";
+
     $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
     $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
     $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . self::totalFiles() . "\n";
-    
+
     $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
     $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
     $result .= SHORTNAME . "_commits " . self::gitCommits() . "\n";
-    
+
     $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
     $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
     $result .= SHORTNAME . "_appsize{type=\"total\"} " . self::appSize()[0] . "\n";
     $result .= SHORTNAME . "_appsize{type=\"git\"} " . self::appSize()[1] . "\n";
     $result .= SHORTNAME . "_appsize{type=\"plain\"} " . self::appSize()[2] . "\n";
-    
+
+    $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
+    $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
+    $result .= SHORTNAME . "_todos " . self::getOpenDoings() +1 . "\n";
+
+    $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
+    $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
+    $result .= SHORTNAME . "_mtime " . microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] . "\n";
+
     // usefull metrics?
     // current loged in users (user sessions)
-    // current runtime (from ps)
+    // current process runtime (ps -p $(pidof "nginx: worker process") -o etimes= | tr -d " ")
     // current errors (from log?)
-    
+
     header("Content-type: text/plain; charset=utf-8");
     http_response_code( 200 );
     return $result;
