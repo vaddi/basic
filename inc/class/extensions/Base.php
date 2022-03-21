@@ -51,13 +51,13 @@ class Base {
     $result = null;
 		$path = exec( 'pwd' );
 		$size = explode( "\t", exec( '/usr/bin/du -s ' . $path ) );
-		$result[] = isset( $size[0] ) ? number_format( $size[0] / 1024, 2 ) : null;
+		$result[] = isset( $size[0] ) ? $size[0] : null;
 		if( self::git() ) {
 			$size = explode( "\t", exec( '/usr/bin/du -s ' . $path . '/.git' ) );
-			$git = isset( $size[0] ) ? number_format( $size[0] / 1024, 2 ) . ' MB' : null;
+			$git = isset( $size[0] ) ? $size[0] : null;
       //$result = 'total ' . $real . 'MB, only .git ' . ( (float) $real - (float) $git ) . 'MB';
-      $result[] = (float) $git;
-      $result[] = (float) $result[0] - (float) $git;
+      $result[] = $git;
+      $result[] = $result[0] - $git;
 		}
 		return $result;
 	}
@@ -228,7 +228,7 @@ class Base {
     
     $result .= "# HELP " . SHORTNAME . "_info " . APPNAME . " Info Metric with constant value 1\n";
     $result .= "# TYPE " . SHORTNAME . "_info gauge\n";
-    $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . HOST . "\"} 1\n";
+    $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . APPDOMAIN . "\"} 1\n";
     
     $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
     $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
@@ -238,14 +238,16 @@ class Base {
     $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
     $result .= SHORTNAME . "_commits " . self::gitCommits() . "\n";
     
-    $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in MiB\n";
+    $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
     $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
     $result .= SHORTNAME . "_appsize{type=\"total\"} " . self::appSize()[0] . "\n";
     $result .= SHORTNAME . "_appsize{type=\"git\"} " . self::appSize()[1] . "\n";
     $result .= SHORTNAME . "_appsize{type=\"plain\"} " . self::appSize()[2] . "\n";
     
     // usefull metrics?
-    // current loged in users
+    // current loged in users (user sessions)
+    // current runtime (from ps)
+    // current errors (from log?)
     
     header("Content-type: text/plain; charset=utf-8");
     http_response_code( 200 );

@@ -59,6 +59,7 @@ You only have to place the file into the `css` or `js` Folder and the Template C
 ## JavaScript ##
 
 The Base Template contains some JavaScript Files for clock, pageload and to highlight the current navigation link. 
+All files will be added to page head by `tpl/head.php`
 
 
 ## Application Exporter ##
