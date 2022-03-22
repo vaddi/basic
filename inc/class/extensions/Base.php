@@ -149,15 +149,52 @@ class Base {
 	/**
 	 * Helper for request counter
 	 */
-	public static function requestCounter() { 
-    // save each user request in sqlite db
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $timestamp = date( 'Y-m-d H:i:s', time());
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-    $platform = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'];
-    $url = URL;
-    $referer = $_SERVER['HTTP_REFERER'];
-    
+	public static function requestCounter() {
+    // create PDO database object
+    if( SQLITE_USE ) {
+      // save each user request in sqlite db
+      $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : null;
+      $timestamp = date( 'Y-m-d H:i:s', time());
+      $useragent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : null;
+      $platform = isset( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null;
+      $url = URL;
+      $referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;
+      $hits = 1;
+      $db = new DB( SQLITE_TYPE, SQLITE_FILE );
+      if( $db ) {
+        // do we have an entry for the visitor?
+        $db->query( "SELECT * FROM visitors WHERE ip = :ip OR useragent = :useragent" );
+        $db->bind( ':ip', $ip );
+        $db->bind( ':useragent', $useragent );
+        $db->execute();
+        $result = $db->resultset();
+        if( count( $result ) == 0 ) {
+          // insert a new entry for this visitor
+          $db->query( "INSERT INTO visitors ( ip, url, timestamp, useragent, platform, referer, hits ) VALUES ( :ip, :url, :timestamp, :useragent, :platform, :referer, :hits )" );
+          $db->bind( ':ip', $ip );
+          $db->bind( ':url', $url );
+          $db->bind( ':timestamp', $timestamp );
+          $db->bind( ':useragent', $useragent );
+          $db->bind( ':platform', $platform );
+          $db->bind( ':referer', $referer );
+          $db->bind( ':hits', $hits );
+          $db->execute();
+        } else if( isset( $result[0]['id'] ) ) {
+          // update the existing user entry id
+          $db->query( "UPDATE visitors SET ip = :ip, url = :url, timestamp = :timestamp, useragent = :useragent, platform = :platform, referer = :referer, hits = :hits WHERE id = :id;" );
+          $db->bind( ':ip', $ip );
+          $db->bind( ':url', $url );
+          $db->bind( ':timestamp', $timestamp );
+          $db->bind( ':useragent', $useragent );
+          $db->bind( ':platform', $platform );
+          $db->bind( ':referer', $referer );
+          $db->bind( ':hits', ( $result[0]['hits'] +1 ) );
+          $db->bind( ':id', $result[0]['id'] );
+          $db->execute();
+        }
+      }
+    }
+    return false;
 	}
 
 	/**
@@ -192,14 +229,57 @@ class Base {
     $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
     $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
 
-    $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
-    $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
-    $result .= SHORTNAME . "_mtime " . ( microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] ) . "\n";
+    $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
+    $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
+    
+    if( SQLITE_USE ) {
+      // create PDO database object
+      $db = new DB( SQLITE_TYPE, SQLITE_FILE );
+      if( $db ) {
+        $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE timestamp < date('now')" );
+        $db->execute();
+        $hits_daily = $db->resultset()[0]['hits'];
+        $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE timestamp < date('now','-1 hour')" );
+        $db->execute();
+        $hits_hourly = $db->resultset()[0]['hits'];
+        $db->query( "SELECT COUNT(hits) as hits FROM visitors" );
+        $db->execute();
+        $hits_total = $db->resultset()[0]['hits'];
+        $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"daily\"} " . $hits_daily . "\n";
+        $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"hourly\"} " . $hits_hourly . "\n";
+        $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"total\"} " . $hits_total . "\n";
+    
+        $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE timestamp < date('now')" );
+        $db->execute();
+        $hits_daily = $db->resultset()[0]['hits'];
+        $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE timestamp < date('now','-1 hour')" );
+        $db->execute();
+        $hits_hourly = $db->resultset()[0]['hits'];
+        $db->query( "SELECT SUM(hits) as hits FROM visitors" );
+        $db->execute();
+        $hits_total = $db->resultset()[0]['hits'];
+        $db->query( "SELECT AVG(hits) as hits FROM visitors" );
+        $db->execute();
+        $hits_avg = $db->resultset()[0]['hits'];
+        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"daily\"} " . $hits_daily . "\n";
+        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"hourly\"} " . $hits_hourly . "\n";
+        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"total\"} " . $hits_total . "\n";
+        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"avg\"} " . $hits_avg . "\n";
+      }
+    }
+
+    // $result .= '';
+    // $result .= '';
+    // $result .= '';
 
     // ToDo: find some usefull metrics.
     // current loged in users (user sessions)
     // current process runtime (ps -p $(pidof "nginx: worker process") -o etimes= | tr -d " ")
     // current errors (from log?)
+
+    $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
+    $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
+    $result .= SHORTNAME . "_mtime " . ( microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] ) . "\n";
 
     header("Content-type: text/plain; charset=utf-8");
     http_response_code( 200 );

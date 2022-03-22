@@ -11,6 +11,18 @@ Installation ist straight forrward. You just need to clone the current Repossito
 
 After getting the Base Application, you can add Pages into the `pages` Folder and Edit the Base css to fit your needs.
 
+If you want to use the Visitor Metrics, you need to enable the sqlite Database in to the config file:
+
+	define( 'SQLITE_USE', true );
+
+And you have to make the sqlite file writeable for you webserver user. The right command for this will appear if you open the page in a Browser. Something like:
+
+	SQLite file not writeable by webserver user, please add write permissions to file and Folder!
+
+	sudo chown -R www-data /var/www/Sites/basic/inc/db
+
+The initial Clone contain the Database file including the visitors table for some statistics. You find also a creation Schema in the `assets` Folder.
+
 
 ### Dependencies ###
 

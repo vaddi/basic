@@ -66,6 +66,7 @@ class Site extends Base {
 
   public function render() {
     $template = new Template( TPL );
+    Base::requestCounter(); // visitor counter class
     if( isset( $_REQUEST['page']) && $_REQUEST['page'] == 'metrics' ) {
       // appExporter for endpoint metrics (no html stuff, just plain text)
       $output = Base::appExporter();
