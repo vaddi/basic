@@ -154,6 +154,8 @@ class Base {
     if( SQLITE_USE ) {
       // save each user request in sqlite db
       $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : null;
+      // we need to exclude IPs (likethe Prometheus scraper)
+      if( in_array( $ip, EXCLUDED_IP ) ) return false;
       $timestamp = date( 'Y-m-d H:i:s', time());
       $useragent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : null;
       $platform = isset( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null;
@@ -161,6 +163,7 @@ class Base {
       $referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;
       $hits = 1;
       $db = new DB( SQLITE_TYPE, SQLITE_FILE );
+
       if( $db ) {
         // do we have an entry for the visitor?
         $db->query( "SELECT * FROM visitors WHERE ip = :ip OR useragent = :useragent" );
@@ -233,9 +236,7 @@ class Base {
       // create PDO database object
       $db = new DB( SQLITE_TYPE, SQLITE_FILE );
       if( $db ) {
-        $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
-        $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
-        
+        $result_tmp = null;
         $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE timestamp < date('now')" );
         $db->execute();
         $hits_daily = $db->resultset()[0]['hits'];
@@ -246,15 +247,15 @@ class Base {
         $db->execute();
         $hits_total = $db->resultset()[0]['hits'];
         if( isset( $hits_daily ) && $hits_daily != null && $hits_daily != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"daily\"} " . $hits_daily . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"visitors\",field=\"daily\"} " . $hits_daily . "\n";
         }
         if( isset( $hits_hourly ) && $hits_hourly != null && $hits_hourly != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"hourly\"} " . $hits_hourly . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"visitors\",field=\"hourly\"} " . $hits_hourly . "\n";
         }
         if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"total\"} " . $hits_total . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"visitors\",field=\"total\"} " . $hits_total . "\n";
         }
-    
+
         $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE timestamp < date('now')" );
         $db->execute();
         $hits_daily = $db->resultset()[0]['hits'];
@@ -268,16 +269,23 @@ class Base {
         $db->execute();
         $hits_avg = $db->resultset()[0]['hits'];
         if( isset( $hits_daily ) && $hits_daily != null && $hits_daily != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"daily\"} " . $hits_daily . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"daily\"} " . $hits_daily . "\n";
         }
         if( isset( $hits_hourly ) && $hits_hourly != null && $hits_hourly != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"hourly\"} " . $hits_hourly . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"hourly\"} " . $hits_hourly . "\n";
         }
         if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"total\"} " . $hits_total . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"total\"} " . $hits_total . "\n";
         }
         if( isset( $hits_avg ) && $hits_avg != null && $hits_avg != "" ) {
-          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"avg\"} " . $hits_avg . "\n";
+          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"avg\"} " . $hits_avg . "\n";
+        }
+
+        // prepend header
+        if( $result_tmp != null || $result_tmp != "" ) {
+          $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
+          $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
+          $result .= $result_tmp;
         }
 
       }
