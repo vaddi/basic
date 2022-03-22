@@ -229,13 +229,13 @@ class Base {
     $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
     $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
 
-    $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
-    $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
-    
     if( SQLITE_USE ) {
       // create PDO database object
       $db = new DB( SQLITE_TYPE, SQLITE_FILE );
       if( $db ) {
+        $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
+        $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
+        
         $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE timestamp < date('now')" );
         $db->execute();
         $hits_daily = $db->resultset()[0]['hits'];
@@ -245,9 +245,15 @@ class Base {
         $db->query( "SELECT COUNT(hits) as hits FROM visitors" );
         $db->execute();
         $hits_total = $db->resultset()[0]['hits'];
-        $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"daily\"} " . $hits_daily . "\n";
-        $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"hourly\"} " . $hits_hourly . "\n";
-        $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"total\"} " . $hits_total . "\n";
+        if( isset( $hits_daily ) && $hits_daily != null && $hits_daily != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"daily\"} " . $hits_daily . "\n";
+        }
+        if( isset( $hits_hourly ) && $hits_hourly != null && $hits_hourly != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"hourly\"} " . $hits_hourly . "\n";
+        }
+        if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"visitors\",field=\"total\"} " . $hits_total . "\n";
+        }
     
         $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE timestamp < date('now')" );
         $db->execute();
@@ -261,10 +267,19 @@ class Base {
         $db->query( "SELECT AVG(hits) as hits FROM visitors" );
         $db->execute();
         $hits_avg = $db->resultset()[0]['hits'];
-        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"daily\"} " . $hits_daily . "\n";
-        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"hourly\"} " . $hits_hourly . "\n";
-        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"total\"} " . $hits_total . "\n";
-        $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"avg\"} " . $hits_avg . "\n";
+        if( isset( $hits_daily ) && $hits_daily != null && $hits_daily != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"daily\"} " . $hits_daily . "\n";
+        }
+        if( isset( $hits_hourly ) && $hits_hourly != null && $hits_hourly != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"hourly\"} " . $hits_hourly . "\n";
+        }
+        if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"total\"} " . $hits_total . "\n";
+        }
+        if( isset( $hits_avg ) && $hits_avg != null && $hits_avg != "" ) {
+          $result .= SHORTNAME . "_visitors{type=\"hits\",field=\"avg\"} " . $hits_avg . "\n";
+        }
+
       }
     }
 
