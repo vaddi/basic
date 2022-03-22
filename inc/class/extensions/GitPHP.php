@@ -1,6 +1,6 @@
 <?php
 
-class Git {
+class GitPHP {
 
 	//
 	// Git stuff

@@ -16,7 +16,7 @@ class Base {
 		$path = exec( 'pwd' );
 		$size = explode( "\t", exec( '/usr/bin/du -s ' . $path ) );
 		$result[] = isset( $size[0] ) ? $size[0] : null;
-		if( Git::git() ) {
+		if( GitPHP::git() ) {
 			$size = explode( "\t", exec( '/usr/bin/du -s ' . $path . '/.git' ) );
 			$git = isset( $size[0] ) ? $size[0] : null;
       //$result = 'total ' . $real . 'MB, only .git ' . ( (float) $real - (float) $git ) . 'MB';
@@ -176,7 +176,7 @@ class Base {
 
     $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
     $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
-    $result .= SHORTNAME . "_commits " . Git::gitCommits() . "\n";
+    $result .= SHORTNAME . "_commits " . GitPHP::gitCommits() . "\n";
 
     $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
     $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
@@ -190,7 +190,7 @@ class Base {
 
     $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
     $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
-    $result .= SHORTNAME . "_updates " . Git::checkForUpdate() . "\n";
+    $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
 
     $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
     $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
