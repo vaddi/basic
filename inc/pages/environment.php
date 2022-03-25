@@ -43,7 +43,11 @@ function urlExists( $url = null ) {
     	$ch = curl_init($url);  
 			curl_setopt($ch, CURLOPT_TIMEOUT, 5);  
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);  
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return data inplace of echoing on screen
+      if( strpos( $url, 'https' ) === false ) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // Skip SSL Verification host
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // Skip SSL Verification peer
+      }
 			$data = curl_exec($ch);  
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);  
 			curl_close($ch);
@@ -125,7 +129,7 @@ function urlExists( $url = null ) {
 				<?php $fcheck = 'inc/config.php'; if ( urlExists( URL . "/" . $fcheck ) ): ?>
 				  <td class="pass"><?php echo URL . "/" . $fcheck ?></td>
 				<?php else: $failed = TRUE ?>
-					<td class="fail">The configured system <b>url</b> <br><b><?php echo URL ?></b><br> couldn't get resolved by curl. Verify that "php5-curl" is installed.</td>
+					<td class="fail">The configured system <b>url</b> <br><b><?php echo URL ?></b><br> couldn't get resolved by curl. Verify that "php-curl" is installed.</td>
 				<?php endif ?>
 			<?php else: $failed = TRUE ?>
 				<td class="fail">The configured system <b>url</b> <br><b><?php echo URL ?></b><br> does not match to valid URL encoding.</td>
@@ -191,7 +195,7 @@ function urlExists( $url = null ) {
 			<?php if (extension_loaded('http')): ?>
 				<td class="pass">Pass</td>
 			<?php else: ?>
-				<td class="fail">Application can use the <a href="http://php.net/http">http</a> extension for the Request_Client_External class.<br /><pre class="hint">Try to add the extensions in <b>/etc/php5/apache2/php.ini</b>
+				<td class="fail">Application can use the <a href="http://php.net/http">http</a> extension for the Request_Client_External class.<br /><pre class="hint">Try to add the extensions in <b>/etc/php/apache2/php.ini</b>
 
 extension=raphf.so
 extension=propro.so
@@ -221,13 +225,13 @@ extension=http.so
 sudo updatedb 
 locate mcrypt.ini
 
-Should show it located at <b>/etc/php5/mods-available</b>
+Should show it located at <b>/etc/php/mods-available</b>
 
 locate mcrypt.so
 
 Edit mcrypt.ini and change extension to match the path to mcrypt.so, example:
 
-extension=/usr/lib/php5/20121212/mcrypt.so
+extension=/usr/lib/php/20121212/mcrypt.so
 </pre>
 </td>
 		<?php endif ?>
@@ -239,7 +243,7 @@ extension=/usr/lib/php5/20121212/mcrypt.so
 		<?php if (function_exists('gd_info')): ?>
 			<td class="pass">Pass</td>
 		<?php else: ?>
-			<td class="fail">Application requires <a href="http://php.net/gd">GD</a> v2 for the Image class. Verify that "php5-gd" is installed.</td>
+			<td class="fail">Application requires <a href="http://php.net/gd">GD</a> v2 for the Image class. Verify that "php-gd" is installed.</td>
 		<?php endif ?>
 	</tr>
 	<?php endif; ?>

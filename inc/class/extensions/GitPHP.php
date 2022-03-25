@@ -24,6 +24,18 @@ class GitPHP {
 		}
 		return false;
 	}
+  
+	/**
+	 * Current commit and the last from git logs
+	 */
+	public static function gitCurrent() {
+		if( self::git() ) {
+			if( is_file( '/usr/bin/git' ) ) {
+				return exec( 'git log -1 | grep commit | tail -c 41' );
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Get the current remote url 

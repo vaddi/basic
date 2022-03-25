@@ -55,6 +55,13 @@ class Site extends Base {
     // if( $page == '403' ) {
     //   $file = __DIR__ . "/../pages/403.php";
     // }
+    if( $page == 'info' ) {
+      if( ENV === "dev" ) { // php info is only available in dev enviroment!
+        $file = __DIR__ . "/../pages/info.php";
+      } else {
+        $file = __DIR__ . "/../pages/403.php";
+      }
+    }
     if( ! is_file( $file ) ) {
       // otherwise we use a 404 page (from templates)
       $file = __DIR__ . "/../pages/404.php";
