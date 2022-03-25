@@ -13,6 +13,7 @@ class Site extends Base {
       echo "cp inc/config.php.example inc/config.php";
       exit;
     }
+    // Site is our initial Class, so we need our config and a template
     self::loadFile( __DIR__ .  '/../config.php' );
     self::loadFile( __DIR__ .  '/Template.php' );
     // validate pages folder
@@ -43,28 +44,28 @@ class Site extends Base {
     $content = null;
     // validate we have this page
     $file = $this->_pages . $page . ".php" ;
-    // if file is protetet (pages has $hidden = true;)
-    // $preload = $template->loadFileData( $file );
-    // if( $preload ) {
-    //   # show 401 or 403
-    // }
-    // show a forbiddenpage 403 or 401
+    // // if file is protetet (pages has $hidden = true;)
+    // // $preload = $template->loadFileData( $file );
+    // // if( $preload ) {
+    // //   # show 401 or 403
+    // // }
+    // // show a forbiddenpage 403 or 401
     // if( $page == '401' ) {
-    //   $file = __DIR__ . "/../pages/401.php";
+    //   $file = PAGES . "401.php";
     // }
     // if( $page == '403' ) {
-    //   $file = __DIR__ . "/../pages/403.php";
+    //   $file = PAGES . "403.php";
     // }
     if( $page == 'info' ) {
       if( ENV === "dev" ) { // php info is only available in dev enviroment!
-        $file = __DIR__ . "/../pages/info.php";
+        $file = PAGES . "info.php";
       } else {
-        $file = __DIR__ . "/../pages/403.php";
+        $file = PAGES . "403.php";
       }
     }
     if( ! is_file( $file ) ) {
       // otherwise we use a 404 page (from templates)
-      $file = __DIR__ . "/../pages/404.php";
+      $file = PAGES . "404.php";
     }
     $template = new Template( TPL );
     // database object

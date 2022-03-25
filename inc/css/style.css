@@ -67,7 +67,9 @@ nav ul li {
   float: left;
   margin-right: 5px;
 }
-nav li a {
+nav li a,
+nav li a:link,
+nav li a:visited {
   text-decoration: none;
   color: #7d7a7a;
   border: 1px solid #ccc;

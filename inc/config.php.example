@@ -14,7 +14,7 @@ define( 'PAGES',      __DIR__ . "/pages/" ); // path to the pages folder
 define( 'TPL',        __DIR__ . "/tpl/" ); // path to the templates folder
 define( 'METRICS',    true ); // enable or disable metrics endpoint
 define( 'EXCLUDED_IP', array( '127.0.0.1', '::1' ) ); // Exclude IPs from tracker
-define( 'MENU_EXCLUDE', array( 'index', '401', '403', '404', 'login', 'info' ) );
+define( 'MENU_EXCLUDE', array( 'index', '401', '403', '404', 'login', 'info', 'news' ) );
 
 define( 'ENV',        'prod' ); 						// Enviroment (dev,prod)
 define( 'SECRET',     'tOpSeCr3tT0k3n!'); // Secret token
