@@ -55,9 +55,9 @@ echo isset( $contact['land'] ) && $contact['land'] != "" ? $contact['land'] . "<
 
 echo "<br />\n";
 // Phnoe, Fax and Mail
-echo isset( $contact['phone'] ) && $contact['phone'] != "" ? $contact['phone'] . "<br />\n" : '';
-echo isset( $contact['fax'] ) && $contact['fax'] != "" ? $contact['fax'] . "<br />\n" : '';
-echo isset( $contact['mail'] ) && $contact['mail'] != "" ? $contact['mail'] . "<br />\n" : '';
+echo isset( $contact['phone'] ) && $contact['phone'] != "" ? '<a href="tel:' . $contact['phone'] . '">' . $contact['phone'] . "</a><br />\n" : '';
+echo isset( $contact['fax'] ) && $contact['fax'] != "" ? '<a href="fax:' . $contact['fax'] . '">' . $contact['fax'] . "</a><br />\n" : '';
+echo isset( $contact['mail'] ) && $contact['mail'] != "" ? '<a href="mailto:' . $contact['mail'] . '">' . $contact['mail'] . "</a><br />\n" : '';
 echo '</div>';
 
 
