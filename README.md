@@ -1,6 +1,6 @@
 # Simple PHP Basic Template #
 
-A Simple plain PHP Templating Engine. You can see a running Application on [demo-page]().
+A Simple plain PHP Templating Engine. You can see a running Application on [demo-page](https://www.mvattersen.de/basic).
 
 
 ## Installation ##
@@ -36,7 +36,7 @@ Updating a old Version which is installed via git command is also straight forrw
 	git pull
 
 
-See [git-merge]() for more about how to merge your Setup and the base Setup.
+See [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merge-and-git-rebase/) for more about how to merge your Setup and the base Setup.
 
 
 ## Content/Pages ##
@@ -93,13 +93,13 @@ All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder
 - basic_commits = Amount of git Commits
 - basic_appsize = Total Size of the Application
 
-You can use my `PHP Applications` Dasboard as Dashboard Example: [dashboard]()
+You can use my `PHP Applications` Dasboard as Dashboard Example: [dashboard](https://github.com/vaddi/basic/tree/main/inc/asset/dashboard.json)
 
 The Exprter can turned off by Set Config Constant `METRICS` to false.
 
 ## Known Bugs ##
 
-Bugs can also be Reported under: [git-issues]()
+Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/issues)
 
 
 

@@ -39,10 +39,13 @@ class Exporter {
     $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
 
     // get the last cahnge on the page: newest file
-    $result .= "# HELP " . SHORTNAME . "_age Use the Youngest file modification date as Reference to get the current Siteage in Milliseconds\n";
-    $result .= "# TYPE " . SHORTNAME . "_age gauge\n";
+    $result_tmp = null;
     $age = Base::lastUpdated();
-    $result .= SHORTNAME . "_age{format=\"iso8601\",last=\"" . $age['date'] . "\"} " . ( time() - strtotime( $age['date'] ) ) . "\n";
+    if( isset( $age['date'] ) && $age['date'] != null && $age['date'] != "" ) {
+      $result .= "# HELP " . SHORTNAME . "_age Use the Youngest file modification date as Reference to get the current Siteage in Milliseconds\n";
+      $result .= "# TYPE " . SHORTNAME . "_age gauge\n";
+      $result .= SHORTNAME . "_age{format=\"iso8601\",last=\"" . $age['date'] . "\"} " . ( time() - strtotime( $age['date'] ) ) . "\n";
+    }
 
     if( SQLITE_USE ) {
 
