@@ -63,12 +63,17 @@ Read the content from the `tpl` Folder and wrap them into a basic HTML Page Temp
 
 ## Layout ##
 
-A pure Layout is allready shiped by default. It uses the `style.css` inside of the `css` Folder and contains pure CSS. 
-
 You only have to place the file into the `css` or `js` Folder and the Template Class will render the neccessary Links into the Page head Section to include them. 
 
+### CSS ###
 
-## JavaScript ##
+A pure Layout is allready shiped by default. It uses the `style.css` inside of the `css` Folder and contains pure CSS. If there are other files in this Folder, the styles.css won't be used, so you can easily overwrite the default layout by your own.
+
+### HTML ###
+
+The layout of html is controlled by the Files into the `tpl` Folder and the class `Template`, with renders the Files 
+
+### JavaScript ###
 
 The Base Template contains some JavaScript Files for clock, pageload and to highlight the current navigation link. 
 All files will be added to page head by `tpl/head.php`
@@ -88,7 +93,9 @@ All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder
 - basic_commits = Amount of git Commits
 - basic_appsize = Total Size of the Application
 
-You can use my Dasboard as Example: [dashboard]()
+You can use my `PHP Applications` Dasboard as Dashboard Example: [dashboard]()
+
+The Exprter can turned off by Set Config Constant `METRICS` to false.
 
 ## Known Bugs ##
 

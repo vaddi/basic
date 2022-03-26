@@ -97,7 +97,7 @@ $unpack = unpack( 'H*', SECRET );
 $secret = array_shift( $unpack );
 define('SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret );
 define('CLIENTTOKEN', urlencode( base64_encode( SERVERTOKEN ) ) );
-define( 'VERSION',    str_replace( "\n", '', file_get_contents( 'inc/version.txt' ) ) );
+define( 'VERSION',    str_replace( "\n", '', file_get_contents( __DIR__ . '/version.txt' ) ) );
 
 // helper constants
 define('PROTOCOL',    isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === "on" ? 'https://' : 'http://' );

@@ -1,5 +1,6 @@
-<nav>
-      <ul id="headnav">
+<div>
+  <nav>
+    <ul id="headnav">
 <?php
   
 $path = PAGES;
@@ -33,5 +34,6 @@ foreach( $files as $key => $value ) {
 echo $output;
 
 ?>
-      </ul>
-    </nav>
+    </ul>
+  </nav>
+<div>

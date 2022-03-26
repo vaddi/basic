@@ -4,19 +4,30 @@ class Template extends Base {
   
   // default tmmpate path
   private $_tpl = __DIR__ . "/../tpl/";
-  
+
+  /**
+   * Constructor of the Class
+   */
   public function __construct( $path = null ) {
     if( $path !== null ) {
       $this->_tpl = $path;
+    } else {
+      return false;
     }
   }
 
+  /**
+   * include the Content from the tpl files and return them as Object
+   */
   public function loadFileData( $file ) {
     ob_start();
     include( $file );
     return ob_get_clean();
   }
 
+  /**
+   * Helper to load javascript and css files
+   */
   public function headFiles( $path = null, $type = null ) {
     if( $path === null || ! is_dir( $path ) ) return false;
     if( $type === null ) $type = '.php';
@@ -31,12 +42,49 @@ class Template extends Base {
       if( $type == '.js' ) {
         $output .= '  <script type="text/javascript" src="' . $value . '"></script>' . "\n";
       } else if( $type == '.css' ) {
-        $output .= '  <link href="' . $value . '" rel="stylesheet">' . "\n";
+        // if inc/css/style.css is not the only file in the directory, use the other ones and not styles.css
+        if( $value == 'inc/css/style.css' && count( $files ) >= 2 ) {
+          continue;
+        } else {
+          $output .= '  <link href="' . $value . '" rel="stylesheet">' . "\n";
+        }
       }
     }
     return $output;
   }
 
+  /**
+   * Build together the HTML Parts of the Page by files from the tpl, css and js folders
+   */
+  public function build( $input ) {
+
+    $output  = '<!DOCTYPE html>' . "\n";
+    $output .= '<html lang="' . CLIENTLANG . '">' . "\n";
+    // load head
+    $output .= $this->loadFileData( $this->_tpl . 'head.php' );
+    $output .= '<body>' . "\n";
+    $output .= '<div class="page-content">' . "\n";
+    // load header
+    $output .= $this->loadFileData( $this->_tpl . 'header.php' );
+    // content
+    $output .= "\n<div id='content'>\n";
+    $output .= $input . "\n";
+
+    $output .= self::debug();
+
+    $output .= "\n</div>\n";
+    // load footer
+    $output .= $this->loadFileData( $this->_tpl . 'footer.php' );
+    $output .= '</div>' . "\n"; // close content
+    $output .= '</body>' . "\n";
+    $output .= '</html>';
+
+    return $output;
+  }
+
+  /**
+   * Some Debug Output
+   */
   public function debug() {
     if( ENV === "dev" ) {
       $output = '<div class="debug">' . "\n";
@@ -89,32 +137,6 @@ class Template extends Base {
       $output .= '</div>' . "\n";
       return $output;
     }
-  }
-
-  public function build( $input ) {
-
-    $output  = '<!DOCTYPE html>' . "\n";
-    $output .= '<html lang="' . CLIENTLANG . '">' . "\n";
-    // load head
-    $output .= $this->loadFileData( $this->_tpl . 'head.php' );
-    $output .= '<body>' . "\n";
-    $output .= '<div class="page-content">' . "\n";
-    // load header
-    $output .= $this->loadFileData( $this->_tpl . 'header.php' );
-    // content
-    $output .= "\n<div id='content'>\n";
-    $output .= $input . "\n";
-
-    $output .= self::debug();
-
-    $output .= "\n</div>\n";
-    // load footer
-    $output .= $this->loadFileData( $this->_tpl . 'footer.php' );
-    $output .= '</div>' . "\n"; // close content
-    $output .= '</body>' . "\n";
-    $output .= '</html>';
-
-    return $output;
   }
   
 }
