@@ -17,7 +17,7 @@ class Site extends Base {
     self::loadFile( __DIR__ .  '/../config.php' );
     self::loadFile( __DIR__ .  '/Template.php' );
     // validate pages folder
-    $this->_pages = PAGES;
+    $this->_pages = PAGES; // set default pages folder from config
     if( ! is_dir( $this->_pages ) ) {
       echo "Pages folder not found under given Path: ". $this->_pages;
       exit;
@@ -77,8 +77,10 @@ class Site extends Base {
     Base::requestCounter(); // visitor counter class
     if( METRICS && isset( $_REQUEST['page']) && $_REQUEST['page'] == 'metrics' ) {
       // appExporter for endpoint metrics (no html stuff, just plain text)
-      $output = Base::appExporter();
+      // output data from a class
+      $output = Exporter::appExporter();
     } else {
+      // default output, get Contetn from file
       $output = $template->build( $this->getContent() );
     }
     print_r( $output );

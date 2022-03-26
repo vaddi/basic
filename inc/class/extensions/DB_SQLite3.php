@@ -1,6 +1,6 @@
 <?php
 
-class DB {
+class DB_SQLite3 {
 
   // class variables
 	private $_db = null;	// Database Object
@@ -95,6 +95,9 @@ class DB {
 	// bind parameter 
 	public function bind( $param, $value, $type = null ) {
     try {
+      if( $value != null ) { // escape all non null values
+        $value = SQLite3::escapeString( $value );
+      }
     	if( is_null( $type ) ) {
 		    switch( true ) {
 		      case is_int( $value ):

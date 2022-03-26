@@ -11,7 +11,7 @@ class Base {
 	 * Get total application size
 	 * @return	Appsize (/ whithout git folder)
 	 */
-	protected static function appSize() {
+	public static function appSize() {
     $result = null;
 		$path = exec( 'pwd' );
 		$size = explode( "\t", exec( '/usr/bin/du -s ' . $path ) );
@@ -29,7 +29,7 @@ class Base {
 	/**
 	 * Get total application files in upload
 	 */
-	protected static function totalFiles() {
+	public static function totalFiles() {
 //		$path = realpath( './' ) . '/' . PAGES;
     $path = PAGES;
 		$result = ( exec( "find $path -not -type d | wc -l |tr -d ' '" ) );
@@ -39,10 +39,22 @@ class Base {
 	/**
 	 * Helper function to get the used enviroment
 	 */
-	protected static function getEnv() {
+	public static function getEnv() {
 		return ENV;
 	}
-  
+
+	/**
+	 * Helper function to get newest file and its date of modification
+	 */
+	public static function lastUpdated() {
+    $path = __DIR__;
+    $string = exec( "find $path -type f -exec stat -lt \"%Y-%m-%dT%H:%M:%S%z\" {} \+ | cut -d' ' -f6- | sort -n | tail -1 | tr -d \"\n\"" );
+    $tmp = explode( ' ', $string );
+    $result['date'] = isset( $tmp[0] ) && $tmp[0] != null ? $tmp[0] : null;
+    $result['file'] = isset( $tmp[1] ) && $tmp[1] != null ? $tmp[1] : null;
+		return $result;
+	}
+
 	/**
 	 * Generate a Token (URL save characters)
 	 * Form 0 = only Numbers
@@ -133,7 +145,7 @@ class Base {
 	}
   
 	/**
-	 * Helper for login
+	 * Helper for static login
 	 */
 	public static function login( $user = null, $passwd = null ) { 
     if( $user === null || $passwd === null ) return false;
@@ -159,10 +171,10 @@ class Base {
       $timestamp = date( 'Y-m-d H:i:s', time());
       $useragent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : null;
       $platform = isset( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null;
-      $url = URL;
+      $url = URL . ( PAGE == 'home' ? '' : "?page=" . PAGE );
       $referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;
       $hits = 1;
-      $db = new DB( SQLITE_TYPE, SQLITE_FILE );
+      $db = new DB_SQLite3( SQLITE_TYPE, SQLITE_FILE );
 
       if( $db ) {
         // do we have an entry for the visitor?
@@ -198,115 +210,6 @@ class Base {
       }
     }
     return false;
-	}
-
-	/**
-	 * Helper to build prometheus scrape endpoint for Application
-	 */
-	public static function appExporter() { 
-		$result = null;
-
-    $result .= "# HELP " . SHORTNAME . "_info " . APPNAME . " Info Metric with constant value 1\n";
-    $result .= "# TYPE " . SHORTNAME . "_info gauge\n";
-    $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . APPDOMAIN . "\",enviroment=\"" . ENV . "\"} 1\n";
-
-    $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
-    $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
-    $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . self::totalFiles() . "\n";
-
-    $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
-    $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
-    $result .= SHORTNAME . "_commits " . GitPHP::gitCommits() . "\n";
-
-    $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
-    $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
-    $result .= SHORTNAME . "_appsize{type=\"total\"} " . self::appSize()[0] . "\n";
-    $result .= SHORTNAME . "_appsize{type=\"git\"} " . self::appSize()[1] . "\n";
-    $result .= SHORTNAME . "_appsize{type=\"plain\"} " . self::appSize()[2] . "\n";
-
-    $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
-    $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
-    $result .= SHORTNAME . "_todos " . ( self::getOpenDoings() +1 ) . "\n";
-
-    $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
-    $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
-    $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
-
-    if( SQLITE_USE ) {
-      // create PDO database object
-      $db = new DB( SQLITE_TYPE, SQLITE_FILE );
-      if( $db ) {
-        $result_tmp = null;
-        $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE timestamp < date('now')" );
-        $db->execute();
-        $hits_daily = $db->resultset()[0]['hits'];
-        $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE timestamp < date('now','-1 hour')" );
-        $db->execute();
-        $hits_hourly = $db->resultset()[0]['hits'];
-        $db->query( "SELECT COUNT(hits) as hits FROM visitors" );
-        $db->execute();
-        $hits_total = $db->resultset()[0]['hits'];
-        if( isset( $hits_daily ) && $hits_daily != null && $hits_daily != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"visitors\",field=\"daily\"} " . $hits_daily . "\n";
-        }
-        if( isset( $hits_hourly ) && $hits_hourly != null && $hits_hourly != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"visitors\",field=\"hourly\"} " . $hits_hourly . "\n";
-        }
-        if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"visitors\",field=\"total\"} " . $hits_total . "\n";
-        }
-
-        $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE timestamp < date('now')" );
-        $db->execute();
-        $hits_daily = $db->resultset()[0]['hits'];
-        $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE timestamp < date('now','-1 hour')" );
-        $db->execute();
-        $hits_hourly = $db->resultset()[0]['hits'];
-        $db->query( "SELECT SUM(hits) as hits FROM visitors" );
-        $db->execute();
-        $hits_total = $db->resultset()[0]['hits'];
-        $db->query( "SELECT AVG(hits) as hits FROM visitors" );
-        $db->execute();
-        $hits_avg = $db->resultset()[0]['hits'];
-        if( isset( $hits_daily ) && $hits_daily != null && $hits_daily != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"daily\"} " . $hits_daily . "\n";
-        }
-        if( isset( $hits_hourly ) && $hits_hourly != null && $hits_hourly != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"hourly\"} " . $hits_hourly . "\n";
-        }
-        if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"total\"} " . $hits_total . "\n";
-        }
-        if( isset( $hits_avg ) && $hits_avg != null && $hits_avg != "" ) {
-          $result_tmp .= SHORTNAME . "_visitors{type=\"hits\",field=\"avg\"} " . $hits_avg . "\n";
-        }
-
-        // prepend header
-        if( $result_tmp != null || $result_tmp != "" ) {
-          $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
-          $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
-          $result .= $result_tmp;
-        }
-
-      }
-    }
-
-    // $result .= '';
-    // $result .= '';
-    // $result .= '';
-
-    // ToDo: find some usefull metrics.
-    // current loged in users (user sessions)
-    // current process runtime (ps -p $(pidof "nginx: worker process") -o etimes= | tr -d " ")
-    // current errors (from log?)
-
-    $result .= "# HELP " . SHORTNAME . "_mtime Total time for this response, Metric Time in Seconds\n";
-    $result .= "# TYPE " . SHORTNAME . "_mtime gauge\n";
-    $result .= SHORTNAME . "_mtime " . ( microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"] ) . "\n";
-
-    header("Content-type: text/plain; charset=utf-8");
-    http_response_code( 200 );
-    return $result;
 	}
 
 }

@@ -3,7 +3,7 @@
 class Template extends Base {
   
   // default tmmpate path
-  private $_tpl = __DIR__ . "/../tpl/";
+  private $_tpl = TPL;
 
   /**
    * Constructor of the Class
