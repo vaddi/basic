@@ -1,4 +1,6 @@
 **/.DS_Store
 inc/config.php
 inc/db/database.sqlite
+inc/sites/*
+
 
