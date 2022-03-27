@@ -50,7 +50,7 @@ class Visitor {
           $db->execute();
         } else if( isset( $result[0]['id'] ) ) {
           // update the existing user entry id
-          $db->query( "UPDATE visitors SET ip = :ip, url = :url, timestamp = :timestamp, useragent = :useragent, platform = :platform, referer = :referer, hits = :hits, hostname = :Hostname, rendertime = :rendertime WHERE id = :id;" );
+          $db->query( "UPDATE visitors SET ip = :ip, url = :url, timestamp = :timestamp, useragent = :useragent, platform = :platform, referer = :referer, hits = :hits, hostname = :hostname, rendertime = :rendertime WHERE id = :id;" );
           $db->bind( ':ip', $ip );
           $db->bind( ':url', $url );
           $db->bind( ':timestamp', $timestamp );
