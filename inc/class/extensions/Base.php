@@ -168,8 +168,9 @@ class Base {
       $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : null;
       // we need to exclude IPs (likethe Prometheus scraper)
       if( in_array( $ip, EXCLUDED_IP ) ) return false;
-      $timestamp = date( 'Y-m-d H:i:s', time());
       $useragent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : null;
+      if( strpos( $useragent, 'Prometheus' ) !== false ) return false; // exclude prometheus
+      $timestamp = date( 'Y-m-d H:i:s', time());
       $platform = isset( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null;
       $url = URL . ( PAGE == 'home' ? '' : "?page=" . PAGE );
       $referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;
