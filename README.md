@@ -77,8 +77,8 @@ You find also creation Schemas in the `assets` Folder.
 Updating a old Version which is installed via git command (which is recommend) is also straight forrward.
 
 1. Check if the are any Overwrites by you into the Base Files `git status`
-2. If you found uncommited changes. You have to resolve this first. 
-3. If there are no changes found by git, just update by `git pull`
+2. If you found `Untracked files`, you can ignore the Messages. Only Changes on Base Files will result in a merge conflict!  
+3. If there are no changes found by git, just update by running `git pull`
 
 
 See [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merge-and-git-rebase/) for more about how to merge your Setup and the base Setup.

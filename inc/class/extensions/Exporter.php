@@ -16,27 +16,42 @@ class Exporter {
     $result .= "# TYPE " . SHORTNAME . "_info gauge\n";
     $result .= SHORTNAME . "_info{version=\"" . VERSION . "\",nodename=\"" . APPDOMAIN . "\",enviroment=\"" . ENV . "\"} 1\n";
 
-    $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
-    $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
-    $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . Base::totalFiles() . "\n";
+    $tmpval = Base::totalFiles();
+    if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
+      $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
+      $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
+      $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . Base::totalFiles() . "\n";
+    }
 
-    $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
-    $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
-    $result .= SHORTNAME . "_commits " . GitPHP::gitCommits() . "\n";
+    $tmpval = GitPHP::gitCommits();
+    if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
+      $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
+      $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
+      $result .= SHORTNAME . "_commits " . GitPHP::gitCommits() . "\n";
+    }
 
-    $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
-    $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
-    $result .= SHORTNAME . "_appsize{type=\"total\"} " . Base::appSize()[0] . "\n";
-    $result .= SHORTNAME . "_appsize{type=\"git\"} " . Base::appSize()[1] . "\n";
-    $result .= SHORTNAME . "_appsize{type=\"plain\"} " . Base::appSize()[2] . "\n";
+    $tmpval = Base::appSize();
+    if( isset( $tmpval ) && $tmpval != null && is_array( $tmpval ) ) {
+      $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
+      $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
+      $result .= SHORTNAME . "_appsize{type=\"total\"} " . Base::appSize()[0] . "\n";
+      $result .= SHORTNAME . "_appsize{type=\"git\"} " . Base::appSize()[1] . "\n";
+      $result .= SHORTNAME . "_appsize{type=\"plain\"} " . Base::appSize()[2] . "\n";
+    }
 
-    $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
-    $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
-    $result .= SHORTNAME . "_todos " . ( Base::getOpenDoings() +1 ) . "\n";
+    $tmpval = Base::getOpenDoings();
+    if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
+      $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
+      $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
+      $result .= SHORTNAME . "_todos " . ( Base::getOpenDoings() +1 ) . "\n";
+    }
 
-    $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
-    $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
-    $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
+    $tmpval = GitPHP::checkForUpdate();
+    if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
+      $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
+      $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
+      $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
+    }
 
     // get the last cahnge on the page: newest file
     $result_tmp = null;
@@ -151,7 +166,7 @@ class Exporter {
         }
         if( isset( $hits_osh ) && $hits_osh != null && count( $hits_osh ) > 0 ) {
           foreach( $hits_osh as $key => $element ) {
-            $result_tmp .= SHORTNAME . "_os{type=\"hits\",field=\"" . str_replace( '"', '', $element['platform'] ) . "\"} " . $element['hits'] . "\n";
+            $result_tmp .= SHORTNAME . "_os{type=\"hits\",field=\"" . $element['platform'] . "\"} " . $element['hits'] . "\n";
           }
         }
 
