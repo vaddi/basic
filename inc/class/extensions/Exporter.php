@@ -20,37 +20,49 @@ class Exporter {
     if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
       $result .= "# HELP " . SHORTNAME . "_pages Amount of pages (and pages location)\n";
       $result .= "# TYPE " . SHORTNAME . "_pages gauge\n";
-      $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . Base::totalFiles() . "\n";
+      $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . $tmpval . "\n";
     }
 
     $tmpval = GitPHP::gitCommits();
     if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
       $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
       $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
-      $result .= SHORTNAME . "_commits " . GitPHP::gitCommits() . "\n";
+      $result .= SHORTNAME . "_commits " . $tmpval . "\n";
     }
 
     $tmpval = Base::appSize();
     if( isset( $tmpval ) && $tmpval != null && is_array( $tmpval ) ) {
-      $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
-      $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
-      $result .= SHORTNAME . "_appsize{type=\"total\"} " . Base::appSize()[0] . "\n";
-      $result .= SHORTNAME . "_appsize{type=\"git\"} " . Base::appSize()[1] . "\n";
-      $result .= SHORTNAME . "_appsize{type=\"plain\"} " . Base::appSize()[2] . "\n";
+      $result_tmp = null;
+      if( isset( $tmpval[0] ) && $tmpval[0] != null && $tmpval[0] != "" ) {
+        $result_tmp .= SHORTNAME . "_appsize{type=\"total\"} " . $tmpval[0] . "\n";
+      }
+      if( isset( $tmpval[1] ) && $tmpval[1] != null && $tmpval[1] != "" ) {
+        $result_tmp .= SHORTNAME . "_appsize{type=\"git\"} " . $tmpval[1] . "\n";
+      }
+      if( isset( $tmpval[2] ) && $tmpval[2] != null && $tmpval[2] != "" ) {
+        $result_tmp .= SHORTNAME . "_appsize{type=\"plain\"} " . $tmpval[2] . "\n";
+      }
+
+      // prepend header
+      if( $result_tmp != null || $result_tmp != "" ) {
+        $result .= "# HELP " . SHORTNAME . "_appsize Total Size of Application in KiB\n";
+        $result .= "# TYPE " . SHORTNAME . "_appsize gauge\n";
+        $result .= $result_tmp;
+      }
     }
 
     $tmpval = Base::getOpenDoings();
     if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
       $result .= "# HELP " . SHORTNAME . "_todos Current open ToDo's (simple count from Application files)\n";
       $result .= "# TYPE " . SHORTNAME . "_todos gauge\n";
-      $result .= SHORTNAME . "_todos " . ( Base::getOpenDoings() +1 ) . "\n";
+      $result .= SHORTNAME . "_todos " . ( $tmpval +1 ) . "\n";
     }
 
     $tmpval = GitPHP::checkForUpdate();
     if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
       $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
       $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
-      $result .= SHORTNAME . "_updates " . GitPHP::checkForUpdate() . "\n";
+      $result .= SHORTNAME . "_updates " . $tmpval . "\n";
     }
 
     // get the last cahnge on the page: newest file
