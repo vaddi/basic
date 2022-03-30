@@ -79,6 +79,8 @@ class Exporter {
       // create PDO database object
       $db = new DB_SQLite3( SQLITE_TYPE, SQLITE_FILE );
       if( $db ) {
+
+        // visitors
         $result_tmp = null;
         $db->query( "SELECT COUNT(hits) as hits FROM visitors WHERE strftime('%Y', timestamp) = strftime('%Y',date('now')) AND strftime('%m', timestamp) = strftime('%m',date('now')) AND strftime('%d', timestamp) = strftime('%d',date('now'));" );
         $db->execute();
@@ -110,19 +112,18 @@ class Exporter {
         if( isset( $hits_total ) && $hits_total != null && $hits_total != "" ) {
           $result_tmp .= SHORTNAME . "_visitors{field=\"total\"} " . $hits_total . "\n";
         }
-
-        // prepend header
+        // prepend visitors header
         if( $result_tmp != null || $result_tmp != "" ) {
           $result .= "# HELP " . SHORTNAME . "_visitors Basic Visitor Metrics\n";
           $result .= "# TYPE " . SHORTNAME . "_visitors gauge\n";
           $result .= $result_tmp;
         }
 
+        // hits
         $result_tmp = null;
         $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE strftime('%Y', timestamp) = strftime('%Y',date('now')) AND strftime('%m', timestamp) = strftime('%m',date('now')) AND strftime('%d', timestamp) = strftime('%d',date('now'));" );
         $db->execute();
         $hits_daily = $db->resultset()[0]['hits'];
-        
         $db->query( "SELECT SUM(hits) as hits FROM visitors WHERE strftime('%W', timestamp, 'localtime', 'weekday 0', '-6 days') = strftime('%W', date('now') , 'localtime', 'weekday 0', '-6 days');" );
         $db->execute();
         $hits_weekly = $db->resultset()[0]['hits'];
@@ -156,14 +157,14 @@ class Exporter {
         if( isset( $hits_avg ) && $hits_avg != null && $hits_avg != "" ) {
           $result_tmp .= SHORTNAME . "_hits{field=\"avg\"} " . $hits_avg . "\n";
         }
-
-        // prepend header
+        // prepend hits header
         if( $result_tmp != null || $result_tmp != "" ) {
           $result .= "# HELP " . SHORTNAME . "_hits Basic Site hit Metrics\n";
           $result .= "# TYPE " . SHORTNAME . "_hits gauge\n";
           $result .= $result_tmp;
         }
 
+        // visitors by os
         $result_tmp = null;
         $db->query( "SELECT platform,COUNT(id) AS visitors FROM visitors GROUP BY platform;" );
         $db->execute();
@@ -181,11 +182,37 @@ class Exporter {
             $result_tmp .= SHORTNAME . "_os{type=\"hits\",field=\"" . $element['platform'] . "\"} " . $element['hits'] . "\n";
           }
         }
-
-        // prepend header
+        // prepend visitors by os header
         if( $result_tmp != null || $result_tmp != "" ) {
           $result .= "# HELP " . SHORTNAME . "_os Site hits per Operating System\n";
           $result .= "# TYPE " . SHORTNAME . "_os gauge\n";
+          $result .= $result_tmp;
+        }
+
+        // rendertime
+        $result_tmp = null;
+        $db->query( "SELECT MAX(rendertime) as rendertime FROM visitors ORDER BY rendertime DESC LIMIT 1;" );
+        $db->execute();
+        $rendertime_max = $db->resultset();
+        if( isset( $rendertime_max ) && $rendertime_max != null && count( $rendertime_max ) > 0 ) {
+          $result_tmp .= SHORTNAME . "_rendertime{type=\"max\"} " . $rendertime_max[0]['rendertime'] . "\n";
+        }
+        $db->query( "SELECT MIN(rendertime) as rendertime FROM visitors ORDER BY rendertime ASC LIMIT 1;" );
+        $db->execute();
+        $rendertime_min = $db->resultset();
+        if( isset( $rendertime_min ) && $rendertime_min != null && count( $rendertime_min ) > 0 ) {
+          $result_tmp .= SHORTNAME . "_rendertime{type=\"min\"} " . $rendertime_min[0]['rendertime'] . "\n";
+        }
+        $db->query( "SELECT AVG(rendertime) as rendertime FROM visitors;" );
+        $db->execute();
+        $rendertime_avg = $db->resultset();
+        if( isset( $rendertime_avg ) && $rendertime_avg != null && count( $rendertime_avg ) > 0 ) {
+          $result_tmp .= SHORTNAME . "_rendertime{type=\"avg\"} " . $rendertime_avg[0]['rendertime'] . "\n";
+        }
+        // prepend rendertime by os header
+        if( $result_tmp != null || $result_tmp != "" ) {
+          $result .= "# HELP " . SHORTNAME . "_rendertime Site render times, collected from visitors\n";
+          $result .= "# TYPE " . SHORTNAME . "_rendertime gauge\n";
           $result .= $result_tmp;
         }
 
