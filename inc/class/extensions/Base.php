@@ -16,7 +16,7 @@ class Base {
 		$path = exec( 'pwd' );
 		$size = explode( "\t", exec( '/usr/bin/du -s ' . $path ) );
 		$result[] = isset( $size[0] ) ? $size[0] : null;
-		if( GitPHP::git() ) {
+		if( Git::gitPHP() ) {
 			$size = explode( "\t", exec( '/usr/bin/du -s ' . $path . '/.git' ) );
 			$git = isset( $size[0] ) ? $size[0] : null;
       //$result = 'total ' . $real . 'MB, only .git ' . ( (float) $real - (float) $git ) . 'MB';
@@ -112,7 +112,7 @@ class Base {
 	}
 
   public static function getOpenDoings() {
-    $result = exec( 'grep -r "ToDo:" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -2;
+    $result = exec( 'grep -r "todo" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -7;
     return $result;
   }
   

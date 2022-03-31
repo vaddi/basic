@@ -86,6 +86,7 @@ class Template extends Base {
    * Some Debug Output
    */
   public function debug() {
+    // unused php class functions would be nice
     if( ENV === "dev" ) {
       $output = '<div class="debug">' . "\n";
       $output .= '<h2>Debug Output</h2>' . "\n";
@@ -107,13 +108,13 @@ class Template extends Base {
       $output .= '  </tr>' . "\n";
       // git current commit hash
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Git current commit hash</td><td>' . GitPHP::gitCurrent() . "</td>\n";
+      $output .= '    <td>Git current commit hash</td><td>' . Git::gitCurrent() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Git last commit hash</td><td>' . GitPHP::gitLast() . "</td>\n";
+      $output .= '    <td>Git last commit hash</td><td>' . Git::gitLast() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Git remote</td><td>' . GitPHP::gitRemote() . "</td>\n";
+      $output .= '    <td>Git remote</td><td>' . Git::gitRemote() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
       $output .= '    <td>App Size</td><td>' . implode( ' - ', Base::appSize() ) . "</td>\n";
@@ -122,10 +123,10 @@ class Template extends Base {
       $output .= '    <td>Total files</td><td>' . Base::totalFiles() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Git commits</td><td>' . GitPHP::gitCommits() . "</td>\n";
+      $output .= '    <td>Git commits</td><td>' . Git::gitCommits() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Git Tag</td><td>' . GitPHP::gitTag() . "</td>\n";
+      $output .= '    <td>Git Tag</td><td>' . Git::gitTag() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
       $output .= '    <td>Random Token</td><td>' . Base::genToken( 32 ) . "</td>\n";

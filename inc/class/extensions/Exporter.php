@@ -23,7 +23,7 @@ class Exporter {
       $result .= SHORTNAME . "_pages{pagefolder=\"" . PAGES . "\"} " . $tmpval . "\n";
     }
 
-    $tmpval = GitPHP::gitCommits();
+    $tmpval = Git::gitCommits();
     if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
       $result .= "# HELP " . SHORTNAME . "_commits Amount of git commits\n";
       $result .= "# TYPE " . SHORTNAME . "_commits gauge\n";
@@ -58,7 +58,7 @@ class Exporter {
       $result .= SHORTNAME . "_todos " . ( $tmpval +1 ) . "\n";
     }
 
-    $tmpval = GitPHP::checkForUpdate();
+    $tmpval = Git::checkForUpdate();
     if( isset( $tmpval ) && $tmpval != null && $tmpval != "" ) {
       $result .= "# HELP " . SHORTNAME . "_updates Newer Version in Repository available (1 = yes)\n";
       $result .= "# TYPE " . SHORTNAME . "_updates gauge\n";
@@ -219,11 +219,7 @@ class Exporter {
       }
     }
 
-    // $result .= '';
-    // $result .= '';
-    // $result .= '';
-
-    // ToDo: find some usefull metrics.
+    // some other usefull metrics.
     // current loged in users (user sessions)
     // current process runtime (ps -p $(pidof "nginx: worker process") -o etimes= | tr -d " ")
     // current errors (from log?)
