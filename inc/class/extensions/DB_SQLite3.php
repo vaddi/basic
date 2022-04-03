@@ -1,6 +1,6 @@
 <?php
 
-class DB_SQLite3 {
+class DB_SQLite3 extends PDO {
 
   // class variables
 	private $_db = null;	// Database Object

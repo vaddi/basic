@@ -4,7 +4,7 @@
       <span class='login'>
         <?php
         if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN ) {
-          echo '<a href="?page=login&logout=true">Logout</a>';
+          echo ( isset( $_COOKIE['username'] ) && $_COOKIE['username'] != null ? $_COOKIE['username'] . ': ': '' ) . date( 'H:i:s', ( $_COOKIE['created'] + CLIFETIME - time() - 3600 ) ) . ' | <a href="?page=login&logout=true">Logout</a>';
         } else {
           echo '<a href="?page=login">Login</a>';
         }

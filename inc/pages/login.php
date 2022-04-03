@@ -113,9 +113,10 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
           $shavar = sha1( $user . $password, CLIENTTOKEN );
           setcookie( 'cid', CLIENTTOKEN, time() + CLIFETIME );  /* expire in 1 hour */
           setcookie( 'created', time(), time() + CLIFETIME );
-          // if( ! isset( $_COOKIE['commitcookie'] ) ) {
-          //   setcookie( 'commitcookie', "true", time() + CLIFETIME );
-          // }
+          setcookie( 'username', USER, time() + CLIFETIME );
+          if( ! isset( $_COOKIE['commitcookie'] ) ) {
+            setcookie( 'commitcookie', "true", time() + CLIFETIME );
+          }
           // redirect on sucssefull login
           if( isset( $erg['redirect'] )) header( 'Location: ' . $erg['redirect'] );
           $result = array(
