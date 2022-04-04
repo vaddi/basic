@@ -1,4 +1,5 @@
-<div>
+<div id="navigation">
+
   <nav>
     <ul id="headnav">
 <?php

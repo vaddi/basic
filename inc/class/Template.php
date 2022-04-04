@@ -39,10 +39,13 @@ class Template extends Base {
     $output = "";
     $files = glob( $path . "*" . $type );
     foreach( $files as $key => $value ) {
+      if( defined( "SRI" ) && SRI ) {
+        $sri = Base::genSRI( $value );
+      }
       if( $type == '.js' ) {
         $output .= '  <script type="text/javascript" src="' . $value . '"';
         if( defined( "SRI" ) && SRI ) {
-          $output .= ' integrity="sha384-' . Base::genSRI( $value ) . '"';
+          if( $sri ) $output .= ' integrity="sha384-' . $sri . '"';
         }
         $output .= '></script>' . "\n";
       } else if( $type == '.css' ) {
@@ -52,7 +55,7 @@ class Template extends Base {
         } else {
           $output .= '  <link href="' . $value . '" rel="stylesheet"';
           if( defined( "SRI" ) && SRI ) {
-            $output .= ' integrity="sha384-' . Base::genSRI( $value ) . '"';
+            if( $sri ) $output .= ' integrity="sha384-' . $sri . '"';
           }
           $output .= '>' . "\n";
         }

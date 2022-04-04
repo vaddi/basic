@@ -86,8 +86,8 @@ class Base {
 		$passArr = $tmpArr;
 		$passwd = "";
 		$last = '';
-		for ($i = 0; $i < $length; $i++) {
-			shuffle($passArr);
+		for( $i = 0; $i < $length; $i++ ) {
+			shuffle( $passArr );
 			if( $last != $passArr[$i] ) { 
 				$passwd .= $passArr[$i]; 
 			} else { 
@@ -105,7 +105,7 @@ class Base {
 	public static function token( $string = null ) {
 		$secret = SECRET;
 		if( $secret === null || $secret === "" ) throw new Exception( 'No Secret found in DB!' ); 
-		if( $string === null ) $string = self::genToken( 16 );
+		if( $string === null ) $string = self::genToken( 32 );
 		$token = base64_encode( sha1( $string . $secret, true ) . $secret );
 		// safe token in db
 		return $token;
@@ -116,7 +116,10 @@ class Base {
    * See also https://www.w3.org/TR/SRI/
    */
   public static function genSRI( $file ) {
-		$result = ( exec( "openssl dgst -sha384 -binary " . $file . " | openssl base64 -A" ) );
+    $result = false;
+    if( is_file( '/usr/bin/openssl' ) ) {
+      $result = ( exec( "/usr/bin/openssl dgst -sha384 -binary " . $file . " | openssl base64 -A" ) );
+    }
     return $result;
   }
 

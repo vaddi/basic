@@ -154,6 +154,8 @@ if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['
   // do the logout
   if( isset( $request['logout'] ) && $request['logout'] == 'true'  ) {
     setcookie( 'cid', '', 1 );
+    setcookie( 'username', '', 1 );
+    setcookie( 'created', '', 1 );
     if( isset( $_SERVER['HTTP_REFERER'] )) header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
   }
   echo '<div style="margin-top:20px;">You\'re logged in, welcome.</div>';
