@@ -111,6 +111,18 @@ class Base {
 		return $token;
 	}
 
+  /**
+   * Generate SRI Hash (for javascript and css attribute "integrity")
+   * See also https://www.w3.org/TR/SRI/
+   */
+  public static function genSRI( $file ) {
+		$result = ( exec( "openssl dgst -sha384 -binary " . $file . " | openssl base64 -A" ) );
+    return $result;
+  }
+
+  /**
+   * List all mentions of opendoings
+   */
   public static function getOpenDoings() {
     $result = exec( 'grep -r "todo" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -7;
     return $result;

@@ -26,6 +26,7 @@ define( 'USERPASS', 'admin' );
 // var_dump( DateTimeZone::listIdentifiers() ); // list them all
 date_default_timezone_set( 'Europe/Berlin' );
 define( 'CLIFETIME', 3600 ); // Cookie lifetime
+define( 'SRI', true ); // enable (true) or disable (false) SRI (https://www.w3.org/TR/SRI/)
 
 //
 // Mail / Contact Data

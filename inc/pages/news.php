@@ -269,6 +269,7 @@ switch( $_REQUEST ) {
     // render feeds
     
     break;
+
   case isset( $_REQUEST['edit'] ) && $_REQUEST['edit'] != null:
     if( ! isLoggedIn() ) { header( 'Location: ' . URL . '/?page=' . PAGE ); }
     // render edit form
@@ -290,6 +291,7 @@ switch( $_REQUEST ) {
       $content .= renderForm( $db, $id );
     }
     break; // end edit
+
   case isset( $_REQUEST['create'] ) && $_REQUEST['create'] != null:
     if( ! isLoggedIn() ) { header( 'Location: ' . URL . '/?page=' . PAGE ); }
     // if create submitted, show message, if message success, redirect after X Seconds 
@@ -307,6 +309,7 @@ switch( $_REQUEST ) {
       $content .= renderForm( $db, $id = null );
     }
     break; // end create
+
   case isset( $_REQUEST['delete'] ) && $_REQUEST['delete'] != null:
     if( ! isLoggedIn() ) { header( 'Location: ' . URL . '/?page=' . PAGE ); exit; }
     $id = $_REQUEST['delete'];
@@ -318,6 +321,7 @@ switch( $_REQUEST ) {
     }
     header( 'Location: ' . URL . '/?page=' . PAGE );
     break; // end delete
+
   default:
     // render all Entries
     $content .= renderEntries( $db );

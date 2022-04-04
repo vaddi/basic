@@ -40,13 +40,21 @@ class Template extends Base {
     $files = glob( $path . "*" . $type );
     foreach( $files as $key => $value ) {
       if( $type == '.js' ) {
-        $output .= '  <script type="text/javascript" src="' . $value . '"></script>' . "\n";
+        $output .= '  <script type="text/javascript" src="' . $value . '"';
+        if( defined( "SRI" ) && SRI ) {
+          $output .= ' integrity="sha384-' . Base::genSRI( $value ) . '"';
+        }
+        $output .= '></script>' . "\n";
       } else if( $type == '.css' ) {
         // if inc/css/style.css is not the only file in the directory, use the other ones and not styles.css
         if( $value == 'inc/css/style.css' && count( $files ) >= 2 ) {
           continue;
         } else {
-          $output .= '  <link href="' . $value . '" rel="stylesheet">' . "\n";
+          $output .= '  <link href="' . $value . '" rel="stylesheet"';
+          if( defined( "SRI" ) && SRI ) {
+            $output .= ' integrity="sha384-' . Base::genSRI( $value ) . '"';
+          }
+          $output .= '>' . "\n";
         }
       }
     }
