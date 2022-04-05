@@ -3,7 +3,8 @@
 // use our Database (we used for Visitors), also to our News Page 
 $db = new DB_SQLite3( SQLITE_TYPE, SQLITE_FILE );
 
-$content = "<h1>News</h1>";
+$content = "";
+$content .= "<h1>News</h1>";
 
 $content .= '<style>'; // entry
 $content .= '#content .entry {';
@@ -152,8 +153,10 @@ function renderEntries( $db = null ) {
   if( isset( $data ) && $data != null && is_array( $data ) ) {
     $result .= '<div>';
     if( isLoggedIn() ) {
-      $result .= '<a href="?page=' . PAGE . '&create=true">Create Entry</a> | <a href="?page=' . PAGE . '">Show All Entries</a>';
-    } else if( isset( $id ) && $id != null && $id != "" ) {
+      $result .= '<a href="?page=' . PAGE . '&create=true">Create Entry</a>';
+      if( isset( $id ) && $id != null && $id != "" ) $result .= ' | ';
+    }
+    if( isset( $id ) && $id != null && $id != "" ) {
       $result .= '<a href="?page=' . PAGE . '">Show All Entries</a>';
     }
     $result .= '</div>';

@@ -1,6 +1,7 @@
 // functions.js //
 
 // read element from cookie
+// https://www.w3schools.com/js/js_cookies.asp
 function getCookie( cname ) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent( document.cookie );
@@ -32,5 +33,8 @@ function updateCtime( timerId ) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  setInterval( 'updateCtime( "ctime" )', 1000 );
+  let created = getCookie( 'created' );
+  if( created != undefined && created != "" ) {
+    setInterval( 'updateCtime( "ctime" )', 1000 );
+  }
 });
