@@ -89,7 +89,7 @@ class Template extends Base {
     $output .= '</div>' . "\n"; // close content
     $output .= '</body>' . "\n";
     $output .= '</html>';
-
+    http_response_code( 200 );
     return $output;
   }
 

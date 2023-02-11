@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class DB_SQLite3 extends PDO {
 
   // class variables

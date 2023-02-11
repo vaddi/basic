@@ -1,4 +1,9 @@
-<?php $file = 'README.md'; ?>
+<?php 
+
+error_reporting(E_ERROR | E_PARSE);
+$file = 'README.md'; 
+
+?>
 <h1>Dokumentation</h1>
 <p>parsed from <strong><?= $file?></strong> File.</p>
 
@@ -88,6 +93,7 @@ class Slimdown {
   public static function render( $text ) {
     $text = "\n" . $text . "\n";
     foreach( self::$rules as $regex => $replacement ) {
+	//foreach( self::class . '::rules' as $regex => $replacement ) {
       if( is_callable( $replacement ) ) {
         $text = preg_replace_callback( $regex, $replacement, $text );
       } else {

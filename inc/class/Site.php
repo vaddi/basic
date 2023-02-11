@@ -61,11 +61,13 @@ class Site extends Base {
         $file = PAGES . "info.php";
       } else {
         $file = PAGES . "403.php";
+        http_response_code( 403 );
       }
     }
     if( ! is_file( $file ) ) {
       // otherwise we use a 404 page (from templates)
       $file = PAGES . "404.php";
+      http_response_code( 404 );
     }
     $template = new Template( TPL );
     // database object

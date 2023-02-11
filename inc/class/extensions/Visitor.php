@@ -18,8 +18,10 @@ class Visitor {
       if( in_array( $ip, EXCLUDED_IP ) ) return false;
       $useragent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : null;
       if( strpos( $useragent, 'Prometheus' ) !== false ) return false; // exclude prometheus
+      // if an ip is reused, do we have a visitor with same useragent string and diffenrent IP and old timestamp? then shift the pagehits to the old one and count the new hits to the new visitor ith this ip.
+      
       $timestamp = date( 'Y-m-d H:i:s', time());
-      $platform = isset( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null;
+      $platform = isset( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : '';
       $platform = str_replace( '"', '', $platform );
       $url = URL . ( PAGE == 'home' ? '' : "?page=" . PAGE );
       $referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;

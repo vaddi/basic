@@ -117,12 +117,14 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
           if( ! isset( $_COOKIE['commitcookie'] ) ) {
             setcookie( 'commitcookie', "true", time() + CLIFETIME );
           }
-          // redirect on sucssefull login
-          if( isset( $erg['redirect'] )) header( 'Location: ' . $erg['redirect'] );
           $result = array(
             'code' => 0,
             'message' => 'Logged in successfully',
           );
+          // redirect on sucssefull login
+          if( isset( $erg['redirect'] ) && $erg['redirect'] != null && $erg['redirect'] != "" ) {
+            header( 'Location: ' . $erg['redirect'] );
+          }
         } else {
           $result = array(
             'code' => 403,
