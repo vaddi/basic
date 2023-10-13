@@ -41,7 +41,7 @@ define( 'MAILRECIPIENT', 'recipient@gmail.com' ); // single entry, or comma sepa
 
 // Contactpage Data
 define( 'CONTACTNAME', 'Name Surename' ); // You Full name
-define( 'CONTACTSTREET', 'Street. Number' );
+define( 'CONTACTSTREET', 'Street Name Housenumber' );
 define( 'CONTACTPOSTCODE', 'PLZ' );
 define( 'CONTACTCITY', 'City' );
 define( 'CONTACTCOUNTRY', 'State' );
@@ -51,11 +51,15 @@ define( 'CONTACTFAX', '' );
 define( 'CONTACTMAIL', 'recipient@gmail.com' );
 define( 'CONTACTTWITTER', 'http://twitter.com/' );
 define( 'CONTACTFACEBOOK', 'http://facebook.com/' );
+define( 'CONTACTINSTAGRAM', 'https://www.instagram.com/' );
+define( 'CONTACTYOUTUBE', 'https://www.youtube.com/' );
 
-define( 'MAILPHONE', '' ); // Phone number used in html template
-define( 'MAILFAX', '' ); // Fax number used in html template
-define( 'MAILTWITTER', 'http://twitter.com/' ); // twitter url used in html mail template
-define( 'MAILFACEBOOK', 'http://facebook.com/' ); // facebook url used in html mail template
+define( 'MAILPHONE', CONTACTPHONE );
+define( 'MAILFAX', CONTACTFAX );
+define( 'MAILTWITTER', CONTACTTWITTER );
+define( 'MAILFACEBOOK', CONTACTFACEBOOK );
+define( 'MAILINSTAGRAM', CONTACTINSTAGRAM );
+define( 'MAILYOUTUBE', CONTACTYOUTUBE );
 define( 'MAILHTMLHEADER', '' );
 define( 'MAILHTMLIMAGE', '' );
 
@@ -90,19 +94,19 @@ define( 'SQLITE_FILE', __DIR__ . '/db/' . SQLITE_FILENAME ); // Build whole path
 define( 'SQLITE_USE', false );
 
 //
-// Some usefull constants
+// Some other usefull constants
 //
 
 // set server and client token
 $unpack = unpack( 'H*', SECRET );
 $secret = array_shift( $unpack );
-define('SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret );
+define('SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret ); // valid for one day!
 define('CLIENTTOKEN', urlencode( base64_encode( SERVERTOKEN ) ) );
 define( 'VERSION',    str_replace( "\n", '', file_get_contents( __DIR__ . '/version.txt' ) ) );
 
 // helper constants
 define('PROTOCOL',    isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === "on" ? 'https://' : 'http://' );
-define('HOST',        isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : 'localhost' );	
+define('HOST',        isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : 'localhost' );
 define('PATH',        dirname($_SERVER['PHP_SELF']) );
 define('URL',         PROTOCOL . HOST . PATH ); 
 define('CLIENTLANG',  substr( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'de' , 0, 2 ) );
