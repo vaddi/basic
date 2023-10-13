@@ -57,6 +57,8 @@ $img_intext = MAILHTMLIMAGE;
 
 $twitter_url = MAILTWITTER;
 $facebook_url = MAILFACEBOOK;
+$instagram_url = MAILINSTAGRAM;
+$youtube_url = MAILYOUTUBE;
 
 $company_name = APPDOMAIN;
 $slogan = APPSLOGAN;

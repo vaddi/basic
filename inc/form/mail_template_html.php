@@ -423,6 +423,8 @@ $body = '<!DOCTYPE html>
                                         <div>
                                           '. $twitter_url .'
                                           '. $facebook_url .'
+																					'. $instagram_url .'
+																					'. $youtube_url .'
                                           <a href="mailto:'.$email.'">Antwort an '.$name.'</a>
                                         </div>
                                       </td>

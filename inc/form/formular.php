@@ -146,8 +146,11 @@ if( isset( $_COOKIE["commitcookie"] ) && $_COOKIE["commitcookie"] != NULL ) {
       // templating the Message
       if( $mail_format == "html" ) {
         // html mail
-        $twitter_url = empty( $twitter_url ) || $twitter_url == "http://twitter.com/" ? '' : '<a target="_blank" href="'. $twitter_url .'">auf Twitter folgen</a> | ';
-        $facebook_url = empty( $facebook_url ) || $facebook_url == "http://facebook.com/" ? '' : '<a target="_blank" href="'. $facebook_url .'">wir auf Facebook</a> | ';
+        $twitter_url = empty( $twitter_url ) || $twitter_url == "https://twitter.com/" ? '' : '<a target="_blank" href="'. $twitter_url .'">auf Twitter folgen</a> | ';
+        $facebook_url = empty( $facebook_url ) || $facebook_url == "https://facebook.com/" ? '' : '<a target="_blank" href="'. $facebook_url .'">Facebook</a> | ';
+				$instagram_url = empty( $instagram_url ) || $instagram_url == "https://www.instagram.com/" ? '' : '<a target="_blank" href="'. $instagram_url .'">Instagram</a> | ';
+				$youtube_url  = empty( $youtube_url ) || $youtube_url == "https://www.youtube.com/" ? '' : '<a target="_blank" href="'. $youtube_url .'">YouTube</a> | ';
+
         $company_string = empty( $company_name ) ? '' : '<em>Copyright &copy; '.date("Y", $timestamp).' '. $company_name .'<br />Alle Rechte vorbehalten.</em><br><br>';
         $slogan = empty( $slogan ) ? '' : '<em>' . $slogan . '</em>';
         $company_phone = empty( $company_phone ) ? '' : '<strong>Telefon</strong>: &nbsp;'. $company_phone .'<br>';

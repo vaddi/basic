@@ -2,5 +2,6 @@
 inc/config.php
 inc/db/database.sqlite
 inc/sites/*
+inc/images/*
 
 

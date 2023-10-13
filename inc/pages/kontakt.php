@@ -2,19 +2,28 @@
 if( CONTACTNAME != "" ) $name = explode( ' ', CONTACTNAME );
   else $name = array();
 
-$street = explode( ' ', CONTACTSTREET );
+// separate Housnumber and Street
+preg_match_all('!\d+!', CONTACTSTREET, $hnumber); // find number in Adressstreet
+$housenumber = isset( $hnumber[0][0] ) ? $hnumber[0][0] : '';
+$street = str_replace( $housenumber, '', CONTACTSTREET );
+
+// prepare array
 $contact = array(
   'name'        =>  isset( $name[0] ) ? $name[0] : '',
   'surename'    =>  isset( $name[1] ) ? $name[1] : '',
-  'street'      =>  isset( $street[0] ) ? $street[0] : '',
-  'housenumber' =>  isset( $street[1] ) ? $street[1] : '',
+  'street'      =>  isset( $street ) ? $street : '',
+  'housenumber' =>  isset( $housenumber ) ? $housenumber : '',
   'plz'         =>  CONTACTPOSTCODE,
   'city'        =>  CONTACTCITY,
   'state'       =>  CONTACTCOUNTRY,
   'land'        =>  CONTACTSTATE,
   'phone'       =>  CONTACTPHONE,
   'fax'         =>  CONTACTFAX,
-  'mail'        =>  CONTACTMAIL
+  'mail'        =>  CONTACTMAIL,
+	'twitter'			=>  CONTACTTWITTER,
+	'facebook'		=>  CONTACTFACEBOOK,
+	'instagram'		=>  CONTACTINSTAGRAM,
+	'youtube'			=>  CONTACTYOUTUBE
 );
 ?>
 <h1>Kontakt</h1>
@@ -60,5 +69,12 @@ echo isset( $contact['fax'] ) && $contact['fax'] != "" ? '<a href="fax:' . $cont
 echo isset( $contact['mail'] ) && $contact['mail'] != "" ? '<a href="mailto:' . $contact['mail'] . '">' . $contact['mail'] . "</a><br />\n" : '';
 echo '</div>';
 
+echo '<div>';
+echo '<h2>Links</h2>';
+echo isset( $contact['twitter'] ) || $contact['twitter'] == "https://twitter.com/" ? '' : '<a href="' . $contact['twitter'] . '">' . $contact['twitter'] . "</a><br />\n";
+echo isset( $contact['facebook'] ) || $contact['twitter'] == "https://twitter.com/" ? '' : '<a href="' . $contact['facebook'] . '">' . $contact['facebook'] . "</a><br />\n";
+echo isset( $contact['instagram'] ) || $contact['instagram'] == "https://www.instagram.com/" ? '' : '<a href="' . $contact['instagram'] . '">' . $contact['instagram'] . "</a><br />\n";
+echo isset( $contact['youtube'] )  || $contact['youtube'] == "https://www.youtube.com/" ? '' : '<a href="' . $contact['youtube'] . '">' . $contact['youtube'] . "</a><br />\n";
+echo '</div>';
 
 ?>
