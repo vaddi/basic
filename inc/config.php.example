@@ -12,6 +12,7 @@ define( 'DESCRIPTION', ''); // Page description for search engines
 define( 'APPDOMAIN',  'you.domain.de' ); 
 define( 'PAGES',      __DIR__ . "/pages/" ); // path to the pages/sites folder
 define( 'TPL',        __DIR__ . "/tpl/" ); // path to the templates folder
+define( 'IMGFOLDER',	"./inc/images/" ); // path to image galerie files
 define( 'METRICS',    true ); // enable or disable metrics endpoint
 define( 'EXCLUDED_IP', array( '127.0.0.1', '::1' ) ); // Exclude IPs from tracker
 define( 'MENU_EXCLUDE', array( 'index', '401', '403', '404', 'login', 'info' ) ); // Exclude Sites from Menu

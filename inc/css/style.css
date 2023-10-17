@@ -120,6 +120,20 @@ nav li a.active {
 }
 
 /*
+Gallerie
+*/
+
+.gallerie {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.gallerie img {
+	max-width: 200px;
+	max-height: 130px;
+}
+
+/*
 Media Queries
 */
 
