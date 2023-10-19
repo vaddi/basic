@@ -11,8 +11,9 @@ $prefix = ".php";
 // read all php files by glob
 $files = glob( $path . $mask . $prefix);
 
-// resorting 
-rsort( $files );
+// resorting sort for Ascending and rsort for Descending 
+sort( $files ); // ASC
+//rsort( $files ); // DESC
 
 $output = "";
 // add index as home

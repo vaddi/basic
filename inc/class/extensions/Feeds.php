@@ -1,5 +1,7 @@
 <?php
 
+// Class <strong>Feeds</strong> will be used to get an Endpoint for RSS/Atom Newsfeeds from the News Page of the Site
+
 class Feeds {
 
 	//

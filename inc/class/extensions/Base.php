@@ -1,6 +1,8 @@
 <?php
 
-// Autoload other extension Classes
+// Class <strong>Base</strong> will be used as the Mainclass. It instanciates all other Classes by the PHP  <strong>spl_autoload_register</strong> function
+
+// Autoload all other Classes  in the current Folder
 spl_autoload_register( function( $class_name ) {
   require_once( __DIR__ . '/' . $class_name . '.php');
 });

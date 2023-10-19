@@ -1,5 +1,7 @@
 <?php
 
+// Class <strong>DB_SQLite3</strong> will be used to get access to a SQLite Database
+
 #[\AllowDynamicProperties]
 class DB_SQLite3 extends PDO {
 

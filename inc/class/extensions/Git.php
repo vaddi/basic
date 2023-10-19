@@ -1,5 +1,7 @@
 <?php
 
+// Class <strong>Git</strong> will be used to get some Infromations about the git Project Data
+
 class Git {
 
 	//

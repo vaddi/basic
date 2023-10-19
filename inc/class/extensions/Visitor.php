@@ -1,5 +1,7 @@
 <?php
 
+// Class <strong>Visitor</strong> will be used to collect Data from Sitevisitors
+
 class Visitor {
 
 	//

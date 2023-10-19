@@ -108,16 +108,17 @@ define( 'SQLITE_USE', false );
 // set server and client token
 $unpack = unpack( 'H*', SECRET );
 $secret = array_shift( $unpack );
-define('SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret ); // valid for one day!
-define('CLIENTTOKEN', urlencode( base64_encode( SERVERTOKEN ) ) );
+define( 'SERVERTOKEN', strtotime( date( 'd.m.Y H:00:00' ) ) . '_' . $secret ); // valid for one day!
+define( 'CLIENTTOKEN', urlencode( base64_encode( SERVERTOKEN ) ) );
 define( 'VERSION',    str_replace( "\n", '', file_get_contents( __DIR__ . '/version.txt' ) ) );
 
 // helper constants
-define('PROTOCOL',    isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === "on" ? 'https://' : 'http://' );
-define('HOST',        isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : 'localhost' );
-define('PATH',        dirname($_SERVER['PHP_SELF']) );
-define('URL',         PROTOCOL . HOST . PATH ); 
-define('CLIENTLANG',  substr( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'de' , 0, 2 ) );
+define( 'BASEPATH', str_replace( 'inc', '', __DIR__ ) );
+define( 'PROTOCOL',    isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === "on" ? 'https://' : 'http://' );
+define( 'HOST',        isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : 'localhost' );
+define( 'PATH',        dirname($_SERVER['PHP_SELF']) );
+define( 'URL',         PROTOCOL . HOST . PATH ); 
+define( 'CLIENTLANG',  substr( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'de' , 0, 2 ) );
 define( 'PAGE', isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'home' );
 
 ?>

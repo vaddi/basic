@@ -1,5 +1,7 @@
 <?php
 
+// Class <strong>Exporter</strong> will be used to get an Prometheus Endpoint for Site Metrics
+
 class Exporter {
 
 	//
