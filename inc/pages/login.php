@@ -72,6 +72,7 @@ function expireDate() {
 }
 
 // Parsing request data to erg array
+
 if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
 
 	if( is_array( $request ) ) {
@@ -91,7 +92,7 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
     $user = isset( $erg['user'] ) ? $erg['user'] : null;
     $password = isset( $erg['password'] ) ? $erg['password'] : null;
 
-    // validate user
+    // validate user & password from config.php file
     $result = array();
     if( $user === null ) {
       $result = array(
@@ -106,7 +107,7 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
           'message' => 'Empty Password given.'
         );
       } else if( $password ) {
-        // do the Login
+        // do the Login in Base.php
         $login = Base::login( $user, $password );
         if( $login ) {
           // set cookiedata
@@ -123,7 +124,8 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
           );
           // redirect on sucssefull login
           if( isset( $erg['redirect'] ) && $erg['redirect'] != null && $erg['redirect'] != "" ) {
-            header( 'Location: ' . $erg['redirect'] );
+            header( 'Location: ' . $erg['redirect'], false );
+						exit;
           }
         } else {
           $result = array(
@@ -143,11 +145,6 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
     echo '</div>';
   }
   
-  // echo "<pre>";
-  // //var_dump( json_encode( $erg ) );
-  // print_r( $result );
-  // echo "</pre>";
-  
 }
 
 // simple logged in check, user has valid session
@@ -158,27 +155,13 @@ if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['
     setcookie( 'cid', '', 1 );
     setcookie( 'username', '', 1 );
     setcookie( 'created', '', 1 );
-    if( isset( $_SERVER['HTTP_REFERER'] )) header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+    if( isset( $_SERVER['HTTP_REFERER'] )) {
+    	header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+			exit;
+    }
   }
   echo '<div style="margin-top:20px;">You\'re logged in, welcome.</div>';
 }
-
-// echo "<pre>";
-// print_r( SERVERTOKEN );
-// echo "\n";
-// print_r( CLIENTTOKEN );
-// echo "\n";
-// echo "\n";
-// print_r( urldecode( base64_decode( substr( CLIENTTOKEN, 0, -6 ) ) ) ); // === SERVERTOKEN
-// echo "\n";
-// print_r( substr( urldecode( base64_decode( CLIENTTOKEN ) ), 0, -3 )  ); // === SERVERTOKEN
-// echo "\n";
-// print_r( base64_decode( str_replace( "%3D",'', CLIENTTOKEN ) ) );
-// echo "\n";
-// echo "\n";
-// //print_r(  base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN  ); // logged in
-// print_r( base64_decode( sha1( USER . USERPASS, str_replace( "%3D",'', $_COOKIE['cid'] ) ) ) === SERVERTOKEN ); // logged in
-// echo "</pre>";
 
 ?>
 

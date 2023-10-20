@@ -1,15 +1,17 @@
-<?php 
+<?php
 
+// Class <strong>Markdown</strong> will be used to render Markdown Documents in HTML. This is inspired by the https://github.com/jbroadway/slimdown Project.
+
+// disable Warnings for this Class
 error_reporting(E_ERROR | E_PARSE);
 
-// class to render markdown in HTML
-class Slimdown {
+class Markdown {
 
   static private $_headers = null;
 
   public static $rules = array (
     '/(#+)(.*)/' => 'self::header',                           // headers
-    '/\[([^\[]+)\]\(([^\)]+)\)/' => '\1 -> <a name=\'\1\' href=\'\2\' target=\'_blank\'>\2</a>',  // links (we set them also as an page anchor)
+    '/\[([^\[]+)\]\(([^\)]+)\)/' => '\1 (<a name=\'\1\' href=\'\2\' target=\'_blank\'>\2</a>)',  // links (we set them also as an page anchor)
     '/\[([^\[]+)\]\(\)/' => 'self::shortlink',                // short links
     '/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',            // bold
     '/(\*|_)(.*?)\1/' => '<em>\2</em>',                       // emphasis
@@ -109,26 +111,4 @@ class Slimdown {
 }
 
 ?>
-<h1>Dokumentation</h1>
-<p>parsed from <strong><?= $file?></strong> File.</p>
 
-<?php
-
-$file = 'README.md'; 
-
-$marcdown = file_get_contents( __DIR__ . '/../../' . $file );
-$marcdown = Slimdown::render( $marcdown );
-$headers = Slimdown::getHeaders();
-
-$output  = "<h1>Table of contents: </h1>\n";
-$output .= "<ul style='list-style-type: decimal-leading-zero;'>\n";
-foreach( $headers as $key => $value ) {
-  $output .= "<li><a href='#" . $value . "'>" . $value . "</a></li>\n";
-}
-$output .= "</ul>\n";
-$output .= "<br />\n";
-$output .= $marcdown;
-
-echo $output;
-
-?>

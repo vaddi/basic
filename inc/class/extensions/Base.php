@@ -129,7 +129,7 @@ class Base {
    * List all mentions of opendoings
    */
   public static function getOpenDoings() {
-    $result = exec( 'grep -r "todo" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -7;
+    $result = exec( 'grep -r "todo" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -5; // we have 5 times todo in our code, so we need to recalc them (grep -inr "todo")!
     return $result;
   }
   
@@ -162,16 +162,18 @@ class Base {
 	}
   
 	/**
-	 * Helper for static login
+	 * Helper for login
 	 */
-	public static function login( $user = null, $passwd = null ) { 
+	public static function login( $user = null, $passwd = null ) {
     if( $user === null || $passwd === null ) return false;
 		$result = false;
+		// todo: Add users to a own class and add the login also here
     if( $user === USER ) {
       if( $passwd === USERPASS ) {
         $result = true;
       }
     }
+		
     return $result;
 	}
 

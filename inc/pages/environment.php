@@ -101,9 +101,9 @@ function urlExists( $url = null ) {
 <h1 id="mainh">Environment Tests</h1>
 
 <p>
-	The following tests have been run to determine if <a href="https://github.com/vaddi/basic"><?= APPNAME ?></a> will work in your environment.
+	The following tests have been run to determine that <a href="https://github.com/vaddi/basic"><?= APPNAME ?></a> will work in your environment.
 	If any of the tests have failed, consult the <a href="?page=dokumentation">documentation</a>
-	for more information on how to correct the problem.
+	for more information on how to correct the problem or create an Issue on <a href="https://github.com/vaddi/basic/issues">GitHub.com</a>.
 </p>
 
 <?php $failed = FALSE ; ?>

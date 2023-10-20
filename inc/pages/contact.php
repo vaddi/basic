@@ -74,7 +74,7 @@ if( CONTACTADRESS ) {
 	// Phnoe, Fax and Mail
 	echo isset( $contact['phone'] ) && $contact['phone'] != "" ? '<a href="tel:' . preg_replace('/[^a-zA-Z0-9-+_\.]/','', $contact['phone'] ) . '">' . $contact['phone'] . "</a><br />\n" : '';
 	echo isset( $contact['fax'] ) && $contact['fax'] != "" ? '<a href="fax:' . $contact['fax'] . '">' . $contact['fax'] . "</a><br />\n" : '';
-	echo isset( $contact['mail'] ) && $contact['mail'] != "" ? '<a href="mailto:' . $contact['mail'] . '">' . $contact['mail'] . "</a><br />\n" : '';
+	echo isset( $contact['mail'] ) && $contact['mail'] != "" ? '<a href="mailto:' . $contact['mail'] . '">' . str_replace( '@', '[at]', $contact['mail'] ) . "</a><br />\n" : '';
 	echo '</div>';
 }
 

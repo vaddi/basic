@@ -2,6 +2,8 @@
 
 A Simple plain PHP Templating Engine. You can see a running Application on [demo-page](https://www.mvattersen.de/basic).
 
+It run by Files and has no direct dependencie to any Database. For Persistence of Runtimedata you can use a SQLite Database (an example Database is shipped under `inc/db/database.sqlite.example`) or setup a MySQL Database for the Application (Keep in Mind that you then need a PDO Class to use a MySQL Database!). Both Connections can be configured in the `config.php` file.
+
 
 ### Dependencies ###
 
@@ -108,9 +110,9 @@ This Class read and parse the Content from the Files in the `sites` Folder. It a
 Read the content from the `tpl` Folder and combines them into a basic HTML Page. 
 
 
-#### Extension Classes ####
+### Extensions Classes ###
 
-You can extend your own classes by place them into the Folder `inc/class/extensions/`. There are also some other Helper Classes which will be used by the Application. 
+You can extend the Application by your own classes. Just place them into the Folder `inc/class/extensions/`. There are also some other Helper Classes which will be used by the Application (so dont remove them until you're shure they wont be used anywhere!). 
 
 All Classes under the extensions Folder will be automaticly instanciated by the `Base.php` Class by the PHP `spl_autoload_register` function in the Head of the Page.
 
@@ -163,6 +165,15 @@ The Exprter can turned off by Set Config Constant `METRICS` to false into the `c
 ## Known Bugs ##
 
 Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/issues)
+
+
+###  WIP Parts ###
+
+Currently there are some incomplete Things in this Application, feel free to create a Fork or Send Solutions to me via GitHub.
+
+- [ ] Add a Database Wrapperclass to use more than the SQLite Database
+- [ ] Cleanup extension Classes, reorganise Functions into speaking Classes
+- [ ] Build the Class for RSS/Atom Feeds
 
 
 ## Links ##

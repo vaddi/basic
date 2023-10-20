@@ -1,7 +1,7 @@
 # LightBox Galerie
 
 A simple HTML Imagegalerie.
-Source: https://dbrekalo.github.io/simpleLightbox/
+Source: [simpleLightbox](https://dbrekalo.github.io/simpleLightbox/)
 
 
 # installation

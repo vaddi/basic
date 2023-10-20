@@ -145,6 +145,15 @@ class Template extends Base {
       $output .= '  <tr>' . "\n";
       $output .= '    <td>Tokenize "Test"</td><td>' . Base::token( 'Test' ) . "</td>\n";
       $output .= '  </tr>' . "\n";
+      //
+      // $output .= '  <tr>' . "\n";
+      // $output .= '    <td>GET Request Elements</td><td>' . print_r($_GET) . "</td>\n";
+      // $output .= '  </tr>' . "\n";
+      //
+      // $output .= '  <tr>' . "\n";
+      // $output .= '    <td>POST Request Elements</td><td>' . print_r($_POST) . "</td>\n";
+      // $output .= '  </tr>' . "\n";
+      //
       $output .= '</table>' . "\n";
       $output .= '</div>' . "\n";
       return $output;
