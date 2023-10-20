@@ -1,33 +1,29 @@
 <?php 
 
 error_reporting(E_ERROR | E_PARSE);
-$file = 'README.md'; 
 
-?>
-<h1>Dokumentation</h1>
-<p>parsed from <strong><?= $file?></strong> File.</p>
-
-<?php
-
+// class to render markdown in HTML
 class Slimdown {
 
   static private $_headers = null;
 
   public static $rules = array (
     '/(#+)(.*)/' => 'self::header',                           // headers
-    '/\[([^\[]+)\]\(([^\)]+)\)/' => '\1 -> <a name=\'\1\' href=\'\2\' target=\'_blank\'>\2</a>',  // links (we set them also as anchor)
-    '/\[([^\[]+)\]\(\)/' => 'self::shortlink',                    // short links
+    '/\[([^\[]+)\]\(([^\)]+)\)/' => '\1 -> <a name=\'\1\' href=\'\2\' target=\'_blank\'>\2</a>',  // links (we set them also as an page anchor)
+    '/\[([^\[]+)\]\(\)/' => 'self::shortlink',                // short links
     '/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',            // bold
     '/(\*|_)(.*?)\1/' => '<em>\2</em>',                       // emphasis
     '/\~\~(.*?)\~\~/' => '<del>\1</del>',                     // del
     '/\:\"(.*?)\"\:/' => '<q>\1</q>',                         // quote
-    '/`(.*?)`/' => '<code>\1</code>',                         // inline code
+    '/(```[a-z]*\n[\s\S]*?\n```)/' => 'self::codeblock',			// code blocks (https://www.regextester.com/96555)
+		'/`(.*?)`/' => '<code>\1</code>',                         // inline code elements
     '/\n\*(.*)/' => 'self::ul_list',                          // ul lists
     '/\n\-(.*)/' => 'self::ul_list',                          // ul lists
     '/\n[0-9]+\.(.*)/' => 'self::ol_list',                    // ol lists
     '/\n(&gt;|\>)(.*)/' => 'self::blockquote ',               // blockquotes
     '/\n-{5,}/' => "\n<hr />",                                // horizontal rule
     '/\n([^\n]+)\n/' => 'self::para',                         // add paragraphs
+		// fixes
     '/<\/ul>\s?<ul>/' => '',                                  // fix extra ul
     '/<\/ol>\s?<ol>/' => '',                                  // fix extra ol
     '/<\/blockquote><blockquote>/' => "\n"                    // fix extra blockquote
@@ -36,13 +32,21 @@ class Slimdown {
   private static function para( $regs ) {
     $line = $regs[1];
     $trimmed = trim( $line );
+		// oneline Codeblocks (start with a newline followed by single tab)
     if( preg_match( '/^\s/', $line ) ) {
       return sprintf( "<p class='code'>%s</p>\n", $line );
     }
+		// list elements (start with a newline followed by html elemts)
     if( preg_match( '/^<\/?(ul|ol|li|h|p|bl)/', $trimmed ) ) {
       return $line . "\n";
     }
     return sprintf( "<p>%s</p>\n", $trimmed );
+  }
+
+  private static function codeblock( $regs ) {
+    $item = $regs[0];
+		$item = str_replace( array( "```php\n", '`', "\n" ), array( '', '', '<br/>'), $item );
+		return sprintf( "<p class='code'>%s</p>\n", $item );
   }
 
   private static function shortlink( $regs ) {
@@ -103,6 +107,14 @@ class Slimdown {
     return trim( $text );
   }
 }
+
+?>
+<h1>Dokumentation</h1>
+<p>parsed from <strong><?= $file?></strong> File.</p>
+
+<?php
+
+$file = 'README.md'; 
 
 $marcdown = file_get_contents( __DIR__ . '/../../' . $file );
 $marcdown = Slimdown::render( $marcdown );

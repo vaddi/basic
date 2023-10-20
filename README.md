@@ -54,7 +54,7 @@ If you want to use the Visitor Metrics, you need to enable the sqlite Database i
 You an easily use the shipped SQLite3 Dateabase. Enable them into the `config.php` 
 
 ```php
-// cahneg this
+// change this
 define( 'SQLITE_USE', false );
 // to this
 define( 'SQLITE_USE', true );
@@ -97,6 +97,7 @@ Just place you PHP files into the `sites` Folder. All Content will be rendered i
 
 The Templating is done by the two Classes `Sites.php`, wich load Content from the `sites` Folder and the `Template.php` Class, wich loads template Parts from `tpl` Folder and mainly combine all to the outputed HTML or Text.
 
+
 #### Site.php ####
 
 This Class read and parse the Content from the Files in the `sites` Folder. It also wraps the Content by the Template parts by using the `Template.php` Class.
@@ -107,17 +108,29 @@ This Class read and parse the Content from the Files in the `sites` Folder. It a
 Read the content from the `tpl` Folder and combines them into a basic HTML Page. 
 
 
+#### Extension Classes ####
+
+You can extend your own classes by place them into the Folder `inc/class/extensions/`. There are also some other Helper Classes which will be used by the Application. 
+
+All Classes under the extensions Folder will be automaticly instanciated by the `Base.php` Class by the PHP `spl_autoload_register` function in the Head of the Page.
+
+To get a simple description, add a Comment in line 3 of your Class. This will be used in the Class page as description of your Class and help you to keep in mind what a Class is used for.
+
+
 ## Layout ##
 
 You only have to place the file into the `css` or `js` Folder and the Template Class will render the neccessary Links into the Page head Section to include them. 
+
 
 ### CSS ###
 
 A pure Layout is allready shiped by default. It uses the `style.css` inside of the `css` Folder and contains pure CSS. If there are other files in this Folder, the styles.css won't be used, so you can easily overwrite the default layout by your own.
 
+
 ### HTML ###
 
 The layout of outputed html is controlled by the Files into the `tpl` Folder and the class `Template.php`. 
+
 
 ### JavaScript ###
 
@@ -129,9 +142,9 @@ All files will be added to page head by `tpl/head.php`
 
 The Application has a Prometheus ready scrape target url on where it can find some Metrics when requesting the metrics Page
 
-	http(s)://domain.tld/basic/?page=metrics
+	http[s]://[domain.tld]/[appname]/?page=metrics
 
-All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder Page name (default might be `basic`).
+All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder Page name (default Name is `basic`).
 
 
 - basic_info = like current Version and Application Domain
@@ -140,16 +153,16 @@ All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder
 - basic_appsize = Total Size of the Application
 - basic_todos = amount of TODO mentions in the Code
 - basic_updates = Are there a new Version available on github
-- 
+
 
 You can use my `PHP Applications` Dasboard as Dashboard Example: [dashboard](https://github.com/vaddi/basic/tree/main/inc/asset/dashboard.json)
 
-The Exprter can turned off by Set Config Constant `METRICS` to false.
+The Exprter can turned off by Set Config Constant `METRICS` to false into the `config.php` file.
+
 
 ## Known Bugs ##
 
 Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/issues)
-
 
 
 ## Links ##
