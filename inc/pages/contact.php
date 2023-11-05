@@ -20,6 +20,7 @@ $contact = array(
   'phone'       =>  CONTACTPHONE,
   'fax'         =>  CONTACTFAX,
   'mail'        =>  CONTACTMAIL,
+	'authorpage'	=>	SOCIALPAGE,
 	'twitter'			=>  SOCIALTWITTER,
 	'facebook'		=>  SOCIALFACEBOOK,
 	'instagram'		=>  SOCIALINSTAGRAM,
@@ -81,6 +82,7 @@ if( CONTACTADRESS ) {
 if( SOCIALLINKS ) {
 	echo '<div>';
 	echo '<h2>Links</h2>';
+	echo isset( $contact['authorpage'] ) && $contact['authorpage'] != "" ? 'My Website: <a href="' . $contact['authorpage'] . '">' . $contact['authorpage'] . "</a><br />\n" : '';
 	echo isset( $contact['twitter'] ) && $contact['twitter'] != "https://twitter.com/" && $contact['twitter'] != "" ? 'Twitter: <a href="' . $contact['twitter'] . '">' . $contact['twitter'] . "</a><br />\n" : '';
 	echo isset( $contact['facebook'] ) && $contact['facebook'] != "https://facebook.com/" && $contact['facebook'] != "" ? 'Facebook: <a href="' . $contact['facebook'] . '">' . $contact['facebook'] . "</a><br />\n" : '';
 	echo isset( $contact['instagram'] ) && $contact['instagram'] != "https://www.instagram.com/" && $contact['instagram'] != "" ? 'Instagram: <a href="' . $contact['instagram'] . '">' . $contact['instagram'] . "</a><br />\n" : '';

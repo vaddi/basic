@@ -3,7 +3,7 @@
 <div class="uppercase">
   <p>A very simple but effective Templating engine written in PHP. You can just add your own PHP File into the `pages` Folder and the engine will render the content depending on the requestet Page.</p>
 
-  <p>Read the <a href="?page=dokumentation">Documentation</a> for more infors about how to use this.</p>
+  <p>Read the <a href="?page=documentation">Documentation</a> for more infos about how to use this.</p>
 
   <p>Why another PHP Framework/Tempate thing?<br />Because i want to build a small on of my own and all i found was very bloaten and use some template enging besed by replacing Texts like "{{TILTE}}" by a Title String. Here we use ordinary PHP Files for the Template and for the Page Files. This make the Handling easy, if you are familary by PHP. The Engine itself is also writen in PHP (basicly 2 Classes which build the Page whithin his Content).</p>
 
@@ -20,12 +20,12 @@
 
 <h1>Pages</h1>
 
-<?php 
+<div>
+
+<?php
 // read pages folder from config.php and replace Basedir Path to get the relative Path
 define( 'PAGESPATH', str_replace( BASEPATH, '', PAGES ) ); 
 ?>
-
-<div>
 
 	<p>All Pages can be found under the Path <strong><?= PAGESPATH ?></strong>. There you can place new Page Files which will be automaticly available in the Menu, unlike you Exclude their Names in the config.php.</p>
 
@@ -72,15 +72,18 @@ echo '</p>';
 
 <h1>PHP Classes</h1>
 
-<?php define( 'CLASSPATH', 'inc/class/extensions/' ); ?>
-
 <div>
+
+<?php
+// read all classes 
+define( 'CLASSPATH', 'inc/class/extensions/' );
+?>
 
 	<p>All Classes can be found under the Path <strong><?= CLASSPATH ?></strong>. There you can place new Classes which will be automaticly available in the Pages. Often we use here static functions to get easy access from the Pages itself.</p>
 	
 	<p>They all will be automaticly instanciated from the Class: <strong>inc/class/<?= get_called_class(); ?>.php</strong>. This is done by the Basic.php Class, which have an autoload function for this. </p>
 
-<?php
+<?php 
 
 $files = glob( CLASSPATH . "*.php", GLOB_BRACE ); // all file types
 

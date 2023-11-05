@@ -11,6 +11,6 @@
   <!-- favicon -->
   <link rel="shortcut icon" href="inc/img/favicon.ico">
 <?php echo Template::headFiles( 'inc/css/', '.css' ) ?>
-  <!-- javascript -->
 <?php echo Template::headFiles( 'inc/js/', '.js' ) ?>
+<?php echo Template::headFeeds() ?>
 </head>

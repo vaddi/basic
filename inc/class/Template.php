@@ -31,12 +31,12 @@ class Template extends Base {
   public function headFiles( $path = null, $type = null ) {
     if( $path === null || ! is_dir( $path ) ) return false;
     if( $type === null ) $type = '.php';
+		$output = "";
     if( $type == '.js' ) {
-      $output = "<!-- javascript -->\n";
+      $output .= "  <!-- javascript -->\n";
     } else if( $type == '.css' ) {
-      $output = "<!-- styles -->\n";
+      $output .= "  <!-- styles -->\n";
     }
-    $output = "";
     $files = glob( $path . "*" . $type );
     foreach( $files as $key => $value ) {
       if( defined( "SRI" ) && SRI ) {
@@ -63,6 +63,16 @@ class Template extends Base {
     }
     return $output;
   }
+
+  /**
+   * Helper to load javascript and css files
+   */
+  public function headFeeds() {
+		$output = "  <!-- feeds -->\n";
+		$output .= '  <link rel="alternate" type="application/rss+xml" title="' . APPNAME . ' &raquo; Feed" href="' . URL . '/?page=feed" />' . "\n";
+		$output .= '  <link rel="alternate" type="application/rss+xml" title="' . APPNAME . ' &raquo; News-Feed" href="' . URL . '/?page=news&feed=rss" />' . "\n";
+		return $output;
+	}
 
   /**
    * Build together the HTML Parts of the Page by files from the tpl, css and js folders

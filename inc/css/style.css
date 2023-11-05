@@ -119,6 +119,23 @@ nav li a.active {
   padding: 16px;
 }
 
+#content .task-list-item-checkbox {
+	margin: 0 0.2em 0.25em -1.4em;
+	vertical-align: middle;
+}
+
+#content .task-list-item {
+	list-style: none;
+}
+
+#content [type=checkbox], 
+#content [type=radio] {
+	box-sizing: border-box;
+	padding: 0;
+}
+
+
+
 /*
 Gallerie
 */

@@ -34,11 +34,12 @@ function getItems( $db = null ) {
       return $result;
     }
   }
+	rsort( $result ); // letzte zuerst sortieren
   return $result;
 }
 
-// get one element
-function getItem( $db = null, $id = null  ) {
+// get single element
+function getItem( $db = null, $id = null ) {
   $result = false;
   if( $db === null || $id === null ) return $result;
   if( isset( $db ) ) {
@@ -54,6 +55,25 @@ function getItem( $db = null, $id = null  ) {
   return $result;
 }
 
+// get the last updated Element Date
+function getLastUpdate( $db = null ) {
+  $result = false;
+  if( $db === null ) return $result;
+  if( isset( $db ) ) {
+    try {
+      $db->query( "SELECT id, MAX(updated) AS updated FROM " . PAGE . " GROUP BY id ORDER BY updated DESC" );
+      $db->execute();
+      $result = $db->resultset();
+    } catch( Exception $e ) {
+      return $e;
+    }
+  }
+	if( isset( $result[0]['updated'] ) ) {
+		return $result[0]['updated'];
+	}
+  return false;
+}
+
 // create a database table
 function dbCreate( $db = null ) {
   $result = false;
@@ -65,6 +85,7 @@ function dbCreate( $db = null ) {
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	title TEXT NOT NULL,
 	content TEXT NOT NULL,
+	guid TEXT NOT NULL,
   updated TEXT NOT NULL DEFAULT (datetime('now','localtime')),
 	created TEXT NOT NULL DEFAULT (datetime('now','localtime'))
 )"
@@ -85,22 +106,42 @@ function dbCreate( $db = null ) {
 }
 
 // drop a database table
-function dbDrop( $db = null ) {
+function dbDrop( $db = null, $table = null ) {
   $result = false;
   if( $db === null ) return $result;
-	$db->query( "DROP TABLE IF EXISTS " . PAGE );
-  $db->execute();
-  $result = $db->resultset();
-  return $result;
+	if( $table === null ) $table = PAGE;
+	if( dbTableExists( $db, $table ) ) {
+		$db->query( "DROP TABLE IF EXISTS " . $table );
+	  $db->execute();
+	  $result = $db->resultset();
+	  return $result;
+	}
+	return false;
 }
 
-function createEntry( $db = null, $title = null, $content = null ) {
+// check if DB Table exists
+function dbTableExists( $db = null, $table = null ) {
+  $result = false;
+  if( $db === null ) return $result;
+	if( $table === null ) $table = PAGE;
+	$db->query( "SELECT name FROM sqlite_master WHERE type='table' AND name='" . $table . "';" );
+  $db->execute();
+  $result = $db->resultset();
+	if( isset( $result[0] ) && $result[0]['name'] == $table ) {
+		return true;
+	}
+	return false;
+}
+
+function createEntry( $db = null, $title = null, $content = null, $guid = null ) {
   $result = false;
   if( $db === null || $title === null || $content === null ) return $result;
+	if( $guid === null ) $guid = genGUID( 16 );
   try {
-    $db->query( "INSERT INTO " . PAGE . " ( title, content ) VALUES ( :title, :content )" );
+    $db->query( "INSERT INTO " . PAGE . " ( title, content, guid ) VALUES ( :title, :content, :guid )" );
     $db->bind( ':title', $title );
     $db->bind( ':content', $content );
+		$db->bind( ':guid', $guid );
     $db->execute();
     $result = $db->resultset();
   } catch( Exception $e ) {
@@ -113,10 +154,11 @@ function updateEntry( $db = null, $id = null, $title = null, $content = null ) {
   $result = false;
   if( $db === null || $id === null || $title === null || $content === null ) return $result;
   try {
-    $db->query( "UPDATE " . PAGE . " SET title = :title, content = :content WHERE id = :id" );
+    $db->query( "UPDATE " . PAGE . " SET title = :title, content = :content, updated = :updated WHERE id = :id" );
     $db->bind( ':title', $title );
     $db->bind( ':content', $content );
     $db->bind( ':id', $id );
+		$db->bind( ':updated', date( 'Y-m-d H:i:s' ) );
     $db->execute();
     $result = $db->resultset();
   } catch( Exception $e ) {
@@ -163,8 +205,12 @@ function renderEntries( $db = null ) {
     foreach( $data as $key => $entry ) {
       $result .= '<div class="entry">' . "\n";
       $result .= '  <div class="entry-header">';
-      //  $entry['created'] )
-      $result .= "<div style='float:right'>" . date( 'd.m.Y H:i:s', strtotime( $entry['created'] ) ) . "</div>";
+      $result .= "<div style='float:right;'>";
+			// Created at Date
+			$result .= "Created: " . date( 'd.m.Y H:i:s', strtotime( $entry['created'] ) );
+			$result .= "<br/>";
+			$result .= "Updated: " . date( 'd.m.Y H:i:s', strtotime( $entry['updated'] ) );
+			$result .= "</div>";
       $result .= "    <h3><a href='?page=" . PAGE . "&show=" . $entry['id'] . "'>" . $entry['title'] . "</a></h3>\n";
       if( isLoggedIn() ) { // edit elemnts
         $result .= '    <div style="float:right">' . "\n";
@@ -175,7 +221,7 @@ function renderEntries( $db = null ) {
       }
       $result .= "  </div>\n";
       $result .= '  <div class="entry-content">' . "\n";
-      $result .= $entry['content'] . "\n";
+      $result .= str_replace( "\n", '<br />', $entry['content'] ) . "\n";
       $result .= "  </div>\n";
       $result .= "</div>\n";
     }
@@ -187,7 +233,7 @@ function isLoggedIn() {
   // if request is by logged in user, render the list view (or if given id, the single element with form to edit, or on create, a new form)
   if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN ) {
     // user has a valid session
-    // TODO calidate cookie liefetime!
+    // validate cookie liefetime!
     if( time() - $_COOKIE['created'] < CLIFETIME ) {
       return true;
     }
@@ -263,16 +309,74 @@ function renderForm( $db = null, $id = null ) {
     $result .= '  </fieldset>' . "\n";
     $result .= '</form>' . "\n";
   }
-  
   return $result;
 }
 
+function genGUID( $length = 16 ) {
+	return bin2hex( openssl_random_pseudo_bytes( $length ) );
+}
+
+function genFeed( $db, $feed_type ) {
+	$items = getItems( $db );
+	$link_self = URL . '/?page=' . PAGE . '&feed=atom';
+	$last_updated = date('c', strtotime( getLastUpdate( $db ) ) );
+	$generator = "vaddis Feedcreator";
+	$generatorUri = 'https://github.com/vaddi/basic/blob/main/inc/class/extensions/Feeds.php';
+	$generatorVersion = '1.0'; 
+	$icon = 'https://example.com/images/feedicon.png';
+	$logo = 'ttps://example.com/images/feed.png';
+	if( $_REQUEST['feed'] == 'atom' ) {
+		// build array for atom feeds
+		$feed = array(
+			'feed' => array(
+				'title' => 'Atom Feeds',
+				'link' => array( 'text' => null, 'rel' => 'alternate', 'href' => APPDOMAIN ),
+				'link' => array( 'text' => null, 'rel' => 'self', 'href' => $link_self ),
+				'updated' => $last_updated,
+				'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),
+				'author' => array( 'text' => null, 'name' => '', 'email' => '', 'uri' => '' ),
+				'id' => APPDOMAIN,
+				'description' => 'Basic Template News Entries',
+				'language' => 'de_DE',
+				'icon' => $icon,
+				'logo' => $logo,
+				'entry' => $items
+			),
+			'xmlns' => 'http://www.w3.org/2005/Atom'
+		);
+		Feeds::generate( $feed );
+	} else if( $_REQUEST['feed'] == 'rss' ) {
+		// build array for rss feeds
+		$feed = array(
+			'rss' => array(
+				'channel' => array(
+					'title' => 'RSS Feed',
+					'link' => APPDOMAIN,
+					'description' => 'RSS 1 News Feed',
+					'lastBuildDate' => $last_updated,
+					'language' => 'de_DE',
+					'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),
+					'item' => $items
+				)
+			),
+			'version' => '2.0'
+		);
+		Feeds::generate( $feed );
+	}
+}
+
+//
+// Main Selector
+//
+
 switch( $_REQUEST ) {
+
+	// show rss/atom feeds
   case isset( $_REQUEST['feed'] ) && $_REQUEST['feed'] != null:
-    // render feeds
-    
+		genFeed( $db, $_REQUEST['feed'] );
     break;
 
+	// edit an entry
   case isset( $_REQUEST['edit'] ) && $_REQUEST['edit'] != null:
     if( ! isLoggedIn() ) { header( 'Location: ' . URL . '/?page=' . PAGE ); }
     // render edit form
@@ -287,6 +391,7 @@ switch( $_REQUEST ) {
       if( is_array( $res ) ) {
         $content .= 'Successful update Entry ' . $id . "\n";
         header( 'Location: ' . URL . '/?page=' . PAGE );
+				exit;
       } else {
         $content .= 'Error on update Entry ' . $id . "\n";
       }
@@ -295,6 +400,7 @@ switch( $_REQUEST ) {
     }
     break; // end edit
 
+  // create a new entry
   case isset( $_REQUEST['create'] ) && $_REQUEST['create'] != null:
     if( ! isLoggedIn() ) { header( 'Location: ' . URL . '/?page=' . PAGE ); }
     // if create submitted, show message, if message success, redirect after X Seconds 
@@ -303,16 +409,18 @@ switch( $_REQUEST ) {
       $subcontent = isset( $_REQUEST['content'] ) && $_REQUEST['content'] != null && $_REQUEST['content'] != "" ? $_REQUEST['content'] : null;
       $res = createEntry( $db, $title, $subcontent );
       if( is_array( $res ) ) {
-        $content .= 'Successful create Entry ' . $id . "\n";
+        $content .= 'Successful create new Entry ' . "\n";
         header( 'Location: ' . URL . '/?page=' . PAGE );
+				exit;
       } else {
-        $content .= 'Error on create Entry ' . $id . "\n";
+        $content .= 'Error on create new Entry ' . "\n";
       }
     } else {
       $content .= renderForm( $db, $id = null );
     }
     break; // end create
 
+  // delete an entry
   case isset( $_REQUEST['delete'] ) && $_REQUEST['delete'] != null:
     if( ! isLoggedIn() ) { header( 'Location: ' . URL . '/?page=' . PAGE ); exit; }
     $id = $_REQUEST['delete'];
@@ -323,10 +431,11 @@ switch( $_REQUEST ) {
       }
     }
     header( 'Location: ' . URL . '/?page=' . PAGE );
+		exit;
     break; // end delete
 
+	// show all entries
   default:
-    // render all Entries
     $content .= renderEntries( $db );
     break;
 }

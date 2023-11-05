@@ -62,42 +62,45 @@ function urlExists( $url = null ) {
     }  
 }
 
+echo <<<END
+	<style type="text/css">
+	/*  h1 + p { margin: 0 0 2em; color: #000; font-size: 90%; font-style: italic; }*/
+		code { font-family: monaco, monospace; }
+		table { border-collapse: collapse; width: 100%; }
+			table th,
+			table td { padding: 0.4em; text-align: left; vertical-align: top; }
+			table th { width: 12em; font-weight: normal; }
+			table tr:nth-child(odd) { background: #eee; }
+			table td.pass { color: #171; }
+			table td.fail { color: #711; }
+		@-webkit-keyframes reset { 0% { opacity: 0; } 100% { opacity: 0; } }
+		@-webkit-keyframes fade-in { 0% { opacity: 0; } 60% { opacity: 0; } 100% { opacity: 1; } }
+		@-moz-keyframes reset { 0% { opacity: 0; } 100% { opacity: 0; } }
+		@-moz-keyframes fade-in { 0% { opacity: 0; } 60% { opacity: 0; } 100% { opacity: 1; } }
+		@keyframes reset { 0% { opacity: 0; } 100% { opacity: 0; } }
+		@keyframes fade-in { 0% { opacity: 0; } 60% { opacity: 0; } 100% { opacity: 1; } }
+		.fade-in {
+			-webkit-animation-name: reset, fade-in;
+			-webkit-animation-duration: 1s;
+			-webkit-animation-timing-function: ease-in;
+			-webkit-animation-iteration-count: 1;
+			-moz-animation-name: reset, fade-in;
+			-moz-animation-duration: 1s;
+			-moz-animation-timing-function: ease-in;
+			-moz-animation-iteration-count: 1;    
+			animation-name: reset, fade-in;
+			animation-duration: 1s;
+			animation-timing-function: ease-in;
+			animation-iteration-count: 1;
+		}
+		#results { padding: 0.8em; color: #fff; font-size: 1.4em; }
+		#results.pass { background: #171; }
+		#results.fail { background: #711; }
+	</style>
+END;
+
 ?>
 
-<style type="text/css">
-/*  h1 + p { margin: 0 0 2em; color: #000; font-size: 90%; font-style: italic; }*/
-	code { font-family: monaco, monospace; }
-	table { border-collapse: collapse; width: 100%; }
-		table th,
-		table td { padding: 0.4em; text-align: left; vertical-align: top; }
-		table th { width: 12em; font-weight: normal; }
-		table tr:nth-child(odd) { background: #eee; }
-		table td.pass { color: #171; }
-		table td.fail { color: #711; }
-	@-webkit-keyframes reset { 0% { opacity: 0; } 100% { opacity: 0; } }
-	@-webkit-keyframes fade-in { 0% { opacity: 0; } 60% { opacity: 0; } 100% { opacity: 1; } }
-	@-moz-keyframes reset { 0% { opacity: 0; } 100% { opacity: 0; } }
-	@-moz-keyframes fade-in { 0% { opacity: 0; } 60% { opacity: 0; } 100% { opacity: 1; } }
-	@keyframes reset { 0% { opacity: 0; } 100% { opacity: 0; } }
-	@keyframes fade-in { 0% { opacity: 0; } 60% { opacity: 0; } 100% { opacity: 1; } }
-	.fade-in {
-		-webkit-animation-name: reset, fade-in;
-		-webkit-animation-duration: 1s;
-		-webkit-animation-timing-function: ease-in;
-		-webkit-animation-iteration-count: 1;
-		-moz-animation-name: reset, fade-in;
-		-moz-animation-duration: 1s;
-		-moz-animation-timing-function: ease-in;
-		-moz-animation-iteration-count: 1;    
-		animation-name: reset, fade-in;
-		animation-duration: 1s;
-		animation-timing-function: ease-in;
-		animation-iteration-count: 1;
-	}
-	#results { padding: 0.8em; color: #fff; font-size: 1.4em; }
-	#results.pass { background: #171; }
-	#results.fail { background: #711; }
-</style>
 <h1 id="mainh">Environment Tests</h1>
 
 <p>

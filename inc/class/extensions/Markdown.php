@@ -21,6 +21,7 @@ class Markdown {
 		'/`(.*?)`/' => '<code>\1</code>',                         // inline code elements
     '/\n\*(.*)/' => 'self::ul_list',                          // ul lists
     '/\n\-(.*)/' => 'self::ul_list',                          // ul lists
+		'/\n(\[\s\])(.*)/' => 'self::ul_list',                          // ul lists
     '/\n[0-9]+\.(.*)/' => 'self::ol_list',                    // ol lists
     '/\n(&gt;|\>)(.*)/' => 'self::blockquote ',               // blockquotes
     '/\n-{5,}/' => "\n<hr />",                                // horizontal rule
@@ -58,6 +59,16 @@ class Markdown {
 
   private static function ul_list( $regs ) {
     $item = $regs[1];
+		// disabled chackboxes for Tasklists
+    if( preg_match( '/^(\s\[\s\]\s)/', $item ) ) {
+			$item = str_replace( ' [ ] ', '', $item );
+      return sprintf( "<ul><li class='task-list-item'><input type='checkbox' id disabled class='task-list-item-checkbox'> %s</li>\n</ul>\n", $item );
+    }
+		// enabled chackboxes for Tasklists
+    if( preg_match( '/^(\s\[x\]\s)/', $item ) ) {
+			$item = str_replace( ' [x] ', '', $item );
+      return sprintf( "<ul><li><input type='checkbox' id checked class='task-list-item-checkbox'> %s</li>\n</ul>\n", $item );
+    }
     return sprintf( "<ul><li>%s</li>\n</ul>\n", trim( $item ) );
   }
 

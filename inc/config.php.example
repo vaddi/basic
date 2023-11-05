@@ -56,6 +56,7 @@ define( 'CONTACTMAIL', 'recipient@gmail.com' ); // Mailadress (empty to hide)
 
 // Social Links
 define( 'SOCIALLINKS', true ); // show/hide Sociallinks
+define( 'SOCIALPAGE', 'https://www.mvattersen.de/' ); // Main website from the Auhtor
 define( 'SOCIALTWITTER', 'https://twitter.com/' );
 define( 'SOCIALFACEBOOK', 'https://facebook.com/' );
 define( 'SOCIALINSTAGRAM', 'https://www.instagram.com/' );
