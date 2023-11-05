@@ -13,8 +13,8 @@ $mail_format = "html"; // plain oder html email versenden
 $mailtemplatehtml = "mail_template_html.php"; // html template file which should be used. Empty uses defaults
 $mailtemplateplain = ""; // plain template file which should be used. Empty uses defaults
 
-$mail_sender = "sendmail";  // smtp oder sendmail zum versenden benutzen
-$wartezeit = 5; // wartezeit zum weiterleiten nach erfolgreichem versenden 
+$mail_sender = "smtp";  // smtp oder sendmail zum versenden benutzen
+$wartezeit = 5; // wartezeit zum weiterleiten nach erfolgreichem versenden
                 // (0 = keine weiterleitung)
 //$weiterleitung = "index.php"; // hierhin weiterleiten
 $weiterleitung = "index.php"; // hierhin weiterleiten
@@ -27,7 +27,7 @@ $subjectfields = MAILSUBJECT;
 // );
 
 // Spamm Abwehr
-$captcha = false; // use a simple captcha
+$captcha = true; // use a simple captcha
 $maxchars = 1000; // Maximale Anzahl an Textzeichen einer Email. 
 $replacechars = false; // Ersetzten von Sonderzeichen wie ä ö ü durch ae oe ue
 // einfacher Wortfilter, mails können nur abgesendet werden wenn keines dieser Wörter im Text vorkommt. Leeres array deaktiviert den filter
