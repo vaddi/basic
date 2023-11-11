@@ -16,12 +16,13 @@ $fonts_array[0] = array('refrig2.ttf', 'Xenowort.ttf');
 // Fontdateien (mit Zahlen)
 $fonts_array[1] = array('Xenowort.ttf');
 
-session_start();
-$pas = imagecreatetruecolor($breite, $hohe);
-$bg = ImageColorAllocate($pas, 255, 255, 255);
-ImageFilledRectangle($pas, 0, 0, $breite, $hohe, $bg);
-$rand = str_replace('0', '9', strtoupper(substr(md5(uniqid (rand())), 0, 6)));
-$_SESSION['P91Captcha_code'] = sha1($rand);
+//session_start();
+
+$pas = imagecreatetruecolor( $breite, $hohe );
+$bg = ImageColorAllocate( $pas, 255, 255, 255 );
+ImageFilledRectangle( $pas, 0, 0, $breite, $hohe, $bg );
+$rand = str_replace( '0', '9', strtoupper( substr( md5( uniqid( rand() ) ), 0, 6 ) ) );
+$_SESSION['P91Captcha_code'] = sha1( $rand );
 $heuri = rand(0, 1);
 if ($heuri == 0) {
         for($i = 0; $i <= ($size * 1.2); $i++) {

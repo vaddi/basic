@@ -95,6 +95,20 @@ If you just want to sendout html content, you can also, but you just have to kee
 Just place you PHP files into the `sites` Folder. All Content will be rendered inside of a Template. These Files will be find under `tpl` Folder and can also just edited like you want, they are also plain PHP Files. 
 
 
+### Special Pages ###
+
+There will be a few Pages shipped whithin this Application. You can use them to build your own pages or use them as they are. Some are hidden by the `MENU_EXCLUDE` array in the `config.php`, you have to remove their name from there to make them visible in the Sitemenu.
+
+List of shipped Pages:
+
+- Authtest (a simple site which show if you are logged in or not)
+- Contact (a full contactform which is able to send Mails by smtp or php mail function, there is also a map and Link section in this Page )
+- Documentation (this Page will render the README.md file like github do)
+- Environment (a few enviroment tests to ensure you have installed and configured your System well)
+- Imprint (an Imprint page)
+- News (a very simple News page with simple CRUD functionality, all Enties will be loaded and saved on the shipped sqlite3 database)
+
+
 ### Classes ###
 
 The Templating is done by the two Classes `Sites.php`, wich load Content from the `sites` Folder and the `Template.php` Class, wich loads template Parts from `tpl` Folder and mainly combine all to the outputed HTML or Text.
@@ -173,7 +187,7 @@ Currently there are some incomplete Things in this Application, feel free to cre
 
 - [ ] Add a Database Wrapperclass to use more than the SQLite Database
 - [ ] Cleanup extension Classes, reorganise Functions into speaking Classes
-- [ ] Build the Class for RSS/Atom Feeds
+- [x] Build the Class for RSS/Atom Feeds
 
 
 ## Links ##

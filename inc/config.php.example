@@ -63,6 +63,7 @@ define( 'SOCIALINSTAGRAM', 'https://www.instagram.com/' );
 define( 'SOCIALYOUTUBE', 'https://www.youtube.com/' );
 
 // E-Mail Formular Stuff
+define( 'MAILCAPTCHA', true );
 define( 'MAILPHONE', CONTACTPHONE );
 define( 'MAILFAX', CONTACTFAX );
 define( 'MAILTWITTER', SOCIALTWITTER );
@@ -73,10 +74,11 @@ define( 'MAILHTMLHEADER', '' ); // HTML Mail Header Image (Resolution: widht 516
 define( 'MAILHTMLIMAGE', '' ); // A Image you can use in the HTML Template (Resolution: width 256px, height 256px)
 
 // $subjectfields = array( // Subjectfield Text's. if set this, there will be a Dropdown
-//   'Allgemeine Frage',
-//   'Verbesserungsvorschlag',
-//   'Fehler melden',
-//   'Werbeanfrage'
+// 	'General question',
+// 	'Suggestion for improvement',
+// 	'Report an error',
+// 	'Advertising request',
+// 	'Something else'
 // );
 $subjectfields = NULL;
 define( 'MAILSUBJECT', $subjectfields );

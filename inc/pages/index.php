@@ -117,7 +117,8 @@ foreach( $files as $file ) {
 	echo '</p>';
 	
 }
-	
+
+// Deprecated: html_entity_decode(): Passing null to parameter #2 ($flags) of type int is deprecated in /Users/mvattersen/Sites/basic/inc/form/formular.php on line 141
 ?>
 
 </div>

@@ -92,7 +92,7 @@ nav li a.active {
 
 .page-content {
   width: auto;
-  margin: 0 7.4em 50px;
+  margin: 0 7.4em 80px;
 }
 
 #content {
@@ -161,11 +161,11 @@ Media Queries
 }
 
 @media (max-width: 640px) {
-  .page-content { margin: 0; }
+  .page-content { margin: 0 0 80px; }
 	nav { margin: 0 0 15px; }
 	nav ul { width: 100%; text-align: center; }
 	nav li a, nav li a:link, nav li a:visited { width: 100%; display: block; padding: 15px 0; }
   nav ul li { float: none; margin: 0 10px; padding: 3px 0; }
-	#cookieConsent { display: contents !important; }
+/*	#cookieConsent { display: contents !important; }*/
 	#closeCookieConsent { margin: 0 !important; }
 }

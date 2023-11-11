@@ -97,9 +97,9 @@ function dbCreate( $db = null ) {
 	}
   if( is_array( $result ) ) {
     // create the first example entries
-    createEntry( $db, 'Erster Beitrag', 'Der erste Beitrag, mit ein wenig Text.' );
-    createEntry( $db, 'Zweiter Eintrag', 'Der zweite Eintrag, mit ein wenig mehr Text.' );
-    createEntry( $db, 'Dritter Post', 'Der dritte Post, mit ein noch mehr Text zum lesen.' );
+    createEntry( $db, 'First post', 'The first post, with a little text.' );
+    createEntry( $db, 'Second post', 'The second entry, with a little more text. This way you can see how the text flows.' );
+    createEntry( $db, 'Third post', "The third post, with even more text to read. \nThis post contains line breaks" );
     return $result;
   }
 	return false;
@@ -269,13 +269,13 @@ function renderForm( $db = null, $id = null ) {
     $result .= '<div><a href="?page=' . PAGE . '">Show All Entries</a><div><br />' . "\n";
     $result .= '<form action="?page=' . PAGE . '&create=true" method="POST">' . "\n";
     $result .= '  <fieldset>' . "\n";
-    $result .= '    <legend>Neuen Eintrag Erstellen</legend>' . "\n";
+    $result .= '    <legend>Create new entry</legend>' . "\n";
     $result .= '    <div>' . "\n";
     $result .= '      <label for"title">Titel</label>' . "\n";
     $result .= '      <input id="title" name="title" autofocus />' . "\n";
     $result .= '    </div>' . "\n";
     $result .= '    <div>' . "\n";
-    $result .= '      <label for"contententry">Inhalt</label>' . "\n";
+    $result .= '      <label for"contententry">Content</label>' . "\n";
     $result .= '      <textarea id="contententry" name="content"></textarea>' . "\n";
     $result .= '    </div>' . "\n";
     $result .= '  <br />' . "\n";
@@ -291,13 +291,13 @@ function renderForm( $db = null, $id = null ) {
     $result .= '<div><a href="?page=' . PAGE . '">Show All Entries</a><div><br />' . "\n";
     $result .= '<form action="?page=' . PAGE . '&edit=' . $id . '" method="POST">' . "\n";
     $result .= '  <fieldset>' . "\n";
-    $result .= '    <legend>Eintrag ' . $id . ' Bearbeiten</legend>' . "\n";
+    $result .= '    <legend>Edit entry ' . $id . '</legend>' . "\n";
     $result .= '    <div>' . "\n";
     $result .= '      <label for"title">Titel</label>' . "\n";
     $result .= '      <input id="title" name="title" value="' . $entry['title'] . '" autofocus />' . "\n";
     $result .= '    </div>' . "\n";
     $result .= '    <div>' . "\n";
-    $result .= '      <label for"contententry">Inhalt</label>' . "\n";
+    $result .= '      <label for"contententry">Content</label>' . "\n";
     $result .= '      <textarea id="contententry" name="content">' . $entry['content'] . '</textarea>' . "\n";
     $result .= '    </div>' . "\n";
     $result .= '  <br />' . "\n";

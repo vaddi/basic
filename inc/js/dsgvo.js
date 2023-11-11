@@ -66,7 +66,7 @@ function renderMessage() {
   // create html element and append after 
   element  = '<div id="cookieConsent">';
   element += '<div id="closeCookieConsent">x</div>';
-  element += 'Diese Website verwendet Cookies zur Verifizierung des Captchas im Kontaktformular. <a href="?page=imprint#datenschutz">Mehr Informationen</a>. <a class="cookieConsentOK">Ich habe verstanden</a>';
+  element += 'This website uses cookies to verify the captcha in the contact form. <a href="?page=imprint#dataprotection">More About</a>. <a class="cookieConsentOK">I have understood</a>';
   element += '</div>';
   document.getElementById( 'content' ).insertAdjacentHTML('afterend', element );
 }
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById( 'cookieConsent' ).setAttribute( 'style','display: none;' );
       
         // if currentpage == contact -> reload the page
-        if( page == 'kontakt' ) location.reload(); // reload if clicked on contact page
+        if( page == 'kontakt' ) window.location.reload(); // reload if clicked on contact page
       });
     }
     
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById( 'cookieConsent' ).setAttribute( 'style','display: none;' );
     
         // if currentpage == contact -> reload the page
-        if( page == 'kontakt' ) location.reload(); // reload if clicked on contact page
+        if( page == 'kontakt' || page == 'contact' ) window.location.reload(); // reload if clicked on contact page
       });
     }
   }
