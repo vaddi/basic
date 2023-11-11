@@ -40,7 +40,7 @@ class Template extends Base {
     $files = glob( $path . "*" . $type );
     foreach( $files as $key => $value ) {
       if( defined( "SRI" ) && SRI ) {
-        $sri = Base::genSRI( $value );
+        $sri = Crypto::genSRI( $value );
       }
       if( $type == '.js' ) {
         $output .= '  <script type="text/javascript" src="' . $value . '"';
@@ -150,10 +150,10 @@ class Template extends Base {
       $output .= '    <td>Git Tag</td><td>' . Git::gitTag() . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Random Token</td><td>' . Base::genToken( 32 ) . "</td>\n";
+      $output .= '    <td>Random Token</td><td>' . Crypto::genToken( 32 ) . "</td>\n";
       $output .= '  </tr>' . "\n";
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Tokenize "Test"</td><td>' . Base::token( 'Test' ) . "</td>\n";
+      $output .= '    <td>Tokenize "Test"</td><td>' . Crypto::token( 'Test' ) . "</td>\n";
       $output .= '  </tr>' . "\n";
       //
       // $output .= '  <tr>' . "\n";

@@ -90,9 +90,9 @@ See [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merg
 
 First: You can use PHP Files. No static replace Content like "{{TITLE}}" or something.
 
-If you just want to sendout html content, you can also, but you just have to keep the filenames Prefix `.php`!
+If you just want to sendout simple html content, you can also by write them into the files. But you have to keep the filenames Prefix `.php`, only files with the Prefix `.php` will be used by the Templating!
 
-Just place you PHP files into the `sites` Folder. All Content will be rendered inside of a Template. These Files will be find under `tpl` Folder and can also just edited like you want, they are also plain PHP Files. 
+Just place you PHP files into the `sites` Folder (don't use the shipped `pages` Folder, oserwise you'r not able to simply update!). All Content will be rendered inside of a Template. You can find the Template Files under the `tpl` Folder and can also just edit them as you like, they are also just plain PHP Files. 
 
 
 ### Special Pages ###
@@ -121,7 +121,7 @@ This Class read and parse the Content from the Files in the `sites` Folder. It a
 
 #### Template.php ####
 
-Read the content from the `tpl` Folder and combines them into a basic HTML Page. 
+Read the content from the `tpl` Folder and combines them into a basic HTML Page. The `Template.php` class has the base structure of the HTML Site, there you can find the starting `DOCTYPE` Element and also the `body` and `html` HTML tags.
 
 
 ### Extensions Classes ###
@@ -130,7 +130,7 @@ You can extend the Application by your own classes. Just place them into the Fol
 
 All Classes under the extensions Folder will be automaticly instanciated by the `Base.php` Class by the PHP `spl_autoload_register` function in the Head of the Page.
 
-To get a simple description, add a Comment in line 3 of your Class. This will be used in the Class page as description of your Class and help you to keep in mind what a Class is used for.
+To get a simple description, add a Comment in line 3 of your Class. This will be used in the `index.php` Page (in the Section Pages) as description of your Class and help you to keep in mind what a Class is used for.
 
 
 ## Layout ##
@@ -140,29 +140,29 @@ You only have to place the file into the `css` or `js` Folder and the Template C
 
 ### CSS ###
 
-A pure Layout is allready shiped by default. It uses the `style.css` inside of the `css` Folder and contains pure CSS. If there are other files in this Folder, the styles.css won't be used, so you can easily overwrite the default layout by your own.
+A pure Layout is allready shiped by default. It uses the `style.css` inside of the `css` Folder and contains pure CSS. If there are other files in this Folder, the shipped `styles.css` file won't be used anymore, so you can easily overwrite the default layout by add your own css files into the folder whithout the need to delete the shipped `styles.css` file.
 
 
 ### HTML ###
 
-The layout of outputed html is controlled by the Files into the `tpl` Folder and the class `Template.php`. 
+The layout of the outputed HTML is controlled by the Files into the `tpl` Folder and the class `Template.php`. You can also inserd plain HTML into the Pages. There is no need to use PHP into the files.
 
 
 ### JavaScript ###
 
-The Base Template contains some JavaScript Files for clock, pageload and to highlight the current navigation link. 
-All files will be added to page head by `tpl/head.php`
+The Base Template contains some JavaScript Files for clock, pageload, highlight the current navigation link and some other things which are used by the shipped Pages. 
+All files will be added to the Site head from the `tpl/head.php` file.
 
 
 ## Application Exporter ##
 
-The Application has a Prometheus ready scrape target url on where it can find some Metrics when requesting the metrics Page
+The Application has a Prometheus ready scrape target endpoint on where prometheus can find some Metrics when requesting the metrics Page:
 
 	http[s]://[domain.tld]/[appname]/?page=metrics
 
-All Metrics will be named by the Application `SHORTNAME`, wich is the Besefolder Page name (default Name is `basic`).
+All Metrics will be named by the Application `SHORTNAME` from the `config.php` file, wich is the Besefolder Page name (default Name is `basic`).
 
-
+List of Metrics:
 - basic_info = like current Version and Application Domain
 - basic_pages = Amount of Files/Pages in the configured PAGES destination Folder and the Localpath.
 - basic_commits = Amount of git Commits
@@ -176,7 +176,7 @@ You can use my `PHP Applications` Dasboard as Dashboard Example: [dashboard](htt
 The Exprter can turned off by Set Config Constant `METRICS` to false into the `config.php` file.
 
 
-## Known Bugs ##
+## Bugs ##
 
 Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/issues)
 
@@ -186,8 +186,9 @@ Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/iss
 Currently there are some incomplete Things in this Application, feel free to create a Fork or Send Solutions to me via GitHub.
 
 - [ ] Add a Database Wrapperclass to use more than the SQLite Database
-- [ ] Cleanup extension Classes, reorganise Functions into speaking Classes
-- [x] Build the Class for RSS/Atom Feeds
+- [ ] Add MySQL Database class and Schama Asset
+- [x] Cleanup extension Classes, reorganise Functions into speaking Classes
+- [x] Build a Class for RSS/Atom Feeds
 
 
 ## Links ##
