@@ -85,7 +85,10 @@ class Git {
 		}
 		return false;
 	}
-	
+
+	/** 
+	 * check for .git folder is in this Application
+	 */
 	public static function gitPHP() {
 		if( is_dir( realpath( './' ) . '/.git' ) ) return true;
 		return false;

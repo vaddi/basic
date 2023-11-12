@@ -19,6 +19,23 @@ a:active {
 	color:#f00;
 }
 
+/* rss and atom feed links */
+a img.rssfeed,
+a img.atomfeed {
+	margin-bottom: -2px;
+	width: 16px;
+}
+
+/*
+a img.rssfeed {
+	filter: invert(54%) sepia(18%) saturate(6377%) hue-rotate(3deg) brightness(107%) contrast(103%);
+}
+
+a img.atomfeed {
+	filter: invert(65%) sepia(67%) saturate(6682%) hue-rotate(165deg) brightness(101%) contrast(101%);
+}
+*/
+
 /* body */
 body {
   font-size: 100%;

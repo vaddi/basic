@@ -1,5 +1,9 @@
   <header>
     <div class='right right-header'>
+			<span id="feedicons">
+				<a href="?page=feed" target="_blank" title="RSS Pages Feeds"><img class="rssfeed" src="inc/img/feeds.svg" alt="RSS icon"/></a>
+				<a href="?page=feed&feed=atom" target="_blank" title="Atom Pages Feeds"><img class="atomfeed" src="inc/img/feeds.svg" alt="Atom icon"/></a>
+			</span>
       <span id='uhr'><!-- Time --></span><br />
       <div class='login'>
         <?php

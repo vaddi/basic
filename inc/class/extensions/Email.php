@@ -1,6 +1,6 @@
 <?php
 
-// Class <strong>Mail</strong> will be used to send Emails
+// Class <strong>Email</strong> will be used to send Emails
 
 class Email {
 

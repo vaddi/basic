@@ -63,6 +63,21 @@ class Base {
     $result = exec( 'grep -r "todo" ' . realpath( './' ) . '/' . '* | wc -l | tr -d " "' ) -5; // we have 5 times todo in our code, so we need to recalc them (grep -inr "todo")!
     return $result;
   }
+	
+  /**
+   * Debug the Coockie
+   */
+  public static function getCookie() {
+    $result = '';
+		if( count( $_COOKIE ) > 0 ) {
+			foreach( $_COOKIE as $key => $value ) {
+				$result .= '[' . $key . '] = ' . $value . " (" . ucfirst( gettype( $value ) ) . ")<br />\n"; 
+			}
+		} else {
+			$result = 'No Cookie set';
+		}
+    return $result;
+  }
 
 	/**
 	 * Helper for login
@@ -76,7 +91,6 @@ class Base {
         $result = true;
       }
     }
-		
     return $result;
 	}
 

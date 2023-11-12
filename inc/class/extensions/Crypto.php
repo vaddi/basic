@@ -6,10 +6,10 @@ class Crypto {
 
 	/**
 	 * Generate a Token (URL save characters)
-	 * Form 0 = only Numbers
-	 * Form 1 = only Letters
-	 * Form 2 = Letters and Numbers
-	 * Form 3 = Letters, Numbers and special Characters
+	 * form 0 = only Numbers
+	 * form 1 = only Letters
+	 * form 2 = Letters and Numbers
+	 * form 3 = Letters, Numbers and special Characters
 	 * @param $length Integer 
 	 * @param $form Integer
 	 * @return String
@@ -64,9 +64,9 @@ class Crypto {
    */
   public static function genSRI( $file ) {
     $result = false;
-		$file = '/usr/bin/openssl';
+		$openssl = '/usr/bin/openssl';
     if( is_file( $file ) ) {
-      $result = ( exec( $file . " dgst -sha384 -binary " . $file . " | " . $file . " base64 -A" ) );
+      $result = ( exec( $openssl . " dgst -sha384 -binary " . $file . " | " . $openssl . " base64 -A" ) );
     }
     return $result;
   }

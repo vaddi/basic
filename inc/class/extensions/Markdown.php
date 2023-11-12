@@ -67,7 +67,7 @@ class Markdown {
 		// enabled chackboxes for Tasklists
     if( preg_match( '/^(\s\[x\]\s)/', $item ) ) {
 			$item = str_replace( ' [x] ', '', $item );
-      return sprintf( "<ul><li><input type='checkbox' id checked class='task-list-item-checkbox'> %s</li>\n</ul>\n", $item );
+      return sprintf( "<ul><li class='task-list-item'><input type='checkbox' id disabled checked class='task-list-item-checkbox'> %s</li>\n</ul>\n", $item );
     }
     return sprintf( "<ul><li>%s</li>\n</ul>\n", trim( $item ) );
   }
@@ -96,11 +96,11 @@ class Markdown {
   /**
    * Add a rule.
    */
-  public static function add_rule( $regex, $replacement ) {
+  private static function add_rule( $regex, $replacement ) {
     self::$rules[ $regex ] = $replacement;
   }
 
-  static public function getHeaders() {
+  public static function getHeaders() {
     return self::$_headers;
   }
 

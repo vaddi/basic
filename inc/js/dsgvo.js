@@ -4,7 +4,7 @@
 
 // Show only on this pages (empty = all)
 //let pages = [];
-let pages = [ "home", "presse" ];
+let pages = [];
 
 let dsgvostyles = `
 /*Cookie Consent Begin*/
@@ -58,7 +58,7 @@ a.cookieConsentOK:hover,
 `;
 
 function renderMessage() {
-  // add styles
+  // add styles to head
   let styleSheet = document.createElement( "style" );
   styleSheet.type = "text/css";
   styleSheet.innerText = dsgvostyles;
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const expirationDate = new Date();
         expirationDate.setFullYear(expirationDate.getFullYear() + 1 ); // expires in one year
         let expires = "; expires=" + expirationDate.toUTCString();
-        let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year
+        let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year in seconds
         document.cookie = "commitcookie=true" + maxAge;
     
         let queryString = location.search;
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById( 'cookieConsent' ).setAttribute( 'style','display: none;' );
       
         // if currentpage == contact -> reload the page
-        if( page == 'kontakt' ) window.location.reload(); // reload if clicked on contact page
+        if( page == 'kontakt' || page == 'contact' ) window.location.reload(); // reload if clicked on contact page
       });
     }
     
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const expirationDate = new Date();
         expirationDate.setFullYear(expirationDate.getFullYear() + 1 ); // expires in one year
         let expires = "; expires=" + expirationDate.toUTCString();
-        let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year
+        let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year in seconds
         document.cookie = "commitcookie=true" + maxAge;
   
         let queryString = location.search;

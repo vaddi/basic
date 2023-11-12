@@ -38,7 +38,6 @@ if( CONTACTMAP ) {
 	  Gmap::gmaps( $contact );
 	  echo '</div>' . "\n";
 	}
-	
 }
 
 // Contact form

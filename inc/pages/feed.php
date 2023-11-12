@@ -42,7 +42,7 @@ function genFeed( $feed_type ) {
 		// build array for atom feeds
 		$feed = array(
 			'feed' => array(
-				'title' => 'Atom Feeds',
+				'title' => 'Atom Pages Feeds',
 				'link' => array( 'text' => null, 'rel' => 'alternate', 'href' => APPDOMAIN ),
 				'link' => array( 'text' => null, 'rel' => 'self', 'href' => $link_self ),
 				'updated' => $last_updated,
@@ -65,7 +65,7 @@ function genFeed( $feed_type ) {
 				'channel' => array(
 					'title' => 'RSS Feed',
 					'link' => APPDOMAIN,
-					'description' => 'RSS 1 News Feed',
+					'description' => 'RSS 1 Pages Feed',
 					'lastBuildDate' => $last_updated,
 					'language' => 'de_DE',
 					'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),

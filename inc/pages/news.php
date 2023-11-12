@@ -4,6 +4,13 @@
 $db = new DB_SQLite3( SQLITE_TYPE, SQLITE_FILE );
 
 $content = "";
+
+$content .= '<div class="right" style="padding: 20px 0 0">';
+$content .= '<a href="?page=news&feed=rss" target="_blank" title="RSS News Feeds"><img class="rssfeed" src="inc/img/feeds.svg" alt="RSS icon"/></a>';
+$content .= ' ';
+$content .= '<a href="?page=news&feed=atom" target="_blank" title="Atom News Feeds"><img class="atomfeed" src="inc/img/feeds.svg" alt="Atom icon"/></a>';
+$content .= '</div>';
+
 $content .= "<h1>News</h1>";
 
 $content .= '<style>'; // entry

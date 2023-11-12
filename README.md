@@ -163,6 +163,7 @@ The Application has a Prometheus ready scrape target endpoint on where prometheu
 All Metrics will be named by the Application `SHORTNAME` from the `config.php` file, wich is the Besefolder Page name (default Name is `basic`).
 
 List of Metrics:
+
 - basic_info = like current Version and Application Domain
 - basic_pages = Amount of Files/Pages in the configured PAGES destination Folder and the Localpath.
 - basic_commits = Amount of git Commits
@@ -185,10 +186,13 @@ Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/iss
 
 Currently there are some incomplete Things in this Application, feel free to create a Fork or Send Solutions to me via GitHub.
 
+- [x] Build a Class for RSS/Atom Feeds
+- [x] Add RSS & Atom Feed Icons and Links (On the Site and on the Newspage)
+- [x] Cleanup extension Classes, reorganise Functions into speaking Classes
+- [ ] Add Back to Top scroll
 - [ ] Add a Database Wrapperclass to use more than the SQLite Database
 - [ ] Add MySQL Database class and Schama Asset
-- [x] Cleanup extension Classes, reorganise Functions into speaking Classes
-- [x] Build a Class for RSS/Atom Feeds
+- [ ] Refractoring dsgvo.js (Alos Cookie und Localstorage Settings in Page login.pgp)
 
 
 ## Links ##
