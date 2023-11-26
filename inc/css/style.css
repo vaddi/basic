@@ -5,6 +5,7 @@ html {
   scroll-behavior: smooth;
 }
 
+
 /* links */
 a:link, 
 a:visited {
@@ -46,11 +47,13 @@ body {
   padding: 0;
 }
 
+
 /* positioning */
 .left { float: left; }
 .right { float: right; }
 .center { text-align: center; }
 .middle { vertical-align: middle; }
+
 
 /* header */
 header small {
@@ -61,28 +64,34 @@ header .right-header {
   text-align: right;
 }
 
+
 /* footer */
 footer {
   color: #7d7a7a;
 }
+
 footer .left,
 footer .right {
   margin-top: 0px;
 }
 
+
 /* navigation */
 nav {
   display: flex;
 }
+
 nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 nav ul li {
   float: left;
   margin: 0 5px 15px 0;
 }
+
 nav li a,
 nav li a:link,
 nav li a:visited {
@@ -94,19 +103,19 @@ nav li a:visited {
   padding: 3px 14px;
   background: #eee;
 }
+
 nav li a:hover {
   background: #fafafa;
   color: #666;
 }
+
 nav li a.active {
   background: #fff;
   color: #000;
 }
 
 
-
 /* content */
-
 .page-content {
   width: auto;
   margin: 0 7.4em 80px;
@@ -151,7 +160,10 @@ nav li a.active {
 	padding: 0;
 }
 
-
+#content h1 {
+	padding-bottom: 0.3em;
+	border-bottom: 1px solid #ccc;
+}
 
 /*
 Gallerie

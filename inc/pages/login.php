@@ -44,12 +44,14 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
         $login = Base::login( $user, $password );
         if( $login ) {
           // set cookiedata
+					$expire = time() + CLIFETIME;
           $shavar = sha1( $user . $password, CLIENTTOKEN );
-          setcookie( 'cid', CLIENTTOKEN, time() + CLIFETIME );  /* expire in 1 hour */
-          setcookie( 'created', time(), time() + CLIFETIME );
-          setcookie( 'username', USER, time() + CLIFETIME );
+          setcookie( 'cid', CLIENTTOKEN, $expire );  /* expire in 1 hour */
+          setcookie( 'created', time(), $expire );
+          setcookie( 'username', USER, $expire );
+					setcookie( 'lifetime', CLIFETIME, $expire );
           if( ! isset( $_COOKIE['commitcookie'] ) ) {
-            setcookie( 'commitcookie', "true", time() + CLIFETIME );
+            setcookie( 'commitcookie', "true", $expire );
           }
           $result = array(
             'code' => 0,
@@ -83,11 +85,14 @@ if( isset( $request['submit'] ) && $request['submit'] == 'submit' ) {
 // simple logged in check, user has valid session
 if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN ) {
 //if( isset( $_COOKIE['cid'] ) && base64_decode( sha1( USER . USERPASS, str_replace( "%3D",'', $_COOKIE['cid'] ) ) ) === SERVERTOKEN ) {
-  // do the logout
+	//
+  // logout user
+	//
   if( isset( $request['logout'] ) && $request['logout'] == 'true'  ) {
     setcookie( 'cid', '', 1 );
-    setcookie( 'username', '', 1 );
     setcookie( 'created', '', 1 );
+		setcookie( 'username', '', 1 );
+		setcookie( 'lifetime', '', 1 );
     if( isset( $_SERVER['HTTP_REFERER'] )) {
     	header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
 			exit;

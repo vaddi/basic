@@ -84,12 +84,73 @@ class DateAndTime {
 	}
 
 	/**
-	 * Returns an expire Date 
-	 * Format: 
-	 * @return	String
+	 * A Simple Expiredate
+	 * @return	String	an expire Date
 	 */
 	public static function expireDate() {
 		return  self::germanDay() . ", " . date( 'd' ) . " " . self::germanMonth() . " " . date( 'Y' ) . " " . ( ( date( 'H' ) +1 ) < 10 ? '0' . ( date( 'H' ) +1 ) : ( date( 'H' ) +1 ) ) . ":00:00 GMT";
+	}
+
+	/**
+	 * Converts a unixtimestamp to a date
+	 * @param unix time stamp
+	 * @return a Date from a Timestamp
+	 */
+	public static function time2date( $time ) {
+		// is valid timestamp
+		if( ! self::isTimestamp( $time ) ) return false;
+		// our date data
+		$weekday = date( 'w', $time ); // Weekday
+		$day =  date( 'd', $time ); // Day
+		$month = date( 'm', $time );  // Month
+		$year = date( 'Y', $time ); // Year
+		$hour = date( 'H', $time ); // hour
+		$minute = date( 'i', $time ); // minutes
+		$seconds = date( 's', $time ); // seconds
+		$timezone = date( 'T', $time ); // timezone
+
+		// Formating the Output
+		$date = '';
+		$date .= self::germanDay( $weekday );
+		$date .= ', ';
+		$date .= $day;
+		$date .= ' ';
+		$date .= self::germanMonth( $month );
+		$date .= ' ';
+		$date .= $year;
+		$date .= ' ';
+		$date .= $hour;
+		$date .= ':';
+		$date .= $minute;
+		$date .= ':';
+		$date .= $seconds;
+		$date .= ' ';
+		$date .= $timezone;
+		return $date;
+	}
+	
+	/**
+	 * COnverts a date to a unix time stamp
+	 * @param date
+	 * @return a Date from a Timestamp
+	 */
+	public static function date2time( $date ) {
+		
+		return date( 'U', $date );
+	}
+	
+	/**
+	 * @param string $string
+	 * @return bool
+	 */
+	public static function isTimestamp( $string )
+	{
+	    try {
+	        new DateTime( '@' . $string );
+	    } catch( Exception $e ) {
+	        return false;
+	    }
+	    return true;
 	}
 
 }

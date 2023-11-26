@@ -90,9 +90,9 @@ class Template extends Base {
     // content
     $output .= "\n<div id='content'>\n";
     $output .= $input . "\n";
-
+		// debug
     $output .= self::debug();
-
+		// close content div
     $output .= "\n</div>\n";
     // load footer
     $output .= $this->loadFileData( $this->_tpl . 'footer.php' );
@@ -156,12 +156,14 @@ class Template extends Base {
       $output .= '    <td>Tokenize "Test"</td><td>' . Crypto::token( 'Test' ) . "</td>\n";
       $output .= '  </tr>' . "\n";
 			
+			$expire = is_array( $_COOKIE ) && isset( $_COOKIE['created'] ) ? DateAndTime::time2date( $_COOKIE['created'] ) : 'No expire Date in Cookie';
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Expire Date</td><td>' . DateAndTime::expireDate() . "</td>\n";
+      //$output .= '    <td>Expire Date</td><td>' . date("w, d.m.Y h:i:s T", strtotime( $expire ) ) . "</td>\n";
+			$output .= '    <td>Expire Date</td><td>' . $expire . "</td>\n";
       $output .= '  </tr>' . "\n";
 
       $output .= '  <tr>' . "\n";
-      $output .= '    <td>Cookie</td><td>' . Base::getCookie() . "</td>\n";
+      $output .= '    <td>Cookie</td><td>' . Base::getCookieString() . "</td>\n";
       $output .= '  </tr>' . "\n";
 			//
       // $output .= '  <tr>' . "\n";

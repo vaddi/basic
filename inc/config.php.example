@@ -99,7 +99,7 @@ define( 'MYSQL_HOST', 'localhost' );
 define( 'MYSQL_PORT', 3306 );
 
 // SQLite connection parameters
-define( 'SQLITE_TYPE', 'FILE' );	// FILE | MEMORY (In planning)
+define( 'SQLITE_TYPE', 'FILE' );// FILE | MEMORY (In planning)
 define( 'SQLITE_FILENAME', 'database.sqlite' ); // the used Filename
 define( 'SQLITE_FILE', __DIR__ . '/db/' . SQLITE_FILENAME ); // Build whole path
 define( 'SQLITE_USE', false );

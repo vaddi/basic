@@ -10,6 +10,7 @@ if( strpos( $currentURL, 'SCRIPT' ) !== false ) {
 // Sanity check, install should only be checked from index.php
 defined('PATH') or exit('Install tests must be loaded from within index.php!');
 
+$show_all_constants = false; // false = show only missing Constants, true = show all
 $minversion = '7.1.0';
 
 // Setup checks
@@ -174,15 +175,116 @@ END;
 	<?php endif; ?>
 </table>
 
-<?php if ($failed === TRUE): ?>
+<?php if( $failed === TRUE ): ?>
 	<p id="results" class="fail fade-in">✘ Application <b><?= APPNAME ?></b><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;will not work correctly with your environment!</p>
 <?php else: ?>
 	<?php $realpath = str_replace("index.php/", "", $_SERVER['REQUEST_URI']); ?>
 	<?php $abs_path = $_SERVER['DOCUMENT_ROOT'] . dirname($_SERVER['PHP_SELF']) ?>
 	<p id="results" class="pass fade-in">✔ Your environment passed all requirements.</p>
-	<p>Rename the <b>inc/pages/index.php</b> file or delete it's Content.<br />
-	<br />
+	<p><strong>Remove or Disable</strong> this <strong>enviroment</strong> Page, so it is not visible in a productive Enviroment!</p>
+<?php endif ?>
+
+<h1>Configuraton Tests</h1>
+
+<?php
+if( $show_all_constants ) {
+	echo '<p>The following Staic Configuration Constants are read from <strong>config.php.example</strong>.<br />If you find a Constant wich is <strong>not</strong> in you config.php File, please add them.</p>';
+}	else {
+	echo '<p>List of missing Constants (if there are any).</p>';
+}
+
+$example_file = "inc/config.php.example";
+$handle = fopen( $example_file, 'r' );
+$constants = array();
+if( $handle ) {
+    while( ( $line = fgets( $handle ) ) !== false ) {
+				// exclude all comment lines
+				if( preg_match( '#^//(.*)?$#m', $line, $comment ) ) {
+					continue;
+				}
+				// exclude all lines start with $
+				if( preg_match( '#^\$(.*)?$#m', $line, $comment ) ) {
+					continue;
+				}
+				// exclude all lines start with $
+				if( preg_match( '#^date_default_timezone_set(.*)?$#m', $line, $comment ) ) {
+					continue;
+				}
+				// get all constant Names and Values
+				if( preg_match("/'([^']+)'/", $line, $m ) ) {
+					// Constant Name
+					$const_name = trim( $m[1] );
+					// get all constant values
+					$ar1 = array( "define( '" . $const_name . "',", ");" );
+					$ar2 = array( '', '' );
+					$const_value = str_replace( $ar1, $ar2, $line );
+					// get all comments behind constants
+					if( preg_match( '%\s+(?://|#).*%', $line, $c ) ) {
+						$comment = str_replace( ' // ', '', $c[0] );
+					} else {
+						$comment = null;
+					}
+					// replace all comments behind constants
+					$const_value = preg_replace( '%\s+(?://|#).*%', '', $const_value );
+					$constants[ $const_name ] = array( trim( $const_value ), $comment );
+				}
+    }
+    fclose( $handle );
+} else {
+	$failed = TRUE;
+	echo "Unable to read $example_file";
+}
+
+// Output all Constants and they're test results
+echo '<table>';
+
+foreach( $constants as $key => $value ) {
+	if( $show_all_constants ) {
+		echo '<tr>';
+		echo '<th>' . $key . '</th>';
+		if( defined( $key ) ) {
+			if( is_array( constant( $key ) ) ) {
+				$array_values = implode( ', ', constant( $key ) );
+				echo '<td class="pass" style="max-width:22em">' . $array_values . '</td>';
+			} else {
+				// exclude sensitive Passwords
+				if( $key == 'USERPASS' || $key == 'SECRET' || $key == 'MAILPASS' || $key == 'MYSQL_PASS' || $key == 'SERVERTOKEN' || $key == 'CLIENTTOKEN' ) {
+					echo '<td class="pass" style="max-width:22em">*****</td>';
+				} else {
+					echo '<td class="pass" style="max-width:22em">' . constant( $key ) . '</td>';
+				}
+			}
+		} else {
+			$failed = TRUE;
+			echo '<td class="fail" style="max-width:22em">Not found "define( \'' . $key . '\', \'' . $value[0] . '\' );" to your config.php File!</td>';
+		}
+		echo '<td>' . $value[1] . '</td>';
+		echo '</tr>';
+	} else {
+		if( ! defined( $key ) ) {
+			$failed = TRUE;
+			echo '<tr>';
+			echo '<th>' . $key . '</th>';
+			echo '<td class="fail" style="max-width:22em">Not found "define( \'' . $key . '\', ' . $value[0] . ' );" to your config.php File!</td>';
+			echo '<td>' . $value[1] . '</td>';
+			echo '</tr>';
+		}
+	}
+}
+
+echo "</table>";
+
+?>
+
+<?php if( $failed === TRUE ): ?>
+	<p id="results" class="fail fade-in">✘ Missing Constants detected!</b><br />
+	&nbsp;&nbsp;&nbsp;&nbsp;Ther're some Constants missing in your <strong>config.phg</strong> File!</p>
+	<p>Add the red marked Constants to your <strong>config.phg</strong> File or copy the corresponding Line from the  <strong>config.phg.example</strong> File.</p>
+<?php else: ?>
+	<?php $realpath = str_replace("index.php/", "", $_SERVER['REQUEST_URI']); ?>
+	<?php $abs_path = $_SERVER['DOCUMENT_ROOT'] . dirname($_SERVER['PHP_SELF']) ?>
+	<p id="results" class="pass fade-in">✔ All Constants found, no Error detected.</p>
 <?php endif ?>
 
 <h1>Optional Tests</h1>

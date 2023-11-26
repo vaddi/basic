@@ -17,7 +17,7 @@ function navHelper( item, index ) {
   document.getElementById( 'headnav' ).innerHTML += '<a href="' + item + ">" + item + "</a>";
 }
 
-function navigator( navId ) {
+function activeNavElement( navId ) {
 	let loc = getLoc();
   let links = document.getElementById( navId ).querySelectorAll("a");
   for( i = 0; i < links.length; i++ ) {
@@ -30,5 +30,5 @@ function navigator( navId ) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  navigator( 'headnav' );
+  activeNavElement( 'headnav' );
 });

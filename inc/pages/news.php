@@ -3,83 +3,31 @@
 // use our Database (we used for Visitors), also to our News Page 
 $db = new DB_SQLite3( SQLITE_TYPE, SQLITE_FILE );
 
-$content = "";
+// // DB schema
+// $schema = array(
+// 	array( 'name' => 'id', 'type' => 'INTEGER', 'null' => 'NOT NULL', 'default' => '', 'key' => 'PRIMARY KEY', 'increment' => 'AUTOINCREMENT' ),
+// 	array( 'name' => 'title', 'type' => 'TEXT', 'null' => 'NOT NULL', 'default' => '', 'key' => '', 'increment' => '' ),
+// 	array( 'name' => 'content', 'type' => 'TEXT', 'null' => 'NOT NULL', 'default' => '', 'key' => '', 'increment' => '' ),
+// 	array( 'name' => 'guid', 'type' => 'TEXT', 'null' => 'NOT NULL', 'default' => '', 'key' => '', 'increment' => '' ),
+// 	array( 'name' => 'updated', 'type' => 'TEXT', 'null' => 'NOT NULL', 'default' => "DEFAULT (datetime('now','localtime'))", 'key' => '', 'increment' => '' ),
+// 	array( 'name' => 'created', 'type' => 'TEXT', 'null' => 'NOT NULL', 'default' => "DEFAULT (datetime('now','localtime'))", 'key' => '', 'increment' => '' )
+// );
+//
+// $query = 'CREATE TABLE ' . PAGE . "(\n";
+// foreach( $schema as $key => $entry ) {
+// 	$query .= '  '; // add space to every entry
+// 	foreach( $entry as $name => $value ) {
+// 		$query .= $value;
+// 		if( $value !== '' ) $query .= ' ';
+// 	}
+// 	if( $key != ( count( $schema ) -1 ) ) $query .= ','; // add comma behind all, except the last entry
+// 	$query .= "\n";
+// }
+// $query .= ')';
 
-$content .= '<div class="right" style="padding: 20px 0 0">';
-$content .= '<a href="?page=news&feed=rss" target="_blank" title="RSS News Feeds"><img class="rssfeed" src="inc/img/feeds.svg" alt="RSS icon"/></a>';
-$content .= ' ';
-$content .= '<a href="?page=news&feed=atom" target="_blank" title="Atom News Feeds"><img class="atomfeed" src="inc/img/feeds.svg" alt="Atom icon"/></a>';
-$content .= '</div>';
-
-$content .= "<h1>News</h1>";
-
-$content .= '<style>'; // entry
-$content .= '#content .entry {';
-$content .= '  border-top: 1px solid #ccc;';
-$content .= '  margin: 20px 0;';
-$content .= '}';
-$content .= '#content .entry:first-of-txpe {';
-$content .= '  border-top: none;';
-$content .= '  margin: 0 0 20px;';
-$content .= '}';
-$content .= '</style>';
-
-// get all elements
-function getItems( $db = null ) {
-  $result = false;
-  if( $db === null ) return $result;
-  if( isset( $db ) ) {
-    try {
-      $db->query( "SELECT * FROM " . PAGE . ";" );
-      $db->execute();
-      $result = $db->resultset();
-    } catch( Exception $e ) {
-      dbCreate( $db ); // try to create once.
-      $db->query( "SELECT * FROM " . PAGE . ";" );
-      $db->execute();
-      $result = $db->resultset();
-      return $result;
-    }
-  }
-	rsort( $result ); // letzte zuerst sortieren
-  return $result;
-}
-
-// get single element
-function getItem( $db = null, $id = null ) {
-  $result = false;
-  if( $db === null || $id === null ) return $result;
-  if( isset( $db ) ) {
-    try {
-      $db->query( "SELECT * FROM " . PAGE . " WHERE id = :id" );
-      $db->bind( ':id', $id );
-      $db->execute();
-      $result = $db->resultset();
-    } catch( Exception $e ) {
-      return $e;
-    }
-  }
-  return $result;
-}
-
-// get the last updated Element Date
-function getLastUpdate( $db = null ) {
-  $result = false;
-  if( $db === null ) return $result;
-  if( isset( $db ) ) {
-    try {
-      $db->query( "SELECT id, MAX(updated) AS updated FROM " . PAGE . " GROUP BY id ORDER BY updated DESC" );
-      $db->execute();
-      $result = $db->resultset();
-    } catch( Exception $e ) {
-      return $e;
-    }
-  }
-	if( isset( $result[0]['updated'] ) ) {
-		return $result[0]['updated'];
-	}
-  return false;
-}
+//
+// DB functions
+//
 
 // create a database table
 function dbCreate( $db = null ) {
@@ -140,6 +88,11 @@ function dbTableExists( $db = null, $table = null ) {
 	return false;
 }
 
+//
+// CRUD functions
+//
+
+// create an entrie
 function createEntry( $db = null, $title = null, $content = null, $guid = null ) {
   $result = false;
   if( $db === null || $title === null || $content === null ) return $result;
@@ -157,6 +110,45 @@ function createEntry( $db = null, $title = null, $content = null, $guid = null )
   return $result;
 }
 
+// read all entries
+function getItems( $db = null ) {
+  $result = false;
+  if( $db === null ) return $result;
+  if( isset( $db ) ) {
+    try {
+      $db->query( "SELECT * FROM " . PAGE . ";" );
+      $db->execute();
+      $result = $db->resultset();
+    } catch( Exception $e ) {
+      dbCreate( $db ); // try to create once.
+      $db->query( "SELECT * FROM " . PAGE . ";" );
+      $db->execute();
+      $result = $db->resultset();
+      return $result;
+    }
+  }
+	rsort( $result ); // letzte zuerst sortieren
+  return $result;
+}
+
+// read a single entrie
+function getItem( $db = null, $id = null ) {
+  $result = false;
+  if( $db === null || $id === null ) return $result;
+  if( isset( $db ) ) {
+    try {
+      $db->query( "SELECT * FROM " . PAGE . " WHERE id = :id" );
+      $db->bind( ':id', $id );
+      $db->execute();
+      $result = $db->resultset();
+    } catch( Exception $e ) {
+      return $e;
+    }
+  }
+  return $result;
+}
+
+// update an entrie
 function updateEntry( $db = null, $id = null, $title = null, $content = null ) {
   $result = false;
   if( $db === null || $id === null || $title === null || $content === null ) return $result;
@@ -174,6 +166,7 @@ function updateEntry( $db = null, $id = null, $title = null, $content = null ) {
   return $result;
 }
 
+// delete an entrie
 function deleteEntry( $db = null, $id = null ) {
   $result = false;
   if( $db === null || $id === null ) return $result;
@@ -188,6 +181,122 @@ function deleteEntry( $db = null, $id = null ) {
   return $result;
 }
 
+//
+// helper functions
+//
+
+// get the last updated entry Date
+function getLastUpdate( $db = null ) {
+  $result = false;
+  if( $db === null ) return $result;
+  if( isset( $db ) ) {
+    try {
+      $db->query( "SELECT id, MAX(updated) AS updated FROM " . PAGE . " GROUP BY id ORDER BY updated DESC" );
+      $db->execute();
+      $result = $db->resultset();
+    } catch( Exception $e ) {
+      return $e;
+    }
+  }
+	if( isset( $result[0]['updated'] ) ) {
+		return $result[0]['updated'];
+	}
+  return false;
+}
+
+// entry exists
+// returns true/false if entry exists in db
+// seach by name or id
+function entryExist( $db = null , $search = null ) {
+  $result = false;
+  if( $db === null || $search === null ) return $result;
+  try {
+    $db->query( "SELECT id FROM  " . PAGE . " WHERE id = :id" );
+    $db->bind( ':id', $search );
+    $db->execute();
+    $tmp = $db->resultset();
+    if( isset( $tmp ) && $tmp != null ) {
+      $result = true;
+    }
+  } catch( Exception $e ) {
+    return $e;
+  }
+  return $result;
+}
+
+// check if a user is logged in
+function isLoggedIn() {
+  // if request is by logged in user, render the list view (or if given id, the single element with form to edit, or on create, a new form)
+  if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN ) {
+    // user has a valid session
+    // validate cookie liefetime!
+    if( time() - $_COOKIE['created'] < CLIFETIME ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// generates a guid
+function genGUID( $length = 16 ) {
+	return bin2hex( openssl_random_pseudo_bytes( $length ) );
+}
+
+// generate rss or atom feeds
+function genFeed( $db, $feed_type ) {
+	$items = getItems( $db );
+	$link_self = URL . '/?page=' . PAGE . '&feed=atom';
+	$last_updated = date('c', strtotime( getLastUpdate( $db ) ) );
+	$generator = "vaddis Feedcreator";
+	$generatorUri = 'https://github.com/vaddi/basic/blob/main/inc/class/extensions/Feeds.php';
+	$generatorVersion = '1.0'; 
+	$icon = 'https://example.com/images/feedicon.png';
+	$logo = 'ttps://example.com/images/feed.png';
+	if( $_REQUEST['feed'] == 'atom' ) {
+		// build array for atom feeds
+		$feed = array(
+			'feed' => array(
+				'title' => 'Atom Feeds',
+				'link' => array( 'text' => null, 'rel' => 'alternate', 'href' => APPDOMAIN ),
+				'link' => array( 'text' => null, 'rel' => 'self', 'href' => $link_self ),
+				'updated' => $last_updated,
+				'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),
+				'author' => array( 'text' => null, 'name' => '', 'email' => '', 'uri' => '' ),
+				'id' => APPDOMAIN,
+				'description' => 'Basic Template News Entries',
+				'language' => 'de_DE',
+				'icon' => $icon,
+				'logo' => $logo,
+				'entry' => $items
+			),
+			'xmlns' => 'http://www.w3.org/2005/Atom'
+		);
+		Feeds::generate( $feed );
+	} else if( $_REQUEST['feed'] == 'rss' ) {
+		// build array for rss feeds
+		$feed = array(
+			'rss' => array(
+				'channel' => array(
+					'title' => 'RSS Feed',
+					'link' => APPDOMAIN,
+					'description' => 'RSS 1 News Feed',
+					'lastBuildDate' => $last_updated,
+					'language' => 'de_DE',
+					'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),
+					'item' => $items
+				)
+			),
+			'version' => '2.0'
+		);
+		Feeds::generate( $feed );
+	}
+}
+
+//
+// html functions
+//
+
+// render list of all or single entry
 function renderEntries( $db = null ) {
   $result = false;
   if( $db === null ) return $result;
@@ -200,7 +309,7 @@ function renderEntries( $db = null ) {
     $data = getItems( $db );
   }
   if( isset( $data ) && $data != null && is_array( $data ) ) {
-    $result .= '<div>';
+    $result .= '<div>' . "\n";
     if( isLoggedIn() ) {
       $result .= '<a href="?page=' . PAGE . '&create=true">Create Entry</a>';
       if( isset( $id ) && $id != null && $id != "" ) $result .= ' | ';
@@ -208,16 +317,16 @@ function renderEntries( $db = null ) {
     if( isset( $id ) && $id != null && $id != "" ) {
       $result .= '<a href="?page=' . PAGE . '">Show All Entries</a>';
     }
-    $result .= '</div>';
+    $result .= '</div>' . "\n";
     foreach( $data as $key => $entry ) {
       $result .= '<div class="entry">' . "\n";
-      $result .= '  <div class="entry-header">';
-      $result .= "<div style='float:right;'>";
+      $result .= '  <div class="entry-header">' . "\n";
+      $result .= "<div style='float:right;'>\n";
 			// Created at Date
 			$result .= "Created: " . date( 'd.m.Y H:i:s', strtotime( $entry['created'] ) );
 			$result .= "<br/>";
 			$result .= "Updated: " . date( 'd.m.Y H:i:s', strtotime( $entry['updated'] ) );
-			$result .= "</div>";
+			$result .= "</div>" . "\n";
       $result .= "    <h3><a href='?page=" . PAGE . "&show=" . $entry['id'] . "'>" . $entry['title'] . "</a></h3>\n";
       if( isLoggedIn() ) { // edit elemnts
         $result .= '    <div style="float:right">' . "\n";
@@ -236,37 +345,7 @@ function renderEntries( $db = null ) {
   return $result;
 }
 
-function isLoggedIn() {
-  // if request is by logged in user, render the list view (or if given id, the single element with form to edit, or on create, a new form)
-  if( isset( $_COOKIE['cid'] ) && base64_decode( str_replace( "%3D",'', $_COOKIE['cid'] ) ) === SERVERTOKEN ) {
-    // user has a valid session
-    // validate cookie liefetime!
-    if( time() - $_COOKIE['created'] < CLIFETIME ) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function entryExist( $db = null , $search = null ) {
-// returns true/false if entry exists in db
-// seach by name or id
-  $result = false;
-  if( $db === null || $search === null ) return $result;
-  try {
-    $db->query( "SELECT id FROM  " . PAGE . " WHERE id = :id" );
-    $db->bind( ':id', $search );
-    $db->execute();
-    $tmp = $db->resultset();
-    if( isset( $tmp ) && $tmp != null ) {
-      $result = true;
-    }
-  } catch( Exception $e ) {
-    return $e;
-  }
-  return $result;
-}
-
+// render a form for create or edit an entry
 function renderForm( $db = null, $id = null ) {
   $result = false;
   // create or update?
@@ -319,58 +398,33 @@ function renderForm( $db = null, $id = null ) {
   return $result;
 }
 
-function genGUID( $length = 16 ) {
-	return bin2hex( openssl_random_pseudo_bytes( $length ) );
-}
+//
+// Start create the Page Content
+//
 
-function genFeed( $db, $feed_type ) {
-	$items = getItems( $db );
-	$link_self = URL . '/?page=' . PAGE . '&feed=atom';
-	$last_updated = date('c', strtotime( getLastUpdate( $db ) ) );
-	$generator = "vaddis Feedcreator";
-	$generatorUri = 'https://github.com/vaddi/basic/blob/main/inc/class/extensions/Feeds.php';
-	$generatorVersion = '1.0'; 
-	$icon = 'https://example.com/images/feedicon.png';
-	$logo = 'ttps://example.com/images/feed.png';
-	if( $_REQUEST['feed'] == 'atom' ) {
-		// build array for atom feeds
-		$feed = array(
-			'feed' => array(
-				'title' => 'Atom Feeds',
-				'link' => array( 'text' => null, 'rel' => 'alternate', 'href' => APPDOMAIN ),
-				'link' => array( 'text' => null, 'rel' => 'self', 'href' => $link_self ),
-				'updated' => $last_updated,
-				'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),
-				'author' => array( 'text' => null, 'name' => '', 'email' => '', 'uri' => '' ),
-				'id' => APPDOMAIN,
-				'description' => 'Basic Template News Entries',
-				'language' => 'de_DE',
-				'icon' => $icon,
-				'logo' => $logo,
-				'entry' => $items
-			),
-			'xmlns' => 'http://www.w3.org/2005/Atom'
-		);
-		Feeds::generate( $feed );
-	} else if( $_REQUEST['feed'] == 'rss' ) {
-		// build array for rss feeds
-		$feed = array(
-			'rss' => array(
-				'channel' => array(
-					'title' => 'RSS Feed',
-					'link' => APPDOMAIN,
-					'description' => 'RSS 1 News Feed',
-					'lastBuildDate' => $last_updated,
-					'language' => 'de_DE',
-					'generator' => array( 'text' => $generator, 'uri' => $generatorUri, 'version' => $generatorVersion ),
-					'item' => $items
-				)
-			),
-			'version' => '2.0'
-		);
-		Feeds::generate( $feed );
-	}
-}
+$content = "";
+
+// add RSS & Atom Feeds
+$content .= '<div class="right" style="padding: 20px 0 0">' . "\n";
+$content .= '<a href="?page=news&feed=rss" target="_blank" title="RSS News Feeds"><img class="rssfeed" src="inc/img/feeds.svg" alt="RSS icon"/></a>' . "\n";
+$content .= ' ';
+$content .= '<a href="?page=news&feed=atom" target="_blank" title="Atom News Feeds"><img class="atomfeed" src="inc/img/feeds.svg" alt="Atom icon"/></a>' . "\n";
+$content .= '</div>' . "\n";
+
+// headline
+$content .= "<h1>News</h1>\n";
+
+// extra css styles
+$content .= '<style>' . "\n"; // entry
+$content .= '#content .entry {' . "\n";
+//$content .= '  border-top: 1px solid #ccc;' . "\n";
+$content .= '  margin: 20px 0;' . "\n";
+$content .= '}' . "\n";
+$content .= '#content .entry:first-of-txpe {' . "\n";
+$content .= '  border-top: none;' . "\n";
+$content .= '  margin: 0 0 20px;' . "\n";
+$content .= '}' . "\n";
+$content .= '</style>' . "\n";
 
 //
 // Main Selector

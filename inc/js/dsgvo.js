@@ -57,6 +57,26 @@ a.cookieConsentOK:hover,
 /*Cookie Consent End*/
 `;
 
+function commitClickEvent( item ) {
+	console.log( item );
+  if( item != null ) {
+    item.addEventListener( "click", function( event ) {
+      localStorage.setItem( "commitcookie", "true" );
+      const expirationDate = new Date();
+      expirationDate.setFullYear(expirationDate.getFullYear() + 1 ); // expires in one year
+      let expires = "; expires=" + expirationDate.toUTCString();
+      let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year in seconds
+      document.cookie = "commitcookie=true" + maxAge;
+
+      // hide the cookieConsent element
+      document.getElementById( 'cookieConsent' ).setAttribute( 'style','display: none;' );
+
+			// do a page reload after commit
+			window.location.reload(); // reload if clicked on contact page
+    });
+  }
+}
+
 function renderMessage() {
   // add styles to head
   let styleSheet = document.createElement( "style" );
@@ -96,56 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Commit Btn
-  if( cookieConsentOK.length > 0 ) {
-    
-    if( cookieConsentOK[0] != null ) {
-      cookieConsentOK[0].addEventListener( "click", function( event ) {
-        localStorage.setItem( "commitcookie", "true" );
-        const expirationDate = new Date();
-        expirationDate.setFullYear(expirationDate.getFullYear() + 1 ); // expires in one year
-        let expires = "; expires=" + expirationDate.toUTCString();
-        let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year in seconds
-        document.cookie = "commitcookie=true" + maxAge;
-    
-        let queryString = location.search;
-        let params = new URLSearchParams(queryString);
-        let page = params.get("page");
-        if( page === null || page === "" ) {
-          page = 'home';
-        }
-    
-        // hide the cookieConsent element
-        document.getElementById( 'cookieConsent' ).setAttribute( 'style','display: none;' );
-      
-        // if currentpage == contact -> reload the page
-        if( page == 'kontakt' || page == 'contact' ) window.location.reload(); // reload if clicked on contact page
-      });
-    }
-    
-    if( cookieConsentOK[1] != null ) {  
-      cookieConsentOK[1].addEventListener( "click", function( event ) {
-        localStorage.setItem( "commitcookie", "true" );
-        const expirationDate = new Date();
-        expirationDate.setFullYear(expirationDate.getFullYear() + 1 ); // expires in one year
-        let expires = "; expires=" + expirationDate.toUTCString();
-        let maxAge = "; max-age=" + 365*24*60*60 + "; " + expires; // 1 year in seconds
-        document.cookie = "commitcookie=true" + maxAge;
-  
-        let queryString = location.search;
-        let params = new URLSearchParams(queryString);
-        let page = params.get("page");
-        if( page === null || page === "" ) {
-          page = 'home';
-        }
-  
-        // hide the cookieConsent element
-        document.getElementById( 'cookieConsent' ).setAttribute( 'style','display: none;' );
-    
-        // if currentpage == contact -> reload the page
-        if( page == 'kontakt' || page == 'contact' ) window.location.reload(); // reload if clicked on contact page
-      });
-    }
-  }
+	// Commit Btn (for each, neccessary if we have more than one)
+	cookieConsentOK.forEach( commitClickEvent );
 
 });

@@ -67,7 +67,7 @@ class Base {
   /**
    * Debug the Coockie
    */
-  public static function getCookie() {
+  public static function getCookieString() {
     $result = '';
 		if( count( $_COOKIE ) > 0 ) {
 			foreach( $_COOKIE as $key => $value ) {
