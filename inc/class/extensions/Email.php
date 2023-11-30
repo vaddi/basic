@@ -199,7 +199,7 @@ class Email {
 			$content .= '          <img src="inc/form/captcha_form.php' . self::$_sessionstringnew . '" alt="Captcha" id="P91Captcha" />' . "\n";
 			$content .= '          <br /><a href="javascript:P91Captcha(\'' . self::$_sessionstringadd . '\')">Neuer Code?</a>' . "\n";
 			$content .= '          <br /><br />' . "\n";
-			$content .= '          <input type="text" name="code" id="code" class="text requiredField code ' . ( isset( self::$_error['captchaError'] ) && self::$_error['captchaError'] != '' ? 'inputError' : '' ) . '" maxlength="50" placeholder="Captcha-Code" />' . "\n";
+			$content .= '          <input type="text" name="code" id="code" class="text requiredField code ' . ( isset( self::$_error['captchaError'] ) && self::$_error['captchaError'] != '' ? 'inputError' : '' ) . '" maxlength="6" placeholder="Captcha-Code" />' . "\n";
 			if( isset( self::$_error['captchaError'] ) ) {
 				$content .= '          <br /><span class="error">' . self::$_error['captchaError'] . '</span>' . "\n";
 			}
@@ -400,7 +400,7 @@ class Email {
 				session_start();
 				if( ! isset( $_COOKIE[ session_name() ] ) ) {
 		      self::$_sessionstringnew = '?' . session_name() . "=" . session_id();
-		      self::$_sessionstringadd = '&' . session_name() . "=" . session_id();
+		      self::$_sessionstringadd = '&amp;' . session_name() . "=" . session_id();
 				}
 			}
 			return true;

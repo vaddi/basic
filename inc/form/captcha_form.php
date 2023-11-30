@@ -16,7 +16,7 @@ $fonts_array[0] = array('refrig2.ttf', 'Xenowort.ttf');
 // Fontdateien (mit Zahlen)
 $fonts_array[1] = array('Xenowort.ttf');
 
-//session_start();
+session_start();
 
 $pas = imagecreatetruecolor( $breite, $hohe );
 $bg = ImageColorAllocate( $pas, 255, 255, 255 );
