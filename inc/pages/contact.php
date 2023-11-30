@@ -35,7 +35,7 @@ if( CONTACTMAP ) {
 	if( isset( $contact['street'] ) && isset( $contact['housenumber'] ) ) {
 	  echo '<h2>Map</h2>' . "\n";
 	  echo '<div class="gmap">' . "\n";
-	  Gmap::gmaps( $contact );
+	  echo Gmap::gmaps( $contact );
 	  echo '</div>' . "\n";
 	}
 }
