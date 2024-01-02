@@ -80,11 +80,11 @@ if( CONTACTADRESS ) {
 if( SOCIALLINKS ) {
 	echo '<div>' . "\n";
 	echo '<h2>Links</h2>' . "\n";
-	echo isset( $contact['authorpage'] ) && $contact['authorpage'] != "" ? 'My Website: <a href="' . $contact['authorpage'] . '">' . $contact['authorpage'] . "</a><br />\n" : '' . "\n";
-	echo isset( $contact['twitter'] ) && $contact['twitter'] != "https://twitter.com/" && $contact['twitter'] != "" ? 'Twitter: <a href="' . $contact['twitter'] . '">' . $contact['twitter'] . "</a><br />\n" : '' . "\n";
-	echo isset( $contact['facebook'] ) && $contact['facebook'] != "https://facebook.com/" && $contact['facebook'] != "" ? 'Facebook: <a href="' . $contact['facebook'] . '">' . $contact['facebook'] . "</a><br />\n" : '' . "\n";
-	echo isset( $contact['instagram'] ) && $contact['instagram'] != "https://www.instagram.com/" && $contact['instagram'] != "" ? 'Instagram: <a href="' . $contact['instagram'] . '">' . $contact['instagram'] . "</a><br />\n" : '' . "\n";
-	echo isset( $contact['youtube'] ) && $contact['youtube'] != "https://www.youtube.com/" && $contact['youtube'] != "" ? 'YouTube: <a href="' . $contact['youtube'] . '">' . $contact['youtube'] . "</a><br />\n" : '' . "\n";
+	echo isset( $contact['authorpage'] ) && $contact['authorpage'] != "" ? 'My Website: <a href="' . $contact['authorpage'] . '" target="_blank">' . $contact['authorpage'] . "</a><br />\n" : '' . "\n";
+	echo isset( $contact['twitter'] ) && $contact['twitter'] != "https://twitter.com/" && $contact['twitter'] != "" ? 'Twitter: <a href="' . $contact['twitter'] . '" target="_blank">' . $contact['twitter'] . "</a><br />\n" : '' . "\n";
+	echo isset( $contact['facebook'] ) && $contact['facebook'] != "https://facebook.com/" && $contact['facebook'] != "" ? 'Facebook: <a href="' . $contact['facebook'] . '" target="_blank">' . $contact['facebook'] . "</a><br />\n" : '' . "\n";
+	echo isset( $contact['instagram'] ) && $contact['instagram'] != "https://www.instagram.com/" && $contact['instagram'] != "" ? 'Instagram: <a href="' . $contact['instagram'] . '" target="_blank">' . $contact['instagram'] . "</a><br />\n" : '' . "\n";
+	echo isset( $contact['youtube'] ) && $contact['youtube'] != "https://www.youtube.com/" && $contact['youtube'] != "" ? 'YouTube: <a href="' . $contact['youtube'] . '" target="_blank">' . $contact['youtube'] . "</a><br />\n" : '' . "\n";
 	echo '</div>' . "\n";
 }
 
