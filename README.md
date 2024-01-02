@@ -4,8 +4,13 @@ A Simple plain PHP Templating Engine. You can see a running Application on [demo
 
 It run by Files and has no direct dependencie to any Database. For Persistence of Runtimedata you can use a SQLite Database (an example Database is shipped under `inc/db/database.sqlite.example`) or setup a MySQL Database for the Application (Keep in Mind that you then need a PDO Class to use a MySQL Database!). Both Connections can be configured in the `config.php` file.
 
+On a nginx Webserver this web page achieves a carbon rating of A+.
+Only 0.03g of CO2 is produced every time someone visits this web page: [websitecarbon](https://www.websitecarbon.com/website/mvattersen-de-basic/)
 
-### Dependencies ###
+
+# Installation #
+
+## Dependencies ##
 
 A running PHP Webserver (A space where you can place PHP Files). I've testet on **apache2** and **nginx** Servers. The Packagenames can variate a little, depending on you operation System:
 
@@ -20,7 +25,7 @@ Optional (but usefull) packages:
 - php_sqlite3
 
 
-## Installation ##
+## Execution ##
 
 Installation ist straight forrward. You just need to clone the current Repossitory:
 
@@ -46,12 +51,12 @@ define( 'PAGES',      __DIR__ . "/sites/" );
 Now you can edit and add Pages under the `sites` Folder. Don't forget to Edit the edit `styles.css` to fit your needs (Hint: If you copy the file and place a new one into the css Folder, only the new css File(s) will be loaded automaticly into the header section of the Template).
 
 
-### Metrics ###
+## Metrics ##
 
 If you want to use the Visitor Metrics, you need to enable the sqlite Database in to the config file and have Setup a Database.
 
 
-### SQLite3 Database ###
+## SQLite3 Database ##
 
 You an easily use the shipped SQLite3 Dateabase. Enable them into the `config.php` 
 
@@ -74,7 +79,7 @@ The right command to set the Fileaccess should appear if you open the Site for t
 You find also creation Schemas in the `assets` Folder.
 
 
-## Updating ##
+# Updating #
 
 Updating a old Version which is installed via git command (which is recommend) is also straight forrward.
 
@@ -86,7 +91,7 @@ Updating a old Version which is installed via git command (which is recommend) i
 See [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merge-and-git-rebase/) for more about how to merge your Setup and the base Setup.
 
 
-## Content/Pages ##
+# Content/Pages #
 
 First: You can use PHP Files. No static replace Content like "{{TITLE}}" or something.
 
@@ -95,7 +100,7 @@ If you just want to sendout simple html content, you can also by write them into
 Just place you PHP files into the `sites` Folder (don't use the shipped `pages` Folder, oserwise you'r not able to simply update!). All Content will be rendered inside of a Template. You can find the Template Files under the `tpl` Folder and can also just edit them as you like, they are also just plain PHP Files. 
 
 
-### Special Pages ###
+## Special Pages ##
 
 There will be a few Pages shipped whithin this Application. You can use them to build your own pages or use them as they are. Some are hidden by the `MENU_EXCLUDE` array in the `config.php`, you have to remove their name from there to make them visible in the Sitemenu.
 
@@ -109,22 +114,22 @@ List of shipped Pages:
 - News (a very simple News page with simple CRUD functionality, all Enties will be loaded and saved on the shipped sqlite3 database)
 
 
-### Classes ###
+## Classes ##
 
 The Templating is done by the two Classes `Sites.php`, wich load Content from the `sites` Folder and the `Template.php` Class, wich loads template Parts from `tpl` Folder and mainly combine all to the outputed HTML or Text.
 
 
-#### Site.php ####
+### Site.php ###
 
 This Class read and parse the Content from the Files in the `sites` Folder. It also wraps the Content by the Template parts by using the `Template.php` Class.
 
 
-#### Template.php ####
+### Template.php ###
 
 Read the content from the `tpl` Folder and combines them into a basic HTML Page. The `Template.php` class has the base structure of the HTML Site, there you can find the starting `DOCTYPE` Element and also the `body` and `html` HTML tags.
 
 
-### Extensions Classes ###
+## Extensions Classes ##
 
 You can extend the Application by your own classes. Just place them into the Folder `inc/class/extensions/`. There are also some other Helper Classes which will be used by the Application (so dont remove them until you're shure they wont be used anywhere!). 
 
@@ -133,28 +138,28 @@ All Classes under the extensions Folder will be automaticly instanciated by the 
 To get a simple description, add a Comment in line 3 of your Class. This will be used in the `index.php` Page (in the Section Pages) as description of your Class and help you to keep in mind what a Class is used for.
 
 
-## Layout ##
+# Layout #
 
 You only have to place the file into the `css` or `js` Folder and the Template Class will render the neccessary Links into the Page head Section to include them. 
 
 
-### CSS ###
+## CSS ##
 
 A pure Layout is allready shiped by default. It uses the `style.css` inside of the `css` Folder and contains pure CSS. If there are other files in this Folder, the shipped `styles.css` file won't be used anymore, so you can easily overwrite the default layout by add your own css files into the folder whithout the need to delete the shipped `styles.css` file.
 
 
-### HTML ###
+## HTML ##
 
 The layout of the outputed HTML is controlled by the Files into the `tpl` Folder and the class `Template.php`. You can also inserd plain HTML into the Pages. There is no need to use PHP into the files.
 
 
-### JavaScript ###
+## JavaScript ##
 
 The Base Template contains some JavaScript Files for clock, pageload, highlight the current navigation link and some other things which are used by the shipped Pages. 
 All files will be added to the Site head from the `tpl/head.php` file.
 
 
-## Application Exporter ##
+# Application Exporter #
 
 The Application has a Prometheus ready scrape target endpoint on where prometheus can find some Metrics when requesting the metrics Page:
 
@@ -177,12 +182,12 @@ You can use my `PHP Applications` Dasboard as Dashboard Example: [dashboard](htt
 The Exprter can turned off by Set Config Constant `METRICS` to false into the `config.php` file.
 
 
-## Bugs ##
+# Bugs #
 
 Bugs can also be Reported under: [git-issues](https://github.com/vaddi/basic/issues)
 
 
-##  WIP Parts ##
+# WIP Parts #
 
 Currently there are some incomplete Things in this Application, feel free to create a Fork or Send Solutions to me via GitHub.
 
@@ -195,9 +200,10 @@ Currently there are some incomplete Things in this Application, feel free to cre
 - [ ] Refractoring dsgvo.js (Alos Cookie und Localstorage Settings in Page login.pgp)
 
 
-## Links ##
+# Links #
 
 - [git-merge](https://www.freecodecamp.org/news/the-ultimate-guide-to-git-merge-and-git-rebase/)
 - [git-issues](https://github.com/vaddi/basic/issues)
 - [demo-page](https://www.mvattersen.de/basic)
 - [dashboard](https://github.com/vaddi/basic/tree/main/inc/asset/dashboard.json)
+- [websitecarbon](https://www.websitecarbon.com/website/mvattersen-de-basic/)

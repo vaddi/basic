@@ -65,7 +65,7 @@ class Template extends Base {
   }
 
   /**
-   * Helper to load javascript and css files
+   * Helper to load rss & atom feed urls
    */
   public function headFeeds() {
 		$output = "  <!-- feeds -->\n";

@@ -48,7 +48,9 @@ class Markdown {
 
   private static function codeblock( $regs ) {
     $item = $regs[0];
-		$item = str_replace( array( "```php\n", '`', "\n" ), array( '', '', '<br/>'), $item );
+		$replaceTypes = array( "```php\n", "```bash\n", "```c++\n", '`', "\n" );
+		$replacedTypes = array( '', '', '', '', '<br/>' );
+		$item = str_replace( $replaceTypes, $replacedTypes, $item );
 		return sprintf( "<p class='code'>%s</p>\n", $item );
   }
 
@@ -86,7 +88,7 @@ class Markdown {
     list( $tmp, $chars, $header ) = $regs;
     $level = strlen( $chars );
     self::$_headers[] = trim( str_replace( '#', '', $header ) );
-    if( $level == '2' ) {
+    if( $level === '1' ) {
       return sprintf( '<h%d><a id="%s">%s</a></h%d><hr />', $level, trim( str_replace( '#', '', $header ) ), str_replace( '#', '', $header ), $level );
     } else {
       return sprintf( '<h%d><a id="%s">%s</a></h%d>', $level, trim( str_replace( '#', '', $header ) ), str_replace( '#', '', $header ), $level );

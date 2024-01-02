@@ -2,15 +2,19 @@
                          Pageload-Skript
 ************************************************************/
 
-pagestart = new Date();
+// inspired by: https://stackoverflow.com/a/14343144/5208166
+let timerStart = Date.now();
 
-function pageload() {
-	current = new Date();
-	dtime = current.getTime() - pagestart.getTime();
-	loadtime = dtime/1000;
-	document.getElementById("pageload").innerHTML = loadtime;
-}
-
+// DOM is ready for manipulation (DOM ready, like jQuery document.ready)
 document.addEventListener("DOMContentLoaded", function() {
-	pageload();
+	let readytime = ( Date.now() - timerStart ) / 1000;
+	//console.log( "Time until DOMready: ", readytime );
+	document.getElementById("pageReadyTime").innerHTML = readytime;
 });
+
+// DOM and all Content is fully loaded (DOM loaded, like jQuery window.load)
+window.onload=function(){
+	let loadtime = ( Date.now() - timerStart ) / 1000;
+	//console.log( "Time until everything loaded: ", loadtime );
+	document.getElementById("pageLoadTime").innerHTML = loadtime;
+}
